@@ -22,6 +22,7 @@
 <style>
 @font-face{font-family:"Figtree";font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/figtree-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:"Figtree";font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/figtree-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Caveat";font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/caveat-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Press Start 2P";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/press-start-2p-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 :root{
   --paper:#5C94FC; --paper2:#DCE8FF; --paper3:#8DB8FF; --ink:#111111; --ink-soft:#14215E;
@@ -242,6 +243,33 @@ footer .display{font-size:clamp(14px,2.4vw,20px)}
 .toast{background:#000;color:#fff;border:3px solid #fff;border-radius:0}
 footer{padding-bottom:0}
 footer::after{content:"";display:block;height:96px;margin:44px -20px 0;background:var(--brick);border-top:3px solid #000}
+
+/* HERO: a 90s airmail postcard */
+.tag{transform:rotate(-1.5deg);padding:12px;background:repeating-linear-gradient(135deg,#E52521 0 14px,#FFF8E7 14px 28px,#2038EC 28px 42px,#FFF8E7 42px 56px)}
+.tag .body{background:#FFF8E7;color:#1B1B3A;padding:30px 30px 32px;box-shadow:none;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:26px;
+  background-image:radial-gradient(rgba(124,40,0,.07) 1px,transparent 1.2px);background-size:7px 7px}
+.tag .body::before{content:none}
+.tag .to{color:#E52521;margin:0 0 16px}
+.tag h1{font-size:clamp(18px,3.5vw,29px);line-height:1.55;color:#2038EC;text-shadow:3px 3px 0 #FAC000}
+.tag p.sub{color:#14215E;font:600 25px/1.25 "Caveat","Bradley Hand","Segoe Script",cursive;margin:20px 0 0;max-width:none}
+.tag .sign{margin:14px 0 0;font:700 28px/1 "Caveat","Bradley Hand","Segoe Script",cursive;color:#E52521;transform:rotate(-3deg);transform-origin:left}
+.addr{border-left:3px solid #1B1B3A;padding-left:24px;display:flex;flex-direction:column;justify-content:flex-end;gap:14px}
+.addr p{margin:0;padding-bottom:6px;border-bottom:2px solid #1B1B3A;font:600 23px/1.1 "Caveat","Bradley Hand","Segoe Script",cursive;color:#14215E}
+.addr small{font:400 8px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;color:#7C2800;margin-right:6px}
+.postage{position:relative;display:flex;justify-content:flex-end;margin-bottom:auto;padding-bottom:18px}
+.stamp{width:86px;height:104px;display:grid;place-items:center;align-content:center;gap:8px;background:#5C94FC;border:6px dotted #FFF8E7;outline:2px solid #1B1B3A;outline-offset:-9px;box-shadow:0 0 0 1px #c9bfa5}
+.stamp i{width:40px;height:40px;display:grid;place-items:center;background:#FAC000;border:3px solid #000;box-shadow:inset -3px -3px 0 #C87800,inset 3px 3px 0 #FFE9A0;
+  font:400 18px/1 "Press Start 2P",ui-monospace,monospace;color:#fff;text-shadow:2px 2px 0 #7C2800}
+.stamp b{font:400 6px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;color:#fff}
+.mark{position:absolute;right:58px;top:14px;width:92px;height:92px;display:grid;place-items:center;text-align:center;border:3px double #14215E;border-radius:50%;
+  font:400 8px/1.6 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;color:#14215E;transform:rotate(-14deg);opacity:.75;z-index:1}
+.mark::after{content:"";position:absolute;left:100%;top:26px;width:70px;height:40px;background:repeating-linear-gradient(180deg,#14215E 0 2px,transparent 2px 9px)}
+@media (max-width:620px){
+  .tag{padding:9px}
+  .tag .body{grid-template-columns:minmax(0,1fr);padding:22px 20px 24px;gap:20px}
+  .addr{border-left:0;padding-left:0;border-top:3px solid #1B1B3A;padding-top:18px}
+  .mark::after{display:none}
+}
 </style>
 </head>
 <body>
@@ -253,9 +281,18 @@ footer::after{content:"";display:block;height:96px;margin:44px -20px 0;backgroun
     <div class="tag win">
       <div class="bar"><span>wishlist.exe</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
       <div class="body">
-        <p class="to">To: whoever loves me · From: Faith</p>
-        <h1>Faith's birthday wish list</h1>
-        <p class="sub"><span class="pun">Another trip around the sun, and I've got my wish-list in orbit.</span> Tap a box to unwrap it.</p>
+        <div class="msg">
+          <p class="to">Greetings from my 20s</p>
+          <h1>Faith's birthday wish list</h1>
+          <p class="sub"><span class="pun">Another trip around the sun, and I've got my wish-list in orbit.</span> Tap a box to unwrap it.</p>
+          <p class="sign">xo, Faith</p>
+        </div>
+        <div class="addr">
+          <div class="postage" aria-hidden="true"><span class="mark">Birthday<br>mail</span><span class="stamp"><i>?</i><b>Wish post</b></span></div>
+          <p><small>To</small> Whoever loves me</p>
+          <p><small>From</small> Faith</p>
+          <p><small>Re</small> My birthday wishes</p>
+        </div>
       </div>
     </div>
   </div>
