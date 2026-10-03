@@ -81,11 +81,8 @@ h1,h2,.display{font-family:"Press Start 2P","Cooper Black","Arial Rounded MT Bol
 .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
 .btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
 .btn.sun{background:var(--sun);color:#111111}
-.btn[aria-pressed="true"]{background:var(--mint)}
-.punmeter{margin-top:14px;text-align:center;color:var(--ink-soft);font-size:15px;min-height:1.5em}
 
 .pun{transition:background .25s, box-shadow .25s;border-radius:4px}
-body.show-puns .pun{background:var(--sun);color:#111111;box-shadow:0 0 0 3px var(--sun)}
 
 /* WISH GRID */
 section{padding:40px 0}
@@ -266,9 +263,7 @@ footer::after{content:"";display:block;height:96px;margin:44px -20px 0;backgroun
   <div class="controls">
     <button class="btn sun" id="spin">🎲 Pick a gift for me</button>
     <button class="btn" id="unwrapAll">🎁 Unwrap everything</button>
-    <button class="btn" id="punBtn" aria-pressed="false">✨ Highlight the puns</button>
   </div>
-  <p class="punmeter" id="punmeter"></p>
 </header>
 
 <main class="wrap">
@@ -431,10 +426,6 @@ document.getElementById('spin').addEventListener('click',()=>{
 });
 document.getElementById('unwrapAll').addEventListener('click',()=>{unlockAll();burst(0.5,0.2,160);say('All unwrapped. Happy shopping!')});
 
-const puns=document.querySelectorAll('.pun');const meter=document.getElementById('punmeter');
-const pb=document.getElementById('punBtn');
-pb.addEventListener('click',()=>{const on=document.body.classList.toggle('show-puns');pb.setAttribute('aria-pressed',on);
-  if(on){unlockAll();meter.textContent=puns.length+' puns highlighted. Groan responsibly.'}else meter.textContent='';});
 
 /* confetti */
 const cv=document.getElementById('confetti'),cx=cv.getContext('2d');let parts=[],raf;
