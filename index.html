@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Faith's Birthday Wish List</title>
+<meta name="description" content="Another trip around the sun, and I've got my wish-list in orbit. Tap a box to unwrap it.">
+<meta name="theme-color" content="#C2187A">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Faith's Birthday Wish List">
+<meta property="og:description" content="Another trip around the sun, and I've got my wish-list in orbit. Tap a box to unwrap it.">
+<meta property="og:image" content="/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A magenta gift tag reading Faith's birthday wish list">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="fonts/shrikhand-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Figtree";font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/figtree-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Figtree";font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/figtree-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Shrikhand";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/shrikhand-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Shrikhand";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/shrikhand-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --paper:#FFF4F8; --paper2:#FFE3EE; --ink:#3B0F33; --ink-soft:#6E3A63;
+  --magenta:#C2187A; --plum:#6A1B5C; --sun:#F7B500; --cherry:#A3122F; --mint:#BFE8D6;
+  --card:#FFFFFF; --line:#F1C6DA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1E0A1B; --paper2:#2B1027; --ink:#FBE8F2; --ink-soft:#D8AFCB;
+    --magenta:#FF5CB0; --plum:#C77DB8; --sun:#FFC83D; --cherry:#FF6B83; --mint:#2F5E4E;
+    --card:#2A1226; --line:#4A2343;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1E0A1B; --paper2:#2B1027; --ink:#FBE8F2; --ink-soft:#D8AFCB;
+  --magenta:#FF5CB0; --plum:#C77DB8; --sun:#FFC83D; --cherry:#FF6B83; --mint:#2F5E4E;
+  --card:#2A1226; --line:#4A2343;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.55;
+  background-image:radial-gradient(var(--line) 1.2px,transparent 1.3px);background-size:22px 22px;}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+h1,h2,.display{font-family:"Shrikhand","Cooper Black",Georgia,serif;font-weight:400;letter-spacing:.01em;margin:0}
+
+/* HERO: a giant gift tag */
+.hero{padding:56px 0 28px;display:grid;place-items:center}
+.tag{position:relative;background:var(--magenta);color:#fff;width:min(720px,100%);
+  border-radius:28px 120px 120px 28px;padding:44px 140px 44px 44px;transform:rotate(-2deg);
+  box-shadow:10px 12px 0 var(--plum)}
+.tag::after{content:"";position:absolute;right:52px;top:50%;width:44px;height:44px;margin-top:-22px;border-radius:50%;background:var(--paper);box-shadow:inset 3px 3px 0 rgba(0,0,0,.15)}
+.string{position:absolute;right:-60px;top:50%;width:140px;height:4px;background:var(--sun);transform:rotate(-14deg);transform-origin:left;margin-top:-2px;z-index:2;border-radius:4px}
+.tag .to{font-weight:600;opacity:.9;margin:0 0 6px}
+.tag h1{font-size:clamp(40px,7.5vw,78px);line-height:.98}
+.tag p.sub{margin:16px 0 0;font-size:19px;max-width:30ch}
+.controls{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:40px}
+.btn{font:600 16px/1 "Figtree",system-ui,sans-serif;border:3px solid var(--ink);background:var(--card);color:var(--ink);
+  padding:14px 20px;border-radius:999px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .12s, box-shadow .12s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.sun{background:var(--sun);color:#3B0F33}
+.btn[aria-pressed="true"]{background:var(--mint)}
+.punmeter{margin-top:14px;text-align:center;color:var(--ink-soft);font-size:15px;min-height:1.5em}
+
+.pun{transition:background .25s, box-shadow .25s;border-radius:4px}
+body.show-puns .pun{background:var(--sun);color:#3B0F33;box-shadow:0 0 0 3px var(--sun)}
+
+/* WISH GRID */
+section{padding:40px 0}
+.sechead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sechead h2{font-size:clamp(30px,5vw,44px);color:var(--plum)}
+.sechead p{margin:0;color:var(--ink-soft)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.gift{position:relative;background:var(--card);border:3px solid var(--ink);border-radius:18px;overflow:hidden;
+  display:flex;flex-direction:column;min-height:300px;box-shadow:6px 6px 0 var(--c,var(--magenta))}
+.gift .box{position:absolute;inset:0;z-index:3;background:var(--c,var(--magenta));display:grid;place-items:center;cursor:pointer;border:0;width:100%;color:#fff;
+  font:inherit;transition:transform .55s cubic-bezier(.6,-0.3,.4,1.3), opacity .4s .25s;transform-origin:top center;padding:20px}
+.gift .box::before,.gift .box::after{content:"";position:absolute;background:var(--sun)}
+.gift .box::before{left:50%;top:0;bottom:0;width:22px;margin-left:-11px}
+.gift .box::after{top:50%;left:0;right:0;height:22px;margin-top:-11px}
+.bow{position:relative;z-index:1;font-size:46px;line-height:1;background:var(--sun);border-radius:50%;width:84px;height:84px;display:grid;place-items:center;border:3px solid #3B0F33}
+.box .hint{position:absolute;bottom:18px;left:0;right:0;z-index:1;text-align:center;font-weight:800;font-size:15px;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.box .hint span{background:#3B0F33;padding:6px 12px;border-radius:999px}
+.gift.open .box{transform:translateY(-105%) rotate(-8deg);opacity:0;pointer-events:none}
+.gift .inner{padding:22px 22px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.gift .emoji{font-size:38px;line-height:1}
+.gift h3{font-family:"Shrikhand",Georgia,serif;font-weight:400;font-size:24px;line-height:1.1;margin:0;color:var(--ink)}
+.gift .what{font-weight:800;color:var(--c,var(--magenta));margin:0;font-size:15px}
+.gift p{margin:0}
+.gift .note{background:var(--paper2);border-radius:10px;padding:10px 12px;font-size:15px}
+.gift .links{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;padding-top:8px}
+.go{display:inline-block;text-decoration:none;font-weight:800;font-size:15px;padding:10px 14px;border-radius:999px;background:var(--ink);color:var(--paper)}
+.go.alt{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.go:hover{background:var(--c,var(--magenta));color:#fff;border-color:transparent}
+.gift.flash{animation:flash 1.2s ease 2}
+@keyframes flash{50%{box-shadow:0 0 0 8px var(--sun)}}
+
+/* BOOKSHELF */
+.shelf{background:var(--card);border:3px solid var(--ink);border-radius:18px;padding:24px 20px 0;box-shadow:6px 6px 0 var(--cherry)}
+.books{display:flex;align-items:flex-end;gap:6px;overflow-x:auto;padding:10px 4px 0;min-height:250px;border-bottom:14px solid var(--plum)}
+.spine{flex:0 0 auto;width:46px;border:2px solid #3B0F33;border-bottom:0;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;
+  text-decoration:none;color:#fff;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:800;font-size:13px;padding:10px 0;transition:transform .2s;text-align:center;line-height:1.1}
+.spine:hover,.spine:focus-visible{transform:rotate(180deg) translateY(14px)}
+.shelfmeta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center;padding:18px 4px 22px}
+.total{font-family:"Shrikhand",Georgia,serif;font-size:28px;color:var(--cherry)}
+.booklist{columns:2 240px;column-gap:28px;margin:0;padding:0 4px 22px;list-style:none;font-size:15px}
+.booklist li{break-inside:avoid;display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:6px 0}
+.booklist a{text-decoration:none;font-weight:600}
+.booklist a:hover{color:var(--cherry);text-decoration:underline}
+.booklist span{color:var(--ink-soft);white-space:nowrap}
+
+/* SHOES */
+.shoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px}
+.polaroid{background:#fff;padding:12px 12px 16px;border:3px solid var(--ink);border-radius:6px;box-shadow:5px 5px 0 var(--plum);position:relative;margin:0}
+.polaroid:nth-child(odd){transform:rotate(-2deg)} .polaroid:nth-child(even){transform:rotate(2deg)}
+.polaroid img{width:100%;height:auto;display:block;border-radius:2px}
+.polaroid figcaption{color:#3B0F33;font-weight:700;font-size:14px;margin-top:8px;text-align:center}
+.size{position:absolute;top:-14px;right:-10px;background:var(--sun);color:#3B0F33;font-weight:800;font-size:13px;border:2px solid #3B0F33;border-radius:999px;padding:6px 10px;transform:rotate(8deg)}
+.shoecta{margin-top:26px;text-align:center}
+
+footer{text-align:center;padding:40px 20px 70px;color:var(--ink-soft)}
+footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-bottom:8px}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--ink);color:var(--paper);
+  padding:14px 20px;border-radius:14px;font-weight:600;z-index:60;transition:transform .35s;max-width:90vw;text-align:center}
+.toast.on{transform:translate(-50%,0)}
+
+@media (max-width:620px){
+  .tag{padding:34px 28px 90px;border-radius:28px 28px 90px 90px;transform:rotate(-1.5deg)}
+  .tag::after{right:50%;top:auto;bottom:24px;margin:0 -20px 0 0;width:40px;height:40px}
+  .string{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<header class="wrap hero">
+  <div class="tag">
+    <div class="string"></div>
+    <p class="to">To: whoever loves me · From: Faith</p>
+    <h1>Faith's birthday wish list</h1>
+    <p class="sub"><span class="pun">Another trip around the sun, and I've got my wish-list in orbit.</span> Tap a box to unwrap it.</p>
+  </div>
+  <div class="controls">
+    <button class="btn sun" id="spin">🎲 Pick a gift for me</button>
+    <button class="btn" id="unwrapAll">🎁 Unwrap everything</button>
+    <button class="btn" id="punBtn" aria-pressed="false">✨ Highlight the puns</button>
+  </div>
+  <p class="punmeter" id="punmeter"></p>
+</header>
+
+<main class="wrap">
+<section aria-labelledby="wishes">
+  <div class="sechead">
+    <h2 id="wishes">The wishes</h2>
+    <p><span class="pun">No pressure, but these are pre-sent-ed in no particular order.</span></p>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="books" aria-labelledby="bookhead">
+  <div class="sechead">
+    <h2 id="bookhead">Books!!!</h2>
+    <p><span class="pun">Fourteen novel ideas, already shelf-selected.</span></p>
+  </div>
+  <div class="shelf">
+    <div class="books" id="spines"></div>
+    <div class="shelfmeta">
+      <div><div class="total">₦201,500</div><div style="color:var(--ink-soft);font-size:15px">14 books, all at Roving Heights Bookstore</div></div>
+      <a class="go" style="--c:var(--cherry)" href="https://rhbooks.com.ng/" target="_blank" rel="noopener">Visit Roving Heights</a>
+    </div>
+    <ul class="booklist" id="booklist"></ul>
+  </div>
+</section>
+
+<section id="shoes" aria-labelledby="shoehead">
+  <div class="sechead">
+    <h2 id="shoehead">Shoes, size 38/39</h2>
+    <p><span class="pun">I'm head over heels for these, Steve Madden-ly so.</span></p>
+  </div>
+  <div class="shoes">
+    <figure class="polaroid"><span class="size">38/39</span><img alt="Plum patent strappy stiletto sandal with ankle strap" src="images/plum-strappy-sandal.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Plum patent strappy sandal</figcaption></figure>
+    <figure class="polaroid"><span class="size">38/39</span><img alt="Black toe-loop stiletto sandal with ankle strap" src="images/black-toe-loop-stiletto.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Black toe-loop stiletto</figcaption></figure>
+    <figure class="polaroid"><span class="size">38/39</span><img alt="Black strappy kitten-heel sandal with gold bead details" src="images/black-strappy-gold-beads.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Black strappy, gold beads</figcaption></figure>
+    <figure class="polaroid"><span class="size">38/39</span><img alt="Magenta suede slingback pump with burgundy ankle strap" src="images/magenta-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Magenta suede slingback</figcaption></figure>
+  <figure class="polaroid"><span class="size">38/39</span><img alt="Mustard suede slingback pump with light blue ankle strap and brown heel" src="images/mustard-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Mustard suede slingback</figcaption></figure>
+  </div>
+  <p class="shoecta"><a class="go" style="--c:var(--plum)" href="https://www.stevemadden.com/" target="_blank" rel="noopener">Shop Steve Madden</a></p>
+</section>
+</main>
+
+<footer>
+  <div class="display"><span class="pun">Thanks for being present.</span></div>
+  <p><span class="pun">Whatever you pick, I'll be beside myself with glee. That's a wrap!</span></p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const WISHES=[
+ {id:"tennis",e:"🎾",c:"#2E8B57",t:'<span class="pun">Love all</span>',what:"Wilson tennis racket, with balls",
+  p:'<span class="pun">The ball\'s in your court.</span> <span class="pun">A racket worth making a racket about.</span>',
+  links:[["Wilson tennis","https://www.wilson.com/en-us/tennis"]]},
+ {id:"watch",e:"⌚",c:"#3B0F33",t:'<span class="pun">It\'s about time</span>',what:"Apple Watch",
+  p:'<span class="pun">I\'ll be watching this space.</span>',links:[["Apple Watch","https://www.apple.com/apple-watch/"]]},
+ {id:"ipad",e:"📱",c:"#6A1B5C",t:'<span class="pun">iPad, you pay?</span>',what:"iPad",
+  p:'<span class="pun">Tap into your generous side.</span>',links:[["iPad","https://www.apple.com/ipad/"]]},
+ {id:"monitor",e:"🖥️",c:"#1F5FA8",t:'<span class="pun">Screen-sational</span>',what:"A monitor screen",
+  p:'<span class="pun">Help me monitor my happiness levels.</span>',links:[["Browse monitors","https://www.jumia.com.ng/catalog/?q=monitor"]]},
+ {id:"sun",e:"🌻",c:"#D99A00",t:'<span class="pun">You grow, girl</span>',what:"Sunflowers",
+  p:'<span class="pun">Bring them by and I\'ll be petal to the metal happy.</span>',links:[["Find a florist","https://www.google.com/search?q=sunflower+bouquet+delivery+Lagos"]]},
+ {id:"body",e:"🧴",c:"#0F7A5C",t:'<span class="pun">Skin in the game</span>',what:"Body & skin care from The Body Shop",
+  p:'<span class="pun">I\'d be lotion-ally moved.</span>',links:[["The Body Shop","https://www.thebodyshop.com/"]]},
+ {id:"flight",e:"✈️",c:"#B4232C",t:'<span class="pun">Kenya believe it?</span>',what:"Return flight ticket to Nairobi",
+  p:'<span class="pun">Plane and simple: I want to go.</span>',links:[["Search flights","https://www.google.com/travel/flights?q=Flights%20from%20Lagos%20to%20Nairobi"],["Kenya Airways","https://www.kenya-airways.com/"]]},
+ {id:"books",e:"📚",c:"#A3122F",t:'<span class="pun">Booked and busy</span>',what:"Books!!! (14 already in the cart)",
+  p:'Pick any from the shelf below, or gift the whole stack.',links:[["See the bookshelf","#books"]]},
+ {id:"shoes",e:"👠",c:"#8E1C6F",t:'<span class="pun">If the shoe fits</span>',what:"Shoes, size 38/39 (Steve Madden)",
+  p:'Five pairs I love are pinned below.',links:[["See the shoes","#shoes"]]},
+ {id:"jewel",e:"📿",c:"#B07A12",t:'<span class="pun">Let\'s link up</span>',what:"Necklace and bracelet pair from ÌTURA",
+  p:'<span class="pun">A pair-fect match, made in Lagos.</span>',links:[["ÌTURA Jewelry","https://iturajewelry.com/"]]},
+ {id:"wig",e:"💇🏾‍♀️",c:"#5B2A86",t:'<span class="pun">Hair today, here tomorrow</span>',what:"Wig from Hairs by Nii",
+  p:'<span class="pun">No need to split hairs:</span> just tell her it\'s for Faith. She knows exactly what I want.',
+  note:'<span class="pun">Saying "it\'s for Faith" is the secret to make her wig out.</span>',
+  links:[["Hairs by Nii","https://www.instagram.com/reel/DcO5XeJK0gO/?stkn=MXZoczJ0dWR2ZGlpeA=="]]},
+ {id:"suede",e:"👜",c:"#6B3A1E",t:'<span class="pun">It\'s in the bag</span>',what:"Chelly bag from Brags, in suede",
+  p:'<span class="pun">I suede-ly need the full set:</span> maxi and midi, in both colours.',
+  note:'A set in black suede (maxi + midi) and a set in brown suede (maxi + midi).',
+  links:[["Chelly bag on Brags","https://www.bragsng.co/products/chelly-all-bag?variant=45388192743458"]]}
+];
+const BOOKS=[["The Romance Revival",14500],["Soft Landing in Kumasi",15000],["This Seat Is Taken",15000],["The Score",14500],["The Goal",14500],["The Mistake",14500],["The Night We Met",14000],["Love at First Sighting",14500],["Love and Other Conspiracies",15000],["Losing Hope & Finding Cinderella",13500],["Beg, Borrow, or Steal",14500],["Beach Read",17000],["Love and Other Words",13000],["Love on the Brain",12000]];
+const SPINE=["#C2187A","#6A1B5C","#A3122F","#1F5FA8","#2E8B57","#D99A00","#5B2A86","#0F7A5C"];
+
+const grid=document.getElementById('grid');
+WISHES.forEach(w=>{
+  const el=document.createElement('article');
+  el.className='gift';el.id='w-'+w.id;el.style.setProperty('--c',w.c);
+  const links=w.links.map((l,i)=>{const ext=!l[1].startsWith('#');return `<a class="go${i?' alt':''}" href="${l[1]}" ${ext?'target="_blank" rel="noopener"':''}>${l[0]}</a>`}).join('');
+  el.innerHTML=`<button class="box" aria-label="Unwrap: ${w.what}"><span class="bow" aria-hidden="true">🎀</span><span class="hint"><span>Tap to unwrap</span></span></button>
+   <div class="inner"><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div></div>`;
+  el.querySelector('.box').addEventListener('click',()=>{open(el);burst(0.5,0.4,40)});
+  grid.appendChild(el);
+});
+function open(el){el.classList.add('open');el.querySelector('.box').setAttribute('tabindex','-1');}
+
+const sp=document.getElementById('spines'),bl=document.getElementById('booklist');
+const url=t=>'https://rhbooks.com.ng/?s='+encodeURIComponent(t)+'&post_type=product';
+BOOKS.forEach((b,i)=>{
+  const a=document.createElement('a');a.className='spine';a.href=url(b[0]);a.target='_blank';a.rel='noopener';
+  a.textContent=b[0];a.style.background=SPINE[i%SPINE.length];a.style.height=(170+((i*37)%70))+'px';a.style.width=(40+((i*13)%16))+'px';
+  a.title=b[0]+' · ₦'+b[1].toLocaleString();sp.appendChild(a);
+  const li=document.createElement('li');li.innerHTML=`<a href="${url(b[0])}" target="_blank" rel="noopener"></a><span>₦${b[1].toLocaleString()}</span>`;
+  li.querySelector('a').textContent=b[0];bl.appendChild(li);
+});
+
+const toast=document.getElementById('toast');let tt;
+function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),3200)}
+
+document.getElementById('spin').addEventListener('click',()=>{
+  const w=WISHES[Math.floor(Math.random()*WISHES.length)];const el=document.getElementById('w-'+w.id);
+  open(el);el.scrollIntoView({block:'center'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  burst(0.5,0.3,120);say('The gift gods have spoken: '+w.what);
+});
+document.getElementById('unwrapAll').addEventListener('click',()=>{document.querySelectorAll('.gift').forEach(open);burst(0.5,0.2,160);say('All unwrapped. Happy shopping!')});
+
+const puns=document.querySelectorAll('.pun');const meter=document.getElementById('punmeter');
+const pb=document.getElementById('punBtn');
+pb.addEventListener('click',()=>{const on=document.body.classList.toggle('show-puns');pb.setAttribute('aria-pressed',on);
+  if(on){document.querySelectorAll('.gift').forEach(open);meter.textContent=puns.length+' puns highlighted. Groan responsibly.'}else meter.textContent='';});
+
+/* confetti */
+const cv=document.getElementById('confetti'),cx=cv.getContext('2d');let parts=[],raf;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio}size();addEventListener('resize',size);
+const COLS=["#C2187A","#F7B500","#6A1B5C","#A3122F","#BFE8D6","#FF8FC8"];
+function burst(x,y,n){if(reduce)return;for(let i=0;i<n;i++)parts.push({x:x*cv.width,y:y*cv.height,vx:(Math.random()-.5)*14*devicePixelRatio,vy:(Math.random()*-12-2)*devicePixelRatio,
+  r:(4+Math.random()*5)*devicePixelRatio,c:COLS[i%COLS.length],a:Math.random()*6,s:Math.random()*.3-.15,l:120+Math.random()*60});if(!raf)tick()}
+function tick(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.l-->0&&p.y<cv.height+40);
+  parts.forEach(p=>{p.vy+=.35*devicePixelRatio;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.s;cx.save();cx.translate(p.x,p.y);cx.rotate(p.a);cx.fillStyle=p.c;cx.fillRect(-p.r,-p.r/2,p.r*2,p.r);cx.restore()});
+  raf=parts.length?requestAnimationFrame(tick):null;if(!raf)cx.clearRect(0,0,cv.width,cv.height)}
+addEventListener('load',()=>setTimeout(()=>burst(0.5,0.15,90),300));
+</script>
+</body>
+</html>
