@@ -270,6 +270,31 @@ footer::after{content:"";display:block;height:96px;margin:44px -20px 0;backgroun
   .addr{border-left:0;padding-left:0;border-top:3px solid #1B1B3A;padding-top:18px}
   .mark::after{display:none}
 }
+
+/* PLAYABLE LEVEL */
+.screen::after{content:none}
+.screen{padding-bottom:18px}
+.level{position:relative;height:320px;overflow:hidden;border:3px solid #000;background:#5C94FC;touch-action:pan-y}
+.world{position:absolute;top:0;bottom:0;left:0;will-change:transform;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='70'%3E%3Cpath fill='%23fff' d='M40 62h128V38h-16V22h-24V6H80v16H56v16H40zM270 50h84V34h-12V22h-16V12h-28v10h-16v12h-12z'/%3E%3C/svg%3E") repeat-x 0 8px}
+.world::after{content:"";position:absolute;left:0;right:0;bottom:0;height:64px;background:var(--brick);border-top:3px solid #000}
+.hill{position:absolute;bottom:64px;width:240px;height:96px;background:#00A800;border:3px solid #000;border-bottom:0;border-radius:120px 120px 0 0/96px 96px 0 0;
+  background-image:radial-gradient(circle at 40% 45%,#007800 6px,transparent 7px),radial-gradient(circle at 62% 62%,#007800 6px,transparent 7px)}
+.pipe{position:absolute;left:56px;bottom:64px;width:64px;height:52px;background:#00A800;border:3px solid #000;box-shadow:inset 9px 0 0 #7CE07C,inset -11px 0 0 #007800}
+.pipe::before{content:"";position:absolute;left:-10px;right:-10px;top:-27px;height:26px;background:#00A800;border:3px solid #000;box-shadow:inset 9px 0 0 #7CE07C,inset -11px 0 0 #007800}
+.flag{position:absolute;bottom:64px;width:8px;height:200px;background:#7CE07C;border:3px solid #000}
+.flag::before{content:"";position:absolute;left:-7px;top:-19px;width:16px;height:16px;border-radius:50%;background:#FAC000;border:3px solid #000}
+.flag::after{content:"";position:absolute;right:5px;top:150px;width:46px;height:34px;background:#E52521;clip-path:polygon(100% 0,0 50%,100% 100%);transition:top 1.2s ease-out}
+.quest.won .flag::after{top:6px}
+.tile{position:absolute;bottom:194px;width:64px;height:64px;aspect-ratio:auto;font-size:28px;z-index:1}
+.plumber{position:absolute;left:0;bottom:64px;width:48px;height:64px;z-index:2;pointer-events:none}
+.plumber svg{display:block;width:100%;height:100%}
+.plumber.run svg{animation:step .22s linear infinite}
+@keyframes step{0%,49%{transform:translateY(0) rotate(0)}50%,100%{transform:translateY(-4px) rotate(-5deg)}}
+.pad{display:flex;align-items:center;gap:10px}
+.pad .tip{flex:1;margin:0;text-align:center;font:400 9px/1.7 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;color:#fff;text-shadow:2px 2px 0 #000}
+.ctl{font:400 12px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;padding:13px 15px;background:#fff;color:#111;border:3px solid #000;box-shadow:3px 3px 0 #000;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
+.ctl:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.ctl.a{background:#E52521;color:#fff}
 </style>
 </head>
 <body>
@@ -313,11 +338,22 @@ footer::after{content:"";display:block;height:96px;margin:44px -20px 0;backgroun
     <div class="bar"><span>World 1-1: Wish Quest</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
     <div class="screen">
       <div class="hud"><span>Faith <b id="score">000000</b></span><span class="pips" id="pips" aria-hidden="true"></span><span>Coins ×<b id="count">00/12</b></span></div>
-      <div class="play">
-        <div class="tiles" id="tiles"></div>
-        <div class="stage" id="stage" aria-live="polite">
-          <div class="intro" id="intro"><p class="blink">▶ Press start</p><p>Hit a ? block to grab a wish.</p></div>
+      <div class="level" id="level" tabindex="0" aria-label="Wish Quest level. Use the arrow keys to move and space to jump, or pick a block.">
+        <div class="world" id="world">
+          <span class="hill" style="left:560px" aria-hidden="true"></span><span class="hill" style="left:1380px" aria-hidden="true"></span>
+          <span class="pipe" aria-hidden="true"></span><span class="flag" id="flag" aria-hidden="true"></span>
+          <div id="tiles"></div>
+          <div class="plumber" id="plumber"></div>
         </div>
+      </div>
+      <div class="pad">
+        <button class="ctl" type="button" data-k="left" aria-label="Move left">&lt;</button>
+        <button class="ctl" type="button" data-k="right" aria-label="Move right">&gt;</button>
+        <p class="tip">Arrow keys + space, or tap a ? block</p>
+        <button class="ctl a" type="button" data-k="jump">Jump</button>
+      </div>
+      <div class="stage" id="stage" aria-live="polite">
+        <div class="intro" id="intro"><p class="blink">▶ Press start</p><p>Run, jump and bump a ? block to grab a wish.</p></div>
       </div>
       <p class="winmsg" id="winmsg" hidden>* Course clear! All 12 wishes unlocked *</p>
     </div>
@@ -401,12 +437,13 @@ const SPINE=["#E52521","#008A00","#2038EC","#C84C0C","#B87800","#6A3FCF","#00888
 const quest=document.getElementById('quest'),tiles=document.getElementById('tiles'),stage=document.getElementById('stage'),
   pips=document.getElementById('pips'),count=document.getElementById('count'),intro=document.getElementById('intro'),winmsg=document.getElementById('winmsg');
 const pad=n=>String(n).padStart(2,'0');
+const BX=i=>300+i*150,WORLD=300+WISHES.length*150+260;
 WISHES.forEach((w,i)=>{
   const b=document.createElement('button');
   b.className='tile';b.type='button';b.style.setProperty('--c',w.c);b.style.setProperty('--d',(i%4*.15+Math.floor(i/4)*.1)+'s');
   b.setAttribute('aria-label','Level '+(i+1)+': mystery wish');
   b.innerHTML=`<span class="q" aria-hidden="true">?</span><span class="lv" aria-hidden="true">LV ${pad(i+1)}</span>`;
-  b.addEventListener('click',()=>{const fresh=!b.classList.contains('got');select(i);if(fresh)burst(0.5,0.4,40)});
+  b.style.left=BX(i)+'px';b.addEventListener('click',()=>goTo(i));
   tiles.appendChild(b);
   const el=document.createElement('article');
   el.className='gift';el.id='w-'+w.id;el.hidden=true;el.style.setProperty('--c',w.c);
@@ -421,7 +458,7 @@ function unlock(i){
   b.classList.add('got');b.querySelector('.q').textContent=WISHES[i].e;b.setAttribute('aria-label','Level '+(i+1)+': '+WISHES[i].what);
   const n=tiles.querySelectorAll('.got').length;
   [...pips.children].forEach((p,j)=>p.classList.toggle('on',j<n));count.textContent=pad(n)+'/'+WISHES.length;document.getElementById('score').textContent=String(n*100).padStart(6,'0');
-  if(n===WISHES.length&&!won){won=true;winmsg.hidden=false}
+  if(n===WISHES.length&&!won){won=true;winmsg.hidden=false;quest.classList.add('won')}
 }
 function restart(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)}
 function select(i){
@@ -429,7 +466,6 @@ function select(i){
   [...tiles.children].forEach((t,j)=>t.classList.toggle('sel',j===i));
   gifts.forEach((g,j)=>g.hidden=j!==i);
   restart(tiles.children[i],'hit');restart(gifts[i],quest.classList.contains('all')?'flash':'pop');
-  gifts[i].scrollIntoView({block:'nearest'});
 }
 function unlockAll(){WISHES.forEach((_,i)=>unlock(i));quest.classList.add('all')}
 
@@ -446,20 +482,62 @@ BOOKS.forEach((b,i)=>{
 const toast=document.getElementById('toast');let tt;
 function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),3200)}
 
-let spinning=false;
+/* the level: a tiny platformer */
+const level=document.getElementById('level'),world=document.getElementById('world'),heroEl=document.getElementById('plumber');
+const SPR=["...RRRRR....","..RRRRRRRRR.","..HHHSSHS...",".HSHSSSHSSS.",".HSHHSSSHSSS",".HHSSSSHHHH.","...SSSSSSS..","..RRBRRR....",".RRRBRRBRRR.","RRRRBBBBRRRR","SSRBYBBYBRSS","SSSBBBBBBSSS","SSBBBBBBBBSS","..BBB..BBB..",".HHH....HHH.","HHHH....HHHH"];
+const PAL={R:'#E52521',B:'#2038EC',S:'#FFCC99',H:'#6B3A0A',Y:'#FAC000'};
+heroEl.innerHTML='<svg viewBox="0 0 12 16" shape-rendering="crispEdges" aria-hidden="true">'+SPR.map((r,y)=>[...r].map((c,x)=>PAL[c]?`<rect x="${x}" y="${y}" width="1" height="1" fill="${PAL[c]}"/>`:'').join('')).join('')+'</svg>';
+world.style.width=WORLD+'px';document.getElementById('flag').style.left=(WORLD-130)+'px';
+const HW=48,HH=64,GAP=130,SPEED=280,GRAV=1900,JUMP=660;
+const P={x:150,y:0,vy:0,dir:1,ground:true,moving:false,target:null,after:null},keys={left:false,right:false,jump:false};let loop=0,last=0;
+function draw(){
+  const vw=level.clientWidth,cam=Math.max(0,Math.min(WORLD-vw,P.x+HW/2-vw/2));
+  world.style.transform=`translateX(${-cam}px)`;
+  heroEl.style.transform=`translate(${P.x}px,${-P.y}px) scaleX(${P.dir})`;
+  heroEl.classList.toggle('run',P.moving&&P.ground);
+}
+function jump(){P.ground=false;P.vy=JUMP}
+function bump(i){
+  const fresh=!tiles.children[i].classList.contains('got');select(i);if(fresh)burst(0.5,0.4,40);
+  if(P.target===i){P.target=null;const f=P.after;P.after=null;if(f)f()}
+}
+function frame(t){
+  const dt=Math.min(.034,(t-last)/1000)||.016;last=t;let mv=0;
+  if(P.target!=null){const dx=BX(P.target)+8-P.x;if(Math.abs(dx)>6)mv=Math.sign(dx);else if(P.ground){P.x=BX(P.target)+8;jump()}}
+  else{mv=(keys.right?1:0)-(keys.left?1:0);if(keys.jump&&P.ground)jump()}
+  if(mv){P.dir=mv;P.x=Math.max(10,Math.min(WORLD-HW-10,P.x+mv*SPEED*dt))}
+  P.moving=!!mv;
+  if(!P.ground){
+    P.vy-=GRAV*dt;P.y+=P.vy*dt;
+    if(P.vy>0&&P.y+HH>=GAP){const c=P.x+HW/2,i=Math.round((c-32-BX(0))/150);
+      if(i>=0&&i<WISHES.length&&Math.abs(c-(BX(i)+32))<46){P.y=GAP-HH;P.vy=-60;bump(i)}}
+    if(P.y<=0){P.y=0;P.vy=0;P.ground=true}
+  }
+  draw();
+  loop=(mv||!P.ground||P.target!=null||keys.left||keys.right||keys.jump)?requestAnimationFrame(frame):0;
+}
+function kick(){if(!loop){last=performance.now();loop=requestAnimationFrame(frame)}}
+function goTo(i,after){
+  if(reduce){P.x=BX(i)+8;draw();const fresh=!tiles.children[i].classList.contains('got');select(i);if(fresh)burst(0.5,0.4,40);if(after)after();return}
+  P.target=i;P.after=after||null;kick();
+}
+const KEYMAP={ArrowLeft:'left',a:'left',A:'left',ArrowRight:'right',d:'right',D:'right',ArrowUp:'jump',w:'jump',W:'jump',' ':'jump'};
+level.addEventListener('keydown',e=>{const k=KEYMAP[e.key];if(!k||(e.key===' '&&e.target!==level))return;e.preventDefault();P.target=null;keys[k]=true;kick()});
+level.addEventListener('keyup',e=>{const k=KEYMAP[e.key];if(k)keys[k]=false});
+level.addEventListener('focusout',()=>{keys.left=keys.right=keys.jump=false});
+document.querySelectorAll('.ctl').forEach(b=>{const k=b.dataset.k,off=()=>{keys[k]=false};
+  b.addEventListener('pointerdown',e=>{e.preventDefault();P.target=null;keys[k]=true;kick()});
+  ['pointerup','pointercancel','pointerleave'].forEach(n=>b.addEventListener(n,off));
+  b.addEventListener('click',e=>{if(e.detail===0){P.target=null;keys[k]=true;kick();setTimeout(off,k==='jump'?60:320)}});
+  b.addEventListener('contextmenu',e=>e.preventDefault());
+});
+addEventListener('resize',draw);draw();
+
 document.getElementById('spin').addEventListener('click',()=>{
-  if(spinning)return;
   const left=WISHES.map((_,i)=>i).filter(i=>!tiles.children[i].classList.contains('got'));
   const pool=left.length?left:WISHES.map((_,i)=>i),target=pool[Math.floor(Math.random()*pool.length)];
-  const land=()=>{spinning=false;[...tiles.children].forEach(t=>t.classList.remove('cursor'));select(target);burst(0.5,0.3,120);say('The gift gods have spoken: '+WISHES[target].what)};
   quest.scrollIntoView({block:'center'});
-  if(reduce)return land();
-  spinning=true;const n=WISHES.length,start=Math.floor(Math.random()*n),total=n+((target-start+n)%n);let k=0;
-  (function step(){
-    [...tiles.children].forEach((t,j)=>t.classList.toggle('cursor',j===(start+k)%n));
-    if(k===total)return setTimeout(land,260);
-    k++;setTimeout(step,45+200*Math.pow(k/total,2));
-  })();
+  goTo(target,()=>{burst(0.5,0.3,120);say('The gift gods have spoken: '+WISHES[target].what)});
 });
 document.getElementById('unwrapAll').addEventListener('click',()=>{unlockAll();burst(0.5,0.2,160);say('All unwrapped. Happy shopping!')});
 
