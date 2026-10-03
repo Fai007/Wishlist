@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Faith's Birthday Wish List</title>
 <meta name="description" content="Another trip around the sun, and I've got my wish-list in orbit. Tap a box to unwrap it.">
-<meta name="theme-color" content="#B5532F">
+<meta name="theme-color" content="#5C94FC">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Faith's Birthday Wish List">
 <meta property="og:description" content="Another trip around the sun, and I've got my wish-list in orbit. Tap a box to unwrap it.">
@@ -17,55 +17,53 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="fonts/bagel-fat-one-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/press-start-2p-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:"Figtree";font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/figtree-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:"Figtree";font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/figtree-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Bagel Fat One";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/bagel-fat-one-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Silkscreen";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/silkscreen-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Silkscreen";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/silkscreen-700-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Press Start 2P";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/press-start-2p-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 :root{
-  --paper:#FBF3E4; --paper2:#F3E6CF; --paper3:#E4E8D0; --ink:#3E2416; --ink-soft:#75523F;
-  --magenta:#B5532F; --plum:#5E6B33; --sun:#EBCF9A; --cherry:#8A3F22; --mint:#C5CFA4; --cyan:#A9B58A;
-  --card:#FFFCF5; --line:#E0CDAE;
+  --paper:#5C94FC; --paper2:#DCE8FF; --paper3:#8DB8FF; --ink:#111111; --ink-soft:#14215E;
+  --magenta:#E52521; --plum:#C84C0C; --sun:#FAC000; --cherry:#C81E1E; --mint:#00A800; --cyan:#FFFFFF;
+  --card:#FFFFFF; --line:#B9C8F5; --brick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%23C84C0C'/%3E%3Cpath d='M0 1h32M0 17h32M1 0v16M17 16v16' stroke='%23000' stroke-width='2'/%3E%3Cpath d='M3 3h28M0 19h15M19 19h13' stroke='%23F8A070' stroke-width='2'/%3E%3C/svg%3E");
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#24150D; --paper2:#2E1B11; --paper3:#262B17; --ink:#FBF3E4; --ink-soft:#D5BFA6;
-  --magenta:#E08A66; --plum:#A9B58A; --sun:#EBCF9A; --cherry:#E8A07F; --mint:#4C5729; --cyan:#7C8A50;
-  --card:#352115; --line:#5A3D2A;
+    --paper:#0B1030; --paper2:#262A5C; --paper3:#141A4A; --ink:#F4F4F4; --ink-soft:#B8C0F0;
+  --magenta:#FF5A4F; --plum:#C84C0C; --sun:#FAC000; --cherry:#FF7A6E; --mint:#007A00; --cyan:#FFFFFF;
+  --card:#1B1B3A; --line:#3A3F7A;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#24150D; --paper2:#2E1B11; --paper3:#262B17; --ink:#FBF3E4; --ink-soft:#D5BFA6;
-  --magenta:#E08A66; --plum:#A9B58A; --sun:#EBCF9A; --cherry:#E8A07F; --mint:#4C5729; --cyan:#7C8A50;
-  --card:#352115; --line:#5A3D2A;
+  --paper:#0B1030; --paper2:#262A5C; --paper3:#141A4A; --ink:#F4F4F4; --ink-soft:#B8C0F0;
+  --magenta:#FF5A4F; --plum:#C84C0C; --sun:#FAC000; --cherry:#FF7A6E; --mint:#007A00; --cyan:#FFFFFF;
+  --card:#1B1B3A; --line:#3A3F7A;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.55;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cpath fill='%23C4623F' fill-opacity='.2' d='M14 4c1 6 3 8 9 9-6 1-8 3-9 9-1-6-3-8-9-9 6-1 8-3 9-9zM46 38c.7 4 2 5.300 6 6-4 .7-5.300 2-6 6-.7-4-2-5.300-6-6 4-.7 5.300-2 6-6z'/%3E%3C/svg%3E"),linear-gradient(165deg,var(--paper),var(--paper2) 50%,var(--paper3));background-size:64px 64px,100% 100%;}
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='380'%3E%3Cg fill='%23fff' fill-opacity='.6'%3E%3Cpath d='M40 96h128v-24h-16v-16h-24v-16h-48v16h-24v16H40zM330 280h96v-18h-12v-12h-18v-12h-36v12h-18v12h-12z'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,var(--paper),var(--paper3));background-size:520px 380px,100% 100%;}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-h1,h2,.display{font-family:"Bagel Fat One","Cooper Black","Arial Rounded MT Bold",system-ui,sans-serif;font-weight:400;letter-spacing:.01em;margin:0}
+h1,h2,.display{font-family:"Press Start 2P","Cooper Black","Arial Rounded MT Bold",system-ui,sans-serif;font-weight:400;letter-spacing:.01em;margin:0}
 
 /* HERO: a desktop window */
 .hero{padding-block:48px 28px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center}
 .win{background:var(--card);border:3px solid var(--ink);border-radius:12px;box-shadow:8px 8px 0 var(--ink);overflow:hidden}
 .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px 8px 14px;
-  background:linear-gradient(90deg,#3E2416,#6B4A2F 55%,#5E6B33);color:#fff;font:700 13px/1 "Silkscreen",ui-monospace,monospace;border-bottom:3px solid var(--ink)}
+  background:linear-gradient(90deg,#111111,#6B4A2F 55%,#5E6B33);color:#fff;font:700 13px/1 "Press Start 2P",ui-monospace,monospace;border-bottom:3px solid var(--ink)}
 .bar .dots{display:flex;gap:6px}
-.bar .dots i{width:18px;height:18px;display:grid;place-items:center;background:#F3E6CF;color:#3E2416;border:2px solid #3E2416;border-radius:3px;font-style:normal;font-size:10px}
+.bar .dots i{width:18px;height:18px;display:grid;place-items:center;background:#F3E6CF;color:#111111;border:2px solid #111111;border-radius:3px;font-style:normal;font-size:10px}
 .tagwrap{position:relative;width:min(720px,100%)}
 .tag{transform:rotate(-1.5deg)}
 .tag .body{background:linear-gradient(135deg,#B5532F,#8A3F22);color:#fff;padding:34px 40px 42px}
-.tag .to{font:400 13px/1.4 "Silkscreen",ui-monospace,monospace;margin:0 0 12px}
-.tag h1{font-size:clamp(42px,8vw,84px);line-height:.98;text-shadow:3px 3px 0 #3E2416,6px 6px 0 #C5CFA4}
+.tag .to{font:400 13px/1.4 "Press Start 2P",ui-monospace,monospace;margin:0 0 12px}
+.tag h1{font-size:clamp(42px,8vw,84px);line-height:.98;text-shadow:3px 3px 0 #111111,6px 6px 0 #C5CFA4}
 .tag p.sub{margin:22px 0 0;font-size:19px;max-width:34ch}
 .spark{position:absolute;z-index:2;width:var(--s,56px);aspect-ratio:1;background:var(--k,var(--sun));
   clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);animation:twinkle 2.6s ease-in-out infinite}
@@ -74,20 +72,20 @@ h1,h2,.display{font-family:"Bagel Fat One","Cooper Black","Arial Rounded MT Bold
 .spark.c{--s:34px;--k:var(--cyan);top:38%;right:-44px;animation-delay:-1.6s}
 @keyframes twinkle{50%{transform:scale(.72) rotate(18deg);opacity:.75}}
 .ticker{margin-top:38px;width:100%;overflow:hidden;border:3px solid var(--ink);border-radius:8px;background:var(--mint);color:var(--ink);
-  font:700 14px/1 "Silkscreen",ui-monospace,monospace;white-space:nowrap}
+  font:700 14px/1 "Press Start 2P",ui-monospace,monospace;white-space:nowrap}
 .ticker div{display:inline-block;padding:10px 0;animation:scroll 24s linear infinite}
 @keyframes scroll{to{transform:translateX(-50%)}}
 .controls{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
-.btn{font:700 14px/1 "Silkscreen",ui-monospace,monospace;border:3px solid var(--ink);background:var(--card);color:var(--ink);
+.btn{font:700 14px/1 "Press Start 2P",ui-monospace,monospace;border:3px solid var(--ink);background:var(--card);color:var(--ink);
   padding:14px 18px;border-radius:10px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .12s, box-shadow .12s}
 .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
 .btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.btn.sun{background:var(--sun);color:#3E2416}
+.btn.sun{background:var(--sun);color:#111111}
 .btn[aria-pressed="true"]{background:var(--mint)}
 .punmeter{margin-top:14px;text-align:center;color:var(--ink-soft);font-size:15px;min-height:1.5em}
 
 .pun{transition:background .25s, box-shadow .25s;border-radius:4px}
-body.show-puns .pun{background:var(--sun);color:#3E2416;box-shadow:0 0 0 3px var(--sun)}
+body.show-puns .pun{background:var(--sun);color:#111111;box-shadow:0 0 0 3px var(--sun)}
 
 /* WISH GRID */
 section{padding:40px 0}
@@ -97,23 +95,23 @@ section{padding:40px 0}
 /* WISH QUEST: mystery blocks + dialog box */
 .quest{background:#2A180E;color:#FBF3E4;border:3px solid var(--ink);border-radius:12px;box-shadow:8px 8px 0 var(--plum);overflow:hidden}
 .screen{padding:18px;display:grid;gap:18px;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 2px,transparent 2px 4px)}
-.hud{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;font:700 13px/1 "Silkscreen",ui-monospace,monospace;color:#EBCF9A}
+.hud{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;font:700 13px/1 "Press Start 2P",ui-monospace,monospace;color:#EBCF9A}
 .hud b{color:#FBF3E4}
 .pips{display:flex;gap:3px}
 .pips i{width:14px;height:14px;background:#55331F;border:2px solid #EBCF9A}
 .pips i.on{background:#C5CFA4}
 .play{display:grid;gap:18px}
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-content:start}
-.tile{position:relative;aspect-ratio:1;display:grid;place-items:center;padding:0;cursor:pointer;border:3px solid #1A0E07;border-radius:8px;
-  background:#EBCF9A;color:#3E2416;font:400 clamp(28px,7vw,46px)/1 "Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;
+.tile{position:relative;aspect-ratio:1;display:grid;place-items:center;padding:0;cursor:pointer;border:3px solid #000000;border-radius:8px;
+  background:#EBCF9A;color:#111111;font:400 clamp(28px,7vw,46px)/1 "Press Start 2P","Arial Rounded MT Bold",system-ui,sans-serif;
   box-shadow:inset -5px -5px 0 rgba(62,36,22,.3),inset 5px 5px 0 rgba(255,255,255,.5);transition:transform .12s}
 .tile:not(.got)::before{content:"";position:absolute;inset:9px;pointer-events:none;
-  background:radial-gradient(circle at 3px 3px,#8A5A3C 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 3px) 3px,#8A5A3C 2.5px,transparent 3px),
-  radial-gradient(circle at 3px calc(100% - 3px),#8A5A3C 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 3px) calc(100% - 3px),#8A5A3C 2.5px,transparent 3px)}
+  background:radial-gradient(circle at 3px 3px,#7C2800 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 3px) 3px,#7C2800 2.5px,transparent 3px),
+  radial-gradient(circle at 3px calc(100% - 3px),#7C2800 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 3px) calc(100% - 3px),#7C2800 2.5px,transparent 3px)}
 .tile:hover{transform:translateY(-4px)}
 .tile .q{display:block}
 .tile:not(.got) .q{animation:bob 1.8s ease-in-out infinite;animation-delay:var(--d,0s)}
-.tile .lv{position:absolute;left:0;right:0;bottom:7px;text-align:center;font:700 10px/1 "Silkscreen",ui-monospace,monospace;color:#8A5A3C}
+.tile .lv{position:absolute;left:0;right:0;bottom:7px;text-align:center;font:700 10px/1 "Press Start 2P",ui-monospace,monospace;color:#7C2800}
 .tile.got{background:var(--c);box-shadow:inset -5px -5px 0 rgba(0,0,0,.25),inset 5px 5px 0 rgba(255,255,255,.2)}
 .tile.got .lv{color:#FBF3E4}
 .tile.sel{outline:3px solid #FBF3E4;outline-offset:2px}
@@ -122,32 +120,32 @@ section{padding:40px 0}
 @keyframes bob{50%{transform:translateY(-5px)}}
 @keyframes hit{35%{transform:translateY(-16px)}70%{transform:translateY(2px)}}
 .stage{display:grid;min-width:0}
-.intro{display:grid;place-content:center;gap:10px;text-align:center;min-height:220px;padding:24px;border:3px dashed #8A5A3C;border-radius:12px;font:700 14px/1.5 "Silkscreen",ui-monospace,monospace}
+.intro{display:grid;place-content:center;gap:10px;text-align:center;min-height:220px;padding:24px;border:3px dashed #7C2800;border-radius:12px;font:700 14px/1.5 "Press Start 2P",ui-monospace,monospace}
 .intro[hidden],.winmsg[hidden]{display:none}
 .intro p{margin:0}
 .intro .blink{font-size:20px;color:#EBCF9A;animation:blink 1.1s steps(2,jump-none) infinite}
 @keyframes blink{50%{opacity:.15}}
-.winmsg{margin:0;padding:12px;text-align:center;border:3px solid #1A0E07;border-radius:8px;background:#C5CFA4;color:#3E2416;font:700 14px/1.3 "Silkscreen",ui-monospace,monospace}
+.winmsg{margin:0;padding:12px;text-align:center;border:3px solid #000000;border-radius:8px;background:#C5CFA4;color:#111111;font:700 14px/1.3 "Press Start 2P",ui-monospace,monospace}
 @media (min-width:860px){.quest:not(.all) .play{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 .quest.all .stage{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
 .quest.all .gift[hidden]{display:flex}
 @media (min-width:860px){.quest.all .tiles{grid-template-columns:repeat(12,minmax(0,1fr))}.quest.all .tile{font-size:26px}.quest.all .tile .lv{display:none}}
 .quest.all .intro{display:none}
-.gift{background:var(--card);color:var(--ink);border:3px solid #1A0E07;border-radius:12px;display:flex;flex-direction:column;min-height:260px;box-shadow:6px 6px 0 var(--c,var(--magenta))}
+.gift{background:var(--card);color:var(--ink);border:3px solid #000000;border-radius:12px;display:flex;flex-direction:column;min-height:260px;box-shadow:6px 6px 0 var(--c,var(--magenta))}
 .gift[hidden]{display:none}
 .gift.pop{animation:pop .3s ease-out}
 @keyframes pop{from{transform:scale(.94);opacity:.4}}
 .gift .inner{padding:20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
-.gift .lvl{font:700 12px/1 "Silkscreen",ui-monospace,monospace;color:var(--ink-soft)}
+.gift .lvl{font:700 12px/1 "Press Start 2P",ui-monospace,monospace;color:var(--ink-soft)}
 .gift .emoji{font-size:38px;line-height:1}
-.gift h3{font-family:"Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;font-weight:400;font-size:24px;line-height:1.1;margin:0;color:var(--ink)}
+.gift h3{font-family:"Press Start 2P","Arial Rounded MT Bold",system-ui,sans-serif;font-weight:400;font-size:24px;line-height:1.1;margin:0;color:var(--ink)}
 .gift .what{font-weight:800;color:var(--c,var(--magenta));margin:0;font-size:15px}
 .gift p{margin:0}
 :root[data-theme="dark"] .gift .what{color:color-mix(in srgb,var(--c,var(--magenta)) 45%,#fff)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .gift .what{color:color-mix(in srgb,var(--c,var(--magenta)) 45%,#fff)}}
 .gift .note{background:var(--paper2);border-radius:10px;padding:10px 12px;font-size:15px}
 .gift .links{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;padding-top:8px}
-.go{display:inline-block;text-decoration:none;font:700 13px/1.2 "Silkscreen",ui-monospace,monospace;padding:10px 14px;border-radius:8px;background:var(--ink);color:var(--paper)}
+.go{display:inline-block;text-decoration:none;font:700 13px/1.2 "Press Start 2P",ui-monospace,monospace;padding:10px 14px;border-radius:8px;background:var(--ink);color:var(--paper)}
 .go.alt{background:transparent;color:var(--ink);border:2px solid var(--ink)}
 .go:hover{background:var(--c,var(--magenta));color:#fff;border-color:transparent}
 .gift.flash{animation:flash 1.2s ease 2}
@@ -157,11 +155,11 @@ section{padding:40px 0}
 .shelf{background:var(--card);border:3px solid var(--ink);border-radius:12px;padding:0 20px;box-shadow:8px 8px 0 var(--plum);overflow:hidden}
 .shelf .bar{margin:0 -20px 14px}
 .books{display:flex;align-items:flex-end;gap:6px;overflow-x:auto;padding:10px 4px 0;min-height:250px;border-bottom:14px solid var(--plum)}
-.spine{flex:0 0 auto;width:46px;border:2px solid #3E2416;border-bottom:0;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;
+.spine{flex:0 0 auto;width:46px;border:2px solid #111111;border-bottom:0;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;
   text-decoration:none;color:#fff;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:800;font-size:13px;padding:10px 0;transition:transform .2s;text-align:center;line-height:1.1}
 .spine:hover,.spine:focus-visible{transform:rotate(180deg) translateY(14px)}
 .shelfmeta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center;padding:18px 4px 22px}
-.total{font-family:"Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;font-size:28px;color:var(--cherry)}
+.total{font-family:"Press Start 2P","Arial Rounded MT Bold",system-ui,sans-serif;font-size:28px;color:var(--cherry)}
 .booklist{columns:2 240px;column-gap:28px;margin:0;padding:0 4px 22px;list-style:none;font-size:15px}
 .booklist li{break-inside:avoid;display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:6px 0}
 .booklist a{text-decoration:none;font-weight:600}
@@ -173,8 +171,8 @@ section{padding:40px 0}
 .polaroid{background:#fff;padding:12px 12px 16px;border:3px solid var(--ink);border-radius:6px;box-shadow:5px 5px 0 var(--plum);position:relative;margin:0}
 .polaroid:nth-child(odd){transform:rotate(-2deg)} .polaroid:nth-child(even){transform:rotate(2deg)}
 .polaroid img{width:100%;height:auto;display:block;border-radius:2px}
-.polaroid figcaption{color:#3E2416;font-weight:800;font-size:14px;margin-top:8px;text-align:center}
-.size{position:absolute;top:-14px;right:-10px;background:var(--sun);color:#3E2416;font-weight:800;font-size:13px;border:2px solid #3E2416;border-radius:999px;padding:6px 10px;transform:rotate(8deg)}
+.polaroid figcaption{color:#111111;font-weight:800;font-size:14px;margin-top:8px;text-align:center}
+.size{position:absolute;top:-14px;right:-10px;background:var(--sun);color:#111111;font-weight:800;font-size:13px;border:2px solid #111111;border-radius:999px;padding:6px 10px;transform:rotate(8deg)}
 .shoecta{margin-top:26px;text-align:center}
 
 footer{text-align:center;padding:40px 20px 70px;color:var(--ink-soft)}
@@ -192,6 +190,61 @@ footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-botto
   .spark.b{left:-12px}
   .spark.c{display:none}
 }
+
+/* MARIO THEME */
+h1,h2,.display{letter-spacing:0}
+.win,.btn,.gift,.shelf,.quest,.tile,.ticker,.go,.intro,.winmsg,.polaroid,.spine,.toast,.gift .note,.pun,.box .hint span,.bar .dots i{border-radius:0}
+.bar{background:#000;color:#fff;font:400 11px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;padding:10px 10px 10px 14px}
+.bar .dots i{background:#FAC000;color:#000;border-color:#fff;font-size:9px}
+.tag{transform:none;box-shadow:8px 8px 0 #000;border-color:#000}
+.tag .bar{display:none}
+.tag .body{position:relative;background:#C84C0C;color:#FFE7C2;padding:44px 44px 48px;box-shadow:inset 5px 5px 0 #F8A070,inset -5px -5px 0 #7C2800}
+.tag .body::before{content:"";position:absolute;inset:14px;pointer-events:none;
+  background:radial-gradient(circle at 5px 5px,#FFE7C2 4px,transparent 5px),radial-gradient(circle at calc(100% - 5px) 5px,#FFE7C2 4px,transparent 5px),
+  radial-gradient(circle at 5px calc(100% - 5px),#FFE7C2 4px,transparent 5px),radial-gradient(circle at calc(100% - 5px) calc(100% - 5px),#FFE7C2 4px,transparent 5px)}
+.tag .to{font:400 10px/1.6 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;margin:0 0 18px}
+.tag h1{font-size:clamp(20px,4.6vw,40px);line-height:1.45;text-transform:uppercase;text-shadow:4px 4px 0 #000}
+.tag p.sub{color:#fff}
+.spark.a{--k:#FAC000}.spark.b{--k:#fff}.spark.c{--k:#FAC000}
+.ticker{background:#000;color:#FAC000;border-color:#000;font:400 11px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase}
+.btn{font:400 11px/1.2 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;border-color:#000;box-shadow:4px 4px 0 #000}
+.btn:hover{box-shadow:6px 6px 0 #000}.btn:active{box-shadow:1px 1px 0 #000}
+.sechead h2,footer .display{color:#fff;text-shadow:3px 3px 0 #000;text-transform:uppercase;line-height:1.4}
+.sechead h2{font-size:clamp(18px,3.4vw,28px)}
+footer .display{font-size:clamp(14px,2.4vw,20px)}
+.quest{background:#5C94FC;color:#fff;border-color:#000;box-shadow:8px 8px 0 #000}
+.screen{background-image:none;padding-bottom:0}
+.screen::after{content:"";display:block;height:64px;margin:6px -18px 0;background:var(--brick);border-top:3px solid #000}
+.hud{font:400 11px/1.4 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;color:#fff;text-shadow:2px 2px 0 #000}
+.hud b{color:#fff;font-weight:400}
+.pips i{background:rgba(0,0,0,.25);border-color:#000;border-radius:50%}
+.pips i.on{background:#FAC000}
+.tile{background:#FAC000;border-color:#000;color:#fff;text-shadow:3px 3px 0 #7C2800;font:400 clamp(22px,5.5vw,36px)/1 "Press Start 2P",ui-monospace,monospace;
+  box-shadow:inset -5px -5px 0 #C87800,inset 5px 5px 0 #FFE9A0}
+.tile .lv{font:400 8px/1 "Press Start 2P",ui-monospace,monospace;text-shadow:none;color:#7C2800}
+.tile.got{background:#B86A30;text-shadow:none;box-shadow:inset -5px -5px 0 #7C2800,inset 5px 5px 0 #E8A878}
+.tile.got .lv{color:#fff}
+.tile.sel{outline-color:#fff}
+.tile.cursor{outline-color:#E52521}
+.tile.hit::after{content:"";position:absolute;left:50%;top:-6px;width:20px;height:26px;margin-left:-10px;background:#FAC000;border:3px solid #000;border-radius:50%;
+  box-shadow:inset -3px 0 0 #C87800;animation:coin .55s ease-out forwards;pointer-events:none}
+@keyframes coin{0%{transform:translateY(0)}55%{transform:translateY(-58px) scaleX(.25)}100%{transform:translateY(-40px);opacity:0}}
+.intro{border-color:#fff;color:#fff;font:400 11px/1.8 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;text-shadow:2px 2px 0 #000}
+.intro .blink{font-size:16px;color:#FAC000}
+.winmsg{background:#00A800;color:#fff;border-color:#000;font:400 11px/1.6 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;text-shadow:2px 2px 0 #000}
+.gift{border-color:#000}
+.gift .lvl{font:400 9px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase}
+.gift h3{font-size:15px;line-height:1.5}
+.go{font:400 10px/1.4 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;color:var(--card)}
+.go.alt{color:var(--ink)}
+.shelf{box-shadow:8px 8px 0 #000}
+.books{border-bottom:16px solid transparent;border-image:var(--brick) 0 0 16 0 fill;border-image:none;border-bottom:16px solid #C84C0C}
+.total{font-size:18px;line-height:1.6}
+.polaroid{box-shadow:5px 5px 0 #000}
+.size{border-radius:0;font:400 9px/1 "Press Start 2P",ui-monospace,monospace}
+.toast{background:#000;color:#fff;border:3px solid #fff;border-radius:0}
+footer{padding-bottom:0}
+footer::after{content:"";display:block;height:96px;margin:44px -20px 0;background:var(--brick);border-top:3px solid #000}
 </style>
 </head>
 <body>
@@ -209,7 +262,7 @@ footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-botto
       </div>
     </div>
   </div>
-  <div class="ticker" aria-hidden="true"><div>★ It's my birthday ★ Wish list loading... 100% ★ Size 38/39 ★ Books!!! ★ Tap a box to unwrap ★ Made with love ★ ★ It's my birthday ★ Wish list loading... 100% ★ Size 38/39 ★ Books!!! ★ Tap a box to unwrap ★ Made with love ★ ★ It's my birthday ★ Wish list loading... 100% ★ Size 38/39 ★ Books!!! ★ Tap a box to unwrap ★ Made with love ★ ★ It's my birthday ★ Wish list loading... 100% ★ Size 38/39 ★ Books!!! ★ Tap a box to unwrap ★ Made with love ★ </div></div>
+  <div class="ticker" aria-hidden="true"><div>* It's my birthday * Wish list loading... 100% * Size 38/39 * Books!!! * Tap a box to unwrap * Made with love * * It's my birthday * Wish list loading... 100% * Size 38/39 * Books!!! * Tap a box to unwrap * Made with love * * It's my birthday * Wish list loading... 100% * Size 38/39 * Books!!! * Tap a box to unwrap * Made with love * * It's my birthday * Wish list loading... 100% * Size 38/39 * Books!!! * Tap a box to unwrap * Made with love * </div></div>
   <div class="controls">
     <button class="btn sun" id="spin">🎲 Pick a gift for me</button>
     <button class="btn" id="unwrapAll">🎁 Unwrap everything</button>
@@ -225,16 +278,16 @@ footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-botto
     <p><span class="pun">No pressure, but these are pre-sent-ed in no particular order.</span></p>
   </div>
   <div class="quest" id="quest">
-    <div class="bar"><span>wish_quest.exe</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="bar"><span>World 1-1: Wish Quest</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
     <div class="screen">
-      <div class="hud"><span>Player 1: <b>You</b></span><span class="pips" id="pips" aria-hidden="true"></span><span>Wishes <b id="count">00/12</b></span></div>
+      <div class="hud"><span>Faith <b id="score">000000</b></span><span class="pips" id="pips" aria-hidden="true"></span><span>Coins ×<b id="count">00/12</b></span></div>
       <div class="play">
         <div class="tiles" id="tiles"></div>
         <div class="stage" id="stage" aria-live="polite">
-          <div class="intro" id="intro"><p class="blink">▶ Press start</p><p>Tap a ? box to unwrap a wish.</p></div>
+          <div class="intro" id="intro"><p class="blink">▶ Press start</p><p>Hit a ? block to grab a wish.</p></div>
         </div>
       </div>
-      <p class="winmsg" id="winmsg" hidden>★ You win! All 12 wishes unlocked ★</p>
+      <p class="winmsg" id="winmsg" hidden>* Course clear! All 12 wishes unlocked *</p>
     </div>
   </div>
 </section>
@@ -245,7 +298,7 @@ footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-botto
     <p><span class="pun">Fourteen novel ideas, already shelf-selected.</span></p>
   </div>
   <div class="shelf">
-    <div class="bar"><span>C:\Faith\Books</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="bar"><span>World 1-2: Books</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
     <div class="books" id="spines"></div>
     <div class="shelfmeta">
       <div><div class="total">₦201,500</div><div style="color:var(--ink-soft);font-size:15px">14 books, all at Roving Heights Bookstore</div></div>
@@ -280,38 +333,38 @@ footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-botto
 
 <script>
 const WISHES=[
- {id:"tennis",e:"🎾",c:"#5E6B33",t:'<span class="pun">Love all</span>',what:"Wilson tennis racket, with balls",
+ {id:"tennis",e:"🎾",c:"#008A00",t:'<span class="pun">Love all</span>',what:"Wilson tennis racket, with balls",
   p:'<span class="pun">The ball\'s in your court.</span> <span class="pun">A racket worth making a racket about.</span>',
   links:[["Wilson tennis","https://www.wilson.com/en-us/tennis"]]},
- {id:"watch",e:"⌚",c:"#6B4A2F",t:'<span class="pun">It\'s about time</span>',what:"Apple Watch",
+ {id:"watch",e:"⌚",c:"#2038EC",t:'<span class="pun">It\'s about time</span>',what:"Apple Watch",
   p:'<span class="pun">I\'ll be watching this space.</span>',links:[["Apple Watch","https://www.apple.com/apple-watch/"]]},
- {id:"ipad",e:"📱",c:"#B5532F",t:'<span class="pun">iPad, you pay?</span>',what:"iPad",
+ {id:"ipad",e:"📱",c:"#E52521",t:'<span class="pun">iPad, you pay?</span>',what:"iPad",
   p:'<span class="pun">Tap into your generous side.</span>',links:[["iPad","https://www.apple.com/ipad/"]]},
- {id:"monitor",e:"🖥️",c:"#7C8A50",t:'<span class="pun">Screen-sational</span>',what:"A monitor screen",
+ {id:"monitor",e:"🖥️",c:"#0074B8",t:'<span class="pun">Screen-sational</span>',what:"A monitor screen",
   p:'<span class="pun">Help me monitor my happiness levels.</span>',links:[["Browse monitors","https://www.jumia.com.ng/catalog/?q=monitor"]]},
- {id:"sun",e:"🌻",c:"#C4763F",t:'<span class="pun">You grow, girl</span>',what:"Sunflowers",
+ {id:"sun",e:"🌻",c:"#B87800",t:'<span class="pun">You grow, girl</span>',what:"Sunflowers",
   p:'<span class="pun">Bring them by and I\'ll be petal to the metal happy.</span>',links:[["Find a florist","https://www.google.com/search?q=sunflower+bouquet+delivery+Lagos"]]},
- {id:"body",e:"🧴",c:"#4C5729",t:'<span class="pun">Skin in the game</span>',what:"Body & skin care from The Body Shop",
+ {id:"body",e:"🧴",c:"#00888A",t:'<span class="pun">Skin in the game</span>',what:"Body & skin care from The Body Shop",
   p:'<span class="pun">I\'d be lotion-ally moved.</span>',links:[["The Body Shop","https://www.thebodyshop.com/"]]},
- {id:"flight",e:"✈️",c:"#9A4526",t:'<span class="pun">Kenya believe it?</span>',what:"Return flight ticket to Nairobi",
+ {id:"flight",e:"✈️",c:"#C84C0C",t:'<span class="pun">Kenya believe it?</span>',what:"Return flight ticket to Nairobi",
   p:'<span class="pun">Plane and simple: I want to go.</span>',links:[["Search flights","https://www.google.com/travel/flights?q=Flights%20from%20Lagos%20to%20Nairobi"],["Kenya Airways","https://www.kenya-airways.com/"]]},
- {id:"books",e:"📚",c:"#8A5A3C",t:'<span class="pun">Booked and busy</span>',what:"Books!!! (14 already in the cart)",
+ {id:"books",e:"📚",c:"#C81E1E",t:'<span class="pun">Booked and busy</span>',what:"Books!!! (14 already in the cart)",
   p:'Pick any from the shelf below, or gift the whole stack.',links:[["See the bookshelf","#books"]]},
- {id:"shoes",e:"👠",c:"#7A2E1A",t:'<span class="pun">If the shoe fits</span>',what:"Shoes, size 38/39 (Steve Madden)",
+ {id:"shoes",e:"👠",c:"#D03A8C",t:'<span class="pun">If the shoe fits</span>',what:"Shoes, size 38/39 (Steve Madden)",
   p:'Five pairs I love are pinned below.',links:[["See the shoes","#shoes"]]},
- {id:"jewel",e:"📿",c:"#6F7A45",t:'<span class="pun">Let\'s link up</span>',what:"Necklace and bracelet pair from ÌTURA",
+ {id:"jewel",e:"📿",c:"#7C5800",t:'<span class="pun">Let\'s link up</span>',what:"Necklace and bracelet pair from ÌTURA",
   p:'<span class="pun">A pair-fect match, made in Lagos.</span>',links:[["ÌTURA Jewelry","https://iturajewelry.com/"]]},
- {id:"wig",e:"💇🏾‍♀️",c:"#55331F",t:'<span class="pun">Hair today, here tomorrow</span>',what:"Wig from Hairs by Nii",
+ {id:"wig",e:"💇🏾‍♀️",c:"#6A3FCF",t:'<span class="pun">Hair today, here tomorrow</span>',what:"Wig from Hairs by Nii",
   p:'<span class="pun">No need to split hairs:</span> just tell her it\'s for Faith. She knows exactly what I want.',
   note:'<span class="pun">Saying "it\'s for Faith" is the secret to make her wig out.</span>',
   links:[["Hairs by Nii","https://www.instagram.com/reel/DcO5XeJK0gO/?stkn=MXZoczJ0dWR2ZGlpeA=="]]},
- {id:"suede",e:"👜",c:"#7A4A1E",t:'<span class="pun">It\'s in the bag</span>',what:"Chelly bag from Brags, in suede",
+ {id:"suede",e:"👜",c:"#7C2800",t:'<span class="pun">It\'s in the bag</span>',what:"Chelly bag from Brags, in suede",
   p:'<span class="pun">I suede-ly need the full set:</span> maxi and midi, in both colours.',
   note:'A set in black suede (maxi + midi) and a set in brown suede (maxi + midi).',
   links:[["Chelly bag on Brags","https://www.bragsng.co/products/chelly-all-bag?variant=45388192743458"]]}
 ];
 const BOOKS=[["The Romance Revival",14500],["Soft Landing in Kumasi",15000],["This Seat Is Taken",15000],["The Score",14500],["The Goal",14500],["The Mistake",14500],["The Night We Met",14000],["Love at First Sighting",14500],["Love and Other Conspiracies",15000],["Losing Hope & Finding Cinderella",13500],["Beg, Borrow, or Steal",14500],["Beach Read",17000],["Love and Other Words",13000],["Love on the Brain",12000]];
-const SPINE=["#B5532F","#5E6B33","#6B4A2F","#7C8A50","#9A4526","#4C5729","#C4763F","#55331F"];
+const SPINE=["#E52521","#008A00","#2038EC","#C84C0C","#B87800","#6A3FCF","#00888A","#7C2800"];
 
 const quest=document.getElementById('quest'),tiles=document.getElementById('tiles'),stage=document.getElementById('stage'),
   pips=document.getElementById('pips'),count=document.getElementById('count'),intro=document.getElementById('intro'),winmsg=document.getElementById('winmsg');
@@ -335,7 +388,7 @@ function unlock(i){
   const b=tiles.children[i];if(b.classList.contains('got'))return;
   b.classList.add('got');b.querySelector('.q').textContent=WISHES[i].e;b.setAttribute('aria-label','Level '+(i+1)+': '+WISHES[i].what);
   const n=tiles.querySelectorAll('.got').length;
-  [...pips.children].forEach((p,j)=>p.classList.toggle('on',j<n));count.textContent=pad(n)+'/'+WISHES.length;
+  [...pips.children].forEach((p,j)=>p.classList.toggle('on',j<n));count.textContent=pad(n)+'/'+WISHES.length;document.getElementById('score').textContent=String(n*100).padStart(6,'0');
   if(n===WISHES.length&&!won){won=true;winmsg.hidden=false}
 }
 function restart(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)}
@@ -387,7 +440,7 @@ pb.addEventListener('click',()=>{const on=document.body.classList.toggle('show-p
 const cv=document.getElementById('confetti'),cx=cv.getContext('2d');let parts=[],raf;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio}size();addEventListener('resize',size);
-const COLS=["#C4623F","#EBCF9A","#6B7A3A","#A9B58A","#8A3F22","#F3E6CF"];
+const COLS=["#E52521","#FAC000","#00A800","#2038EC","#FFFFFF","#C84C0C"];
 function burst(x,y,n){if(reduce)return;for(let i=0;i<n;i++)parts.push({x:x*cv.width,y:y*cv.height,vx:(Math.random()-.5)*14*devicePixelRatio,vy:(Math.random()*-12-2)*devicePixelRatio,
   r:(4+Math.random()*5)*devicePixelRatio,c:COLS[i%COLS.length],a:Math.random()*6,s:Math.random()*.3-.15,l:120+Math.random()*60});if(!raf)tick()}
 function tick(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.l-->0&&p.y<cv.height+40);
