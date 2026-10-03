@@ -94,19 +94,51 @@ section{padding:40px 0}
 .sechead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
 .sechead h2{font-size:clamp(32px,5vw,46px);color:var(--magenta);text-shadow:2px 2px 0 var(--card),4px 4px 0 var(--cyan)}
 .sechead p{margin:0;color:var(--ink-soft)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
-.gift{position:relative;background:var(--card);border:3px solid var(--ink);border-radius:12px;overflow:hidden;
-  display:flex;flex-direction:column;min-height:300px;box-shadow:6px 6px 0 var(--c,var(--magenta))}
-.gift .box{position:absolute;inset:0;z-index:3;background:var(--c,var(--magenta));display:grid;place-items:center;cursor:pointer;border:0;width:100%;color:#fff;
-  font:inherit;transition:transform .55s cubic-bezier(.6,-0.3,.4,1.3), opacity .4s .25s;transform-origin:top center;padding:20px}
-.gift .box::before,.gift .box::after{content:"";position:absolute;background:var(--sun)}
-.gift .box::before{left:50%;top:0;bottom:0;width:22px;margin-left:-11px}
-.gift .box::after{top:50%;left:0;right:0;height:22px;margin-top:-11px}
-.bow{position:relative;z-index:1;font-size:46px;line-height:1;background:var(--sun);border-radius:50%;width:84px;height:84px;display:grid;place-items:center;border:3px solid #3E2416}
-.box .hint{position:absolute;bottom:18px;left:0;right:0;z-index:1;text-align:center;font:700 13px/1 "Silkscreen",ui-monospace,monospace;color:#fff}
-.box .hint span{background:#3E2416;padding:7px 12px;border-radius:6px}
-.gift.open .box{transform:translateY(-105%) rotate(-8deg);opacity:0;pointer-events:none}
-.gift .inner{padding:22px 22px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+/* WISH QUEST: mystery blocks + dialog box */
+.quest{background:#2A180E;color:#FBF3E4;border:3px solid var(--ink);border-radius:12px;box-shadow:8px 8px 0 var(--plum);overflow:hidden}
+.screen{padding:18px;display:grid;gap:18px;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 2px,transparent 2px 4px)}
+.hud{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;font:700 13px/1 "Silkscreen",ui-monospace,monospace;color:#EBCF9A}
+.hud b{color:#FBF3E4}
+.pips{display:flex;gap:3px}
+.pips i{width:14px;height:14px;background:#55331F;border:2px solid #EBCF9A}
+.pips i.on{background:#C5CFA4}
+.play{display:grid;gap:18px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-content:start}
+.tile{position:relative;aspect-ratio:1;display:grid;place-items:center;padding:0;cursor:pointer;border:3px solid #1A0E07;border-radius:8px;
+  background:#EBCF9A;color:#3E2416;font:400 clamp(28px,7vw,46px)/1 "Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;
+  box-shadow:inset -5px -5px 0 rgba(62,36,22,.3),inset 5px 5px 0 rgba(255,255,255,.5);transition:transform .12s}
+.tile:not(.got)::before{content:"";position:absolute;inset:9px;pointer-events:none;
+  background:radial-gradient(circle at 3px 3px,#8A5A3C 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 3px) 3px,#8A5A3C 2.5px,transparent 3px),
+  radial-gradient(circle at 3px calc(100% - 3px),#8A5A3C 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 3px) calc(100% - 3px),#8A5A3C 2.5px,transparent 3px)}
+.tile:hover{transform:translateY(-4px)}
+.tile .q{display:block}
+.tile:not(.got) .q{animation:bob 1.8s ease-in-out infinite;animation-delay:var(--d,0s)}
+.tile .lv{position:absolute;left:0;right:0;bottom:7px;text-align:center;font:700 10px/1 "Silkscreen",ui-monospace,monospace;color:#8A5A3C}
+.tile.got{background:var(--c);box-shadow:inset -5px -5px 0 rgba(0,0,0,.25),inset 5px 5px 0 rgba(255,255,255,.2)}
+.tile.got .lv{color:#FBF3E4}
+.tile.sel{outline:3px solid #FBF3E4;outline-offset:2px}
+.tile.cursor{outline:4px solid #C5CFA4;outline-offset:2px;transform:scale(1.07)}
+.tile.hit{animation:hit .35s ease-out}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes hit{35%{transform:translateY(-16px)}70%{transform:translateY(2px)}}
+.stage{display:grid;min-width:0}
+.intro{display:grid;place-content:center;gap:10px;text-align:center;min-height:220px;padding:24px;border:3px dashed #8A5A3C;border-radius:12px;font:700 14px/1.5 "Silkscreen",ui-monospace,monospace}
+.intro[hidden],.winmsg[hidden]{display:none}
+.intro p{margin:0}
+.intro .blink{font-size:20px;color:#EBCF9A;animation:blink 1.1s steps(2,jump-none) infinite}
+@keyframes blink{50%{opacity:.15}}
+.winmsg{margin:0;padding:12px;text-align:center;border:3px solid #1A0E07;border-radius:8px;background:#C5CFA4;color:#3E2416;font:700 14px/1.3 "Silkscreen",ui-monospace,monospace}
+@media (min-width:860px){.quest:not(.all) .play{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.quest.all .stage{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.quest.all .gift[hidden]{display:flex}
+@media (min-width:860px){.quest.all .tiles{grid-template-columns:repeat(12,minmax(0,1fr))}.quest.all .tile{font-size:26px}.quest.all .tile .lv{display:none}}
+.quest.all .intro{display:none}
+.gift{background:var(--card);color:var(--ink);border:3px solid #1A0E07;border-radius:12px;display:flex;flex-direction:column;min-height:260px;box-shadow:6px 6px 0 var(--c,var(--magenta))}
+.gift[hidden]{display:none}
+.gift.pop{animation:pop .3s ease-out}
+@keyframes pop{from{transform:scale(.94);opacity:.4}}
+.gift .inner{padding:20px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.gift .lvl{font:700 12px/1 "Silkscreen",ui-monospace,monospace;color:var(--ink-soft)}
 .gift .emoji{font-size:38px;line-height:1}
 .gift h3{font-family:"Bagel Fat One","Arial Rounded MT Bold",system-ui,sans-serif;font-weight:400;font-size:24px;line-height:1.1;margin:0;color:var(--ink)}
 .gift .what{font-weight:800;color:var(--c,var(--magenta));margin:0;font-size:15px}
@@ -192,7 +224,19 @@ footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-botto
     <h2 id="wishes">The wishes</h2>
     <p><span class="pun">No pressure, but these are pre-sent-ed in no particular order.</span></p>
   </div>
-  <div class="grid" id="grid"></div>
+  <div class="quest" id="quest">
+    <div class="bar"><span>wish_quest.exe</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="screen">
+      <div class="hud"><span>Player 1: <b>You</b></span><span class="pips" id="pips" aria-hidden="true"></span><span>Wishes <b id="count">00/12</b></span></div>
+      <div class="play">
+        <div class="tiles" id="tiles"></div>
+        <div class="stage" id="stage" aria-live="polite">
+          <div class="intro" id="intro"><p class="blink">▶ Press start</p><p>Tap a ? box to unwrap a wish.</p></div>
+        </div>
+      </div>
+      <p class="winmsg" id="winmsg" hidden>★ You win! All 12 wishes unlocked ★</p>
+    </div>
+  </div>
 </section>
 
 <section id="books" aria-labelledby="bookhead">
@@ -269,17 +313,40 @@ const WISHES=[
 const BOOKS=[["The Romance Revival",14500],["Soft Landing in Kumasi",15000],["This Seat Is Taken",15000],["The Score",14500],["The Goal",14500],["The Mistake",14500],["The Night We Met",14000],["Love at First Sighting",14500],["Love and Other Conspiracies",15000],["Losing Hope & Finding Cinderella",13500],["Beg, Borrow, or Steal",14500],["Beach Read",17000],["Love and Other Words",13000],["Love on the Brain",12000]];
 const SPINE=["#B5532F","#5E6B33","#6B4A2F","#7C8A50","#9A4526","#4C5729","#C4763F","#55331F"];
 
-const grid=document.getElementById('grid');
-WISHES.forEach(w=>{
+const quest=document.getElementById('quest'),tiles=document.getElementById('tiles'),stage=document.getElementById('stage'),
+  pips=document.getElementById('pips'),count=document.getElementById('count'),intro=document.getElementById('intro'),winmsg=document.getElementById('winmsg');
+const pad=n=>String(n).padStart(2,'0');
+WISHES.forEach((w,i)=>{
+  const b=document.createElement('button');
+  b.className='tile';b.type='button';b.style.setProperty('--c',w.c);b.style.setProperty('--d',(i%4*.15+Math.floor(i/4)*.1)+'s');
+  b.setAttribute('aria-label','Level '+(i+1)+': mystery wish');
+  b.innerHTML=`<span class="q" aria-hidden="true">?</span><span class="lv" aria-hidden="true">LV ${pad(i+1)}</span>`;
+  b.addEventListener('click',()=>{const fresh=!b.classList.contains('got');select(i);if(fresh)burst(0.5,0.4,40)});
+  tiles.appendChild(b);
   const el=document.createElement('article');
-  el.className='gift';el.id='w-'+w.id;el.style.setProperty('--c',w.c);
-  const links=w.links.map((l,i)=>{const ext=!l[1].startsWith('#');return `<a class="go${i?' alt':''}" href="${l[1]}" ${ext?'target="_blank" rel="noopener"':''}>${l[0]}</a>`}).join('');
-  el.innerHTML=`<button class="box" aria-label="Unwrap: ${w.what}"><span class="bow" aria-hidden="true">🎀</span><span class="hint"><span>Tap to unwrap</span></span></button>
-   <div class="inner"><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div></div>`;
-  el.querySelector('.box').addEventListener('click',()=>{open(el);burst(0.5,0.4,40)});
-  grid.appendChild(el);
+  el.className='gift';el.id='w-'+w.id;el.hidden=true;el.style.setProperty('--c',w.c);
+  const links=w.links.map((l,j)=>{const ext=!l[1].startsWith('#');return `<a class="go${j?' alt':''}" href="${l[1]}" ${ext?'target="_blank" rel="noopener"':''}>${l[0]}</a>`}).join('');
+  el.innerHTML=`<div class="inner"><div class="lvl">Level ${pad(i+1)} of ${WISHES.length}</div><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div></div>`;
+  stage.appendChild(el);
+  pips.appendChild(document.createElement('i'));
 });
-function open(el){el.classList.add('open');el.querySelector('.box').setAttribute('tabindex','-1');}
+const gifts=[...stage.querySelectorAll('.gift')];let won=false;
+function unlock(i){
+  const b=tiles.children[i];if(b.classList.contains('got'))return;
+  b.classList.add('got');b.querySelector('.q').textContent=WISHES[i].e;b.setAttribute('aria-label','Level '+(i+1)+': '+WISHES[i].what);
+  const n=tiles.querySelectorAll('.got').length;
+  [...pips.children].forEach((p,j)=>p.classList.toggle('on',j<n));count.textContent=pad(n)+'/'+WISHES.length;
+  if(n===WISHES.length&&!won){won=true;winmsg.hidden=false}
+}
+function restart(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)}
+function select(i){
+  unlock(i);intro.hidden=true;
+  [...tiles.children].forEach((t,j)=>t.classList.toggle('sel',j===i));
+  gifts.forEach((g,j)=>g.hidden=j!==i);
+  restart(tiles.children[i],'hit');restart(gifts[i],quest.classList.contains('all')?'flash':'pop');
+  gifts[i].scrollIntoView({block:'nearest'});
+}
+function unlockAll(){WISHES.forEach((_,i)=>unlock(i));quest.classList.add('all')}
 
 const sp=document.getElementById('spines'),bl=document.getElementById('booklist');
 const url=t=>'https://rhbooks.com.ng/?s='+encodeURIComponent(t)+'&post_type=product';
@@ -294,17 +361,27 @@ BOOKS.forEach((b,i)=>{
 const toast=document.getElementById('toast');let tt;
 function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),3200)}
 
+let spinning=false;
 document.getElementById('spin').addEventListener('click',()=>{
-  const w=WISHES[Math.floor(Math.random()*WISHES.length)];const el=document.getElementById('w-'+w.id);
-  open(el);el.scrollIntoView({block:'center'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
-  burst(0.5,0.3,120);say('The gift gods have spoken: '+w.what);
+  if(spinning)return;
+  const left=WISHES.map((_,i)=>i).filter(i=>!tiles.children[i].classList.contains('got'));
+  const pool=left.length?left:WISHES.map((_,i)=>i),target=pool[Math.floor(Math.random()*pool.length)];
+  const land=()=>{spinning=false;[...tiles.children].forEach(t=>t.classList.remove('cursor'));select(target);burst(0.5,0.3,120);say('The gift gods have spoken: '+WISHES[target].what)};
+  quest.scrollIntoView({block:'center'});
+  if(reduce)return land();
+  spinning=true;const n=WISHES.length,start=Math.floor(Math.random()*n),total=n+((target-start+n)%n);let k=0;
+  (function step(){
+    [...tiles.children].forEach((t,j)=>t.classList.toggle('cursor',j===(start+k)%n));
+    if(k===total)return setTimeout(land,260);
+    k++;setTimeout(step,45+200*Math.pow(k/total,2));
+  })();
 });
-document.getElementById('unwrapAll').addEventListener('click',()=>{document.querySelectorAll('.gift').forEach(open);burst(0.5,0.2,160);say('All unwrapped. Happy shopping!')});
+document.getElementById('unwrapAll').addEventListener('click',()=>{unlockAll();burst(0.5,0.2,160);say('All unwrapped. Happy shopping!')});
 
 const puns=document.querySelectorAll('.pun');const meter=document.getElementById('punmeter');
 const pb=document.getElementById('punBtn');
 pb.addEventListener('click',()=>{const on=document.body.classList.toggle('show-puns');pb.setAttribute('aria-pressed',on);
-  if(on){document.querySelectorAll('.gift').forEach(open);meter.textContent=puns.length+' puns highlighted. Groan responsibly.'}else meter.textContent='';});
+  if(on){unlockAll();meter.textContent=puns.length+' puns highlighted. Groan responsibly.'}else meter.textContent='';});
 
 /* confetti */
 const cv=document.getElementById('confetti'),cx=cv.getContext('2d');let parts=[],raf;
