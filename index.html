@@ -321,6 +321,20 @@ body.claims-on .claimtip{display:block;margin:0 0 16px;padding:12px 14px;backgro
 .spine.gone{opacity:.3}
 .polaroid [data-claim]{justify-content:center;margin-top:10px}
 .polaroid.gone img{opacity:.35}
+
+/* in-game confirm box */
+.ask{padding:0;border:3px solid #000;border-radius:0;background:var(--card);color:var(--ink);box-shadow:8px 8px 0 #000;width:min(430px,calc(100vw - 40px))}
+.ask::backdrop{background:rgba(4,8,40,.62)}
+.ask[open]{animation:pop .2s ease-out}
+.ask form{margin:0}
+.askbody{padding:24px 22px 26px;display:grid;gap:12px;justify-items:center;text-align:center}
+.qb{width:60px;height:60px;display:grid;place-items:center;background:#FAC000;border:3px solid #000;box-shadow:inset -4px -4px 0 #C87800,inset 4px 4px 0 #FFE9A0;
+  font:400 26px/1 "Press Start 2P",ui-monospace,monospace;color:#fff;text-shadow:3px 3px 0 #7C2800;animation:bob 1.6s ease-in-out infinite}
+.ask h3{margin:0;font:400 14px/1.6 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase}
+.ask p{margin:0}
+.askitem{font-weight:800;color:var(--magenta)}
+.askbtns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:8px}
+.askbtns .cbtn{font-size:11px;padding:13px 14px}
 </style>
 </head>
 <body>
@@ -424,6 +438,19 @@ body.claims-on .claimtip{display:block;margin:0 0 16px;padding:12px 14px;backgro
   <div class="display"><span class="pun">Thanks for being present.</span></div>
   <p><span class="pun">Whatever you pick, I'll be beside myself with glee. That's a wrap!</span></p>
 </footer>
+
+<dialog class="ask" id="ask" aria-labelledby="askT">
+  <form method="dialog">
+    <div class="bar"><span>Player 1: your move</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="askbody">
+      <span class="qb" aria-hidden="true">?</span>
+      <h3 id="askT"></h3>
+      <p class="askitem" id="askItem"></p>
+      <p id="askP"></p>
+      <div class="askbtns"><button class="cbtn" value="yes" id="askY"></button><button class="cbtn undo" value="no">Not yet</button></div>
+    </div>
+  </form>
+</dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -532,14 +559,29 @@ function paint(){
   [...bl.children].forEach((li,i)=>{const g=taken.has('book-'+i);li.classList.toggle('gone',g);sp.children[i].classList.toggle('gone',g)});
   document.querySelectorAll('.polaroid').forEach((f,i)=>f.classList.toggle('gone',taken.has('shoe-'+i)));
 }
+const dlg=document.getElementById('ask');
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close('no')});
+function ask(title,item,text,yes){
+  document.getElementById('askT').textContent=title;document.getElementById('askItem').textContent=item;
+  document.getElementById('askP').textContent=text;document.getElementById('askY').textContent=yes;
+  if(!dlg.showModal)return Promise.resolve(confirm(title+' '+item));
+  return new Promise(done=>{dlg.returnValue='';dlg.addEventListener('close',()=>done(dlg.returnValue==='yes'),{once:true});dlg.showModal()});
+}
+function nameOf(id){
+  const n=+id.split('-')[1];
+  if(id.startsWith('book-'))return BOOKS[n][0];
+  if(id.startsWith('shoe-'))return document.querySelectorAll('.polaroid figcaption')[n].textContent;
+  return WISHES.find(w=>w.id===id).what;
+}
 async function loadClaims(){
   try{const r=await fetch('/api/claims',{cache:'no-store'});if(!r.ok)throw 0;CL=await r.json();document.body.classList.add('claims-on');paint()}catch(e){}
 }
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-act]');if(!b||busy)return;
   const id=b.closest('[data-claim]').dataset.claim,act=b.dataset.act;let m=mem.get(id);
-  if(act==='take'&&!confirm("Mark this as yours? Everyone else will see it as taken."))return;
-  if(act==='share'&&!confirm("Chip in on this one? Others can still join you."))return;
+  if(act==='take'&&!await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken. No names are shown.',"Yes, it's mine"))return;
+  if(act==='share'&&!await ask('Chip in on this one?',nameOf(id),'Others can still join you on it. No names are shown.','Yes, chip in'))return;
+  if(busy)return;
   const body={id,action:act};
   if(act==='reset')body.key=ADMIN;else body.token=act==='undo'?(m&&m.t):newToken();
   busy=true;b.disabled=true;
