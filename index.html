@@ -295,6 +295,7 @@ footer::after{content:"";display:block;height:96px;margin:44px -20px 0;backgroun
 .ctl{font:400 12px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;padding:13px 15px;background:#fff;color:#111;border:3px solid #000;box-shadow:3px 3px 0 #000;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
 .ctl:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
 .ctl.a{background:#E52521;color:#fff}
+.btn[aria-pressed="true"]{background:#00A800;color:#fff}
 </style>
 </head>
 <body>
@@ -325,6 +326,7 @@ footer::after{content:"";display:block;height:96px;margin:44px -20px 0;backgroun
   <div class="controls">
     <button class="btn sun" id="spin">🎲 Pick a gift for me</button>
     <button class="btn" id="unwrapAll">🎁 Unwrap everything</button>
+    <button class="btn" id="musicBtn" aria-pressed="false">♪ Music: off</button>
   </div>
 </header>
 
@@ -482,6 +484,26 @@ BOOKS.forEach((b,i)=>{
 const toast=document.getElementById('toast');let tt;
 function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),3200)}
 
+/* sound: an original chiptune loop + blips, off until the visitor turns it on */
+let AC=null,musicOn=false,musicTimer=0,beat=0,nextT=0;
+const hz=m=>440*Math.pow(2,(m-69)/12);
+const MEL=[67,71,74,71,72,76,74,null,69,72,76,72,74,71,67,null,76,74,71,67,69,71,72,null,74,78,76,72,71,69,67,null];
+const BASS=[43,48,45,50,40,45,50,43];
+function tone(f,t,d,type,v,f2){const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.02)}
+function sched(){while(nextT<AC.currentTime+.3){const i=beat%MEL.length;if(MEL[i]!=null)tone(hz(MEL[i]),nextT,.19,'square',.045);
+  if(i%2===0)tone(hz(BASS[i>>2]+(i%4?7:0)),nextT,.24,'triangle',.1);nextT+=.2;beat++}}
+function sfx(k){if(!musicOn||!AC)return;const t=AC.currentTime;
+  if(k==='coin'){tone(hz(84),t,.07,'square',.06);tone(hz(88),t+.07,.07,'square',.06);tone(hz(91),t+.14,.2,'square',.06)}
+  else tone(260,t,.16,'square',.04,620)}
+const mb=document.getElementById('musicBtn');
+mb.addEventListener('click',()=>{
+  if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
+  musicOn=!musicOn;mb.setAttribute('aria-pressed',musicOn);mb.textContent='♪ Music: '+(musicOn?'on':'off');
+  if(musicOn){AC.resume();nextT=AC.currentTime+.05;sched();musicTimer=setInterval(sched,100)}else{clearInterval(musicTimer);AC.suspend()}
+});
+document.addEventListener('visibilitychange',()=>{if(AC&&musicOn)document.hidden?AC.suspend():AC.resume()});
+
 /* the level: a tiny platformer */
 const level=document.getElementById('level'),world=document.getElementById('world'),heroEl=document.getElementById('plumber');
 const SPR=["...RRRRR....","..RRRRRRRRR.","..HHHSSHS...",".HSHSSSHSSS.",".HSHHSSSHSSS",".HHSSSSHHHH.","...SSSSSSS..","..RRBRRR....",".RRRBRRBRRR.","RRRRBBBBRRRR","SSRBYBBYBRSS","SSSBBBBBBSSS","SSBBBBBBBBSS","..BBB..BBB..",".HHH....HHH.","HHHH....HHHH"];
@@ -496,9 +518,9 @@ function draw(){
   heroEl.style.transform=`translate(${P.x}px,${-P.y}px) scaleX(${P.dir})`;
   heroEl.classList.toggle('run',P.moving&&P.ground);
 }
-function jump(){P.ground=false;P.vy=JUMP}
+function jump(){P.ground=false;P.vy=JUMP;sfx('jump')}
 function bump(i){
-  const fresh=!tiles.children[i].classList.contains('got');select(i);if(fresh)burst(0.5,0.4,40);
+  const fresh=!tiles.children[i].classList.contains('got');select(i);if(fresh){burst(0.5,0.4,40);sfx('coin')}
   if(P.target===i){P.target=null;const f=P.after;P.after=null;if(f)f()}
 }
 function frame(t){
