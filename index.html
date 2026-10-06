@@ -759,8 +759,8 @@ document.addEventListener('visibilitychange',()=>{if(AC&&musicOn)document.hidden
 
 /* the level: a tiny platformer */
 const level=document.getElementById('level'),world=document.getElementById('world'),heroEl=document.getElementById('plumber');
-const SPR=[".....PP.....",".....YY.....","....YYYY....","...YPYYPY...","..KKKKKKKK..",".KKKSSSSKKK.",".KKSSSSSSKK.",".KKSKSSKSKK.","..KSSSSSSK..","...SSSSSS...","..DDDDDDDD..",".SDDDDDDDDS.",".SDDDDDDDDS.","..DDDDDDDD..","...SS..SS...","..BBB..BBB.."];
-const PAL={Y:'#FAC000',P:'#E52521',K:'#2B1810',S:'#9A5B34',D:'#D03A8C',B:'#111111'};
+const SPR=["...RRRRR....","..RRRRRRRRR.","..HHHSSHS...",".HSHSSSHSSS.",".HSHHSSSHSSS",".HHSSSSHHHH.","...SSSSSSS..","..RRBRRR....",".RRRBRRBRRR.","RRRRBBBBRRRR","SSRBYBBYBRSS","SSSBBBBBBSSS","SSBBBBBBBBSS","..BBB..BBB..",".HHH....HHH.","HHHH....HHHH"];
+const PAL={R:'#E52521',B:'#2038EC',S:'#FFCC99',H:'#6B3A0A',Y:'#FAC000'};
 heroEl.innerHTML='<svg viewBox="0 0 12 16" shape-rendering="crispEdges" aria-hidden="true">'+SPR.map((r,y)=>[...r].map((c,x)=>PAL[c]?`<rect x="${x}" y="${y}" width="1" height="1" fill="${PAL[c]}"/>`:'').join('')).join('')+'</svg>';
 world.style.width=WORLD+'px';document.getElementById('flag').style.left=(WORLD-130)+'px';
 const HW=48,HH=64,GAP=130,SPEED=280,GRAV=1900,JUMP=660;
