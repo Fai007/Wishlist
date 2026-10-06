@@ -23,7 +23,7 @@ const IDS = [
 ];
 
 // Where chip-ins are sent. Only returned to someone who has just chipped in.
-const ACCOUNT = { number: '8003714351', name: 'Faith Oluokun', bank: process.env.CHIP_BANK || '' };
+const ACCOUNT = { number: '8003714351', name: 'Faith Oluokun', bank: process.env.CHIP_BANK || 'Providus Bank' };
 
 const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
 const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
