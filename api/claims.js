@@ -80,51 +80,53 @@ function emailHtml({ heading, kicker, rows, footer }) {
 }
 
 async function notify(kind, id, amount) {
-  if (!RESEND_KEY) { console.log('notify: skipped — RESEND_API_KEY not set'); return; }
-  console.log('notify:', kind, id, naira(amount));
+  if (!RESEND_KEY) return;
   try {
-    const [vals, count] = await redis([['HVALS', 'amt:' + id], ['SCARD', 'share:' + id]]);
-    const total = (vals || []).reduce((s, v) => s + (parseInt(v, 10) || 0), 0);
     const when = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Lagos', dateStyle: 'medium', timeStyle: 'short' });
-    const added = kind === 'share';
-    const html = emailHtml({
-      kicker: added ? '+1 coin' : 'Coin returned',
-      heading: added ? 'New chip-in!' : 'Chip-in withdrawn',
-      rows: [
-        ['Wish', WISH[id]],
-        [added ? 'Amount pledged' : 'Amount withdrawn', naira(amount)],
-        ['Players chipping in', String(count)],
-        ['Total pledged so far', naira(total)],
-        ['When', when + ' (Lagos)'],
-      ],
-      footer: added
-        ? 'Someone tapped Chip in and was shown your account details. No name was collected, so check your bank alerts for the transfer.'
-        : 'Someone undid their chip-in on this wish.',
-    });
+    let subject, html;
+    if (kind === 'take') {
+      subject = 'Wish taken: ' + WISH[id.split('-')[0]];
+      html = emailHtml({
+        kicker: 'someone\'s on it',
+        heading: 'Wish grabbed!',
+        rows: [
+          ['Wish', WISH[id.split('-')[0]]],
+          ['When', when + ' (Lagos)'],
+        ],
+        footer: 'Someone tapped "I\'m getting this". No name was collected — it\'s a surprise.',
+      });
+    } else {
+      const [vals, count] = await redis([['HVALS', 'amt:' + id], ['SCARD', 'share:' + id]]);
+      const total = (vals || []).reduce((s, v) => s + (parseInt(v, 10) || 0), 0);
+      const added = kind === 'share';
+      subject = (added ? 'New chip-in: ' : 'Chip-in withdrawn: ') + naira(amount) + ' for ' + WISH[id];
+      html = emailHtml({
+        kicker: added ? '+1 coin' : 'Coin returned',
+        heading: added ? 'New chip-in!' : 'Chip-in withdrawn',
+        rows: [
+          ['Wish', WISH[id]],
+          [added ? 'Amount pledged' : 'Amount withdrawn', naira(amount)],
+          ['Players chipping in', String(count)],
+          ['Total pledged so far', naira(total)],
+          ['When', when + ' (Lagos)'],
+        ],
+        footer: added
+          ? 'Someone tapped Chip in and was shown your account details. No name was collected, so check your bank alerts for the transfer.'
+          : 'Someone undid their chip-in on this wish.',
+      });
+    }
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 5000);
-    console.log('notify: sending to', MAIL_TO, 'from', MAIL_FROM);
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       signal: ctl.signal,
       headers: { Authorization: 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: MAIL_FROM,
-        to: [MAIL_TO],
-        subject: (added ? 'New chip-in: ' : 'Chip-in withdrawn: ') + naira(amount) + ' for ' + WISH[id],
-        html,
-      }),
+      body: JSON.stringify({ from: MAIL_FROM, to: [MAIL_TO], subject, html }),
     });
     clearTimeout(timer);
-    if (r.ok) {
-      const data = await r.json();
-      console.log('notify: sent ok, id', data.id);
-    } else {
-      const body = await r.text();
-      console.error('notify: failed', r.status, body);
-    }
+    if (!r.ok) console.error('notify failed', r.status, await r.text());
   } catch (e) {
-    console.error('notify: error', e && e.message);
+    console.error('notify error', e && e.message);
   }
 }
 
@@ -152,6 +154,7 @@ module.exports = async (req, res) => {
         else {
           const [ok] = await redis([['SET', 'claim:' + id, token, 'NX']]);
           if (ok !== 'OK') status = 409;
+          else await notify('take', id, 0);
         }
       } else if (action === 'share') {
         if (!SHAREABLE.has(id)) return res.status(400).json({ error: 'not shareable' });
