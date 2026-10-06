@@ -156,6 +156,8 @@ section{padding:40px 0}
 .spine{flex:0 0 auto;width:46px;border:2px solid #111111;border-bottom:0;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;
   text-decoration:none;color:#fff;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:800;font-size:13px;padding:10px 0;transition:transform .2s;text-align:center;line-height:1.1}
 .spine:hover,.spine:focus-visible{transform:rotate(180deg) translateY(14px)}
+.spine.cover{width:124px;height:186px;writing-mode:horizontal-tb;transform:none;font-size:0;background-size:cover;background-position:center}
+.spine.cover:hover,.spine.cover:focus-visible{transform:translateY(-14px)}
 .shelfmeta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center;padding:18px 4px 22px}
 .total{font-family:"Press Start 2P","Arial Rounded MT Bold",system-ui,sans-serif;font-size:28px;color:var(--cherry)}
 .booklist{columns:2 240px;column-gap:28px;margin:0;padding:0 4px 22px;list-style:none;font-size:15px}
@@ -569,11 +571,14 @@ function select(i){
 function unlockAll(){WISHES.forEach((_,i)=>unlock(i));quest.classList.add('all')}
 
 const sp=document.getElementById('spines'),bl=document.getElementById('booklist');
+const slug=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const url=t=>'https://rhbooks.com.ng/?s='+encodeURIComponent(t)+'&post_type=product';
 BOOKS.forEach((b,i)=>{
   const a=document.createElement('a');a.className='spine';a.href=url(b[0]);a.target='_blank';a.rel='noopener';
   a.textContent=b[0];a.style.background=SPINE[i%SPINE.length];a.style.height=(170+((i*37)%70))+'px';a.style.width=(40+((i*13)%16))+'px';
   a.title=b[0]+' · ₦'+b[1].toLocaleString();sp.appendChild(a);
+  /* real cover from images/books/<slug>.jpg when the file exists, otherwise the coloured spine stays */
+  const im=new Image();im.onload=()=>{a.classList.add('cover');a.style.width=a.style.height='';a.style.backgroundImage=`url("${im.src}")`};im.src='images/books/'+slug(b[0])+'.jpg';
   const li=document.createElement('li');li.innerHTML=`<a href="${url(b[0])}" target="_blank" rel="noopener"></a><span>₦${b[1].toLocaleString()}</span>`;
   li.querySelector('a').textContent=b[0];li.insertAdjacentHTML('beforeend',`<div data-claim="book-${i}" data-compact></div>`);bl.appendChild(li);
 });
@@ -737,7 +742,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadClaims
 const toast=document.getElementById('toast');let tt;
 function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),3200)}
 
-/* sound: an original chiptune loop + blips, off until the visitor turns it on */
+/* sound: an original chiptune loop + blips, starts once the level scrolls into view (or from the button) */
 let AC=null,musicOn=false,musicTimer=0,beat=0,nextT=0;
 const hz=m=>440*Math.pow(2,(m-69)/12);
 const MEL=[67,71,74,71,72,76,74,null,69,72,76,72,74,71,67,null,76,74,71,67,69,71,72,null,74,78,76,72,71,69,67,null];
@@ -750,11 +755,24 @@ function sfx(k){if(!musicOn||!AC)return;const t=AC.currentTime;
   if(k==='coin'){tone(hz(84),t,.07,'square',.06);tone(hz(88),t+.07,.07,'square',.06);tone(hz(91),t+.14,.2,'square',.06)}
   else tone(260,t,.16,'square',.04,620)}
 const mb=document.getElementById('musicBtn');
-mb.addEventListener('click',()=>{
+function setMusic(on){
   if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
-  musicOn=!musicOn;mb.setAttribute('aria-pressed',musicOn);mb.textContent='♪ Music: '+(musicOn?'on':'off');
-  if(musicOn){AC.resume();nextT=AC.currentTime+.05;sched();musicTimer=setInterval(sched,100)}else{clearInterval(musicTimer);AC.suspend()}
-});
+  musicOn=on;mb.setAttribute('aria-pressed',musicOn);mb.textContent='♪ Music: '+(musicOn?'on':'off');
+  clearInterval(musicTimer);
+  if(musicOn){AC.resume();nextT=AC.currentTime+.05;sched();musicTimer=setInterval(sched,100)}else AC.suspend();
+}
+/* once the visitor uses the button, their choice wins over the auto-start */
+let musicTouched=false,levelInView=false;
+mb.addEventListener('click',()=>{musicTouched=true;setMusic(!musicOn)});
+/* browsers keep audio locked until a tap or key press, so retry on those while the level is in view */
+function autoMusic(){
+  if(musicTouched||musicOn||!levelInView)return;
+  try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+  const go=()=>{if(!musicTouched&&!musicOn&&levelInView&&AC.state==='running')setMusic(true)};
+  AC.resume().then(go,()=>{});
+}
+if('IntersectionObserver' in window)new IntersectionObserver(es=>{levelInView=es[es.length-1].isIntersecting;autoMusic()},{threshold:.3}).observe(document.getElementById('level'));
+['pointerup','touchend','keydown'].forEach(ev=>document.addEventListener(ev,e=>{if(!(e.target.closest&&e.target.closest('#musicBtn')))autoMusic()},{passive:true}));
 document.addEventListener('visibilitychange',()=>{if(AC&&musicOn)document.hidden?AC.suspend():AC.resume()});
 
 /* the level: a tiny platformer */
