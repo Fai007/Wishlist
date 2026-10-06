@@ -327,8 +327,12 @@ body.claims-on .claimtip{display:block;margin:0 0 16px;padding:12px 14px;backgro
 .subitems .cbadge{box-shadow:none;color:#fff}
 .gift .subitems [data-claim]{margin:0;padding:0;border:0;flex-wrap:nowrap}
 .allrow{display:none}
-body.claims-on .allrow{display:flex;justify-content:flex-end;margin-top:10px}
-.allrow [hidden]{display:none}
+body.claims-on .allrow{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:10px}
+body.claims-on .allrow[hidden],.allrow [hidden]{display:none}
+.allrow .cbtn[disabled]{cursor:not-allowed}
+.pick{display:inline-flex;align-items:center;gap:6px;padding:5px 7px;background:#fff;color:#111;border:2px solid #000;box-shadow:2px 2px 0 #000;cursor:pointer;font:400 8px/1.4 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase}
+.pick input{width:16px;height:16px;margin:0;accent-color:#00A800;cursor:pointer}
+.pick:has(:checked){background:#FAC000}
 body.claims-on .shelfall{padding:0 4px 22px;margin-top:-8px}
 body.claims-on .shoeall{justify-content:center;margin-top:26px}
 .polaroid.gone img{opacity:.35}
@@ -396,7 +400,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
     <h2 id="wishes">The wishes</h2>
     <p><span class="pun">No pressure, but these are pre-sent-ed in no particular order.</span></p>
   </div>
-  <p class="claimtip">Buying something? Tap <b>I'm getting this</b> on the wish so nobody doubles up. No names are shown, so it stays a surprise. Big gifts can be bought outright or shared.</p>
+  <p class="claimtip">Buying something? Tap <b>I'm getting this</b> on the wish so nobody doubles up, and the shop opens for you. Where a wish has several items, tick one, a few or all of them. No names are shown, so it stays a surprise. Big gifts can be bought outright or shared.</p>
   <div class="quest" id="quest">
     <div class="bar"><span>World 1-1: Wish Quest</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
     <div class="screen">
@@ -436,7 +440,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
       <a class="go" style="--c:var(--cherry)" href="https://rhbooks.com.ng/" target="_blank" rel="noopener">Visit Roving Heights</a>
     </div>
     <ul class="booklist" id="booklist"></ul>
-    <div class="allrow shelfall"><button type="button" class="cbtn" data-all="book-" data-label="All the books on the shelf"></button></div>
+    <div class="allrow shelfall" data-group="book-"><button type="button" class="cbtn undo" data-pickall></button><button type="button" class="cbtn" data-get></button></div>
   </div>
 </section>
 
@@ -452,7 +456,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
     <figure class="polaroid"><span class="size">38/39</span><img alt="Magenta suede slingback pump with burgundy ankle strap" src="images/magenta-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Magenta suede slingback</figcaption></figure>
   <figure class="polaroid"><span class="size">38/39</span><img alt="Mustard suede slingback pump with light blue ankle strap and brown heel" src="images/mustard-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Mustard suede slingback</figcaption></figure>
   </div>
-  <div class="allrow shoeall"><button type="button" class="cbtn" data-all="shoe-" data-label="All the shoes"></button></div>
+  <div class="allrow shoeall" data-group="shoe-"><button type="button" class="cbtn undo" data-pickall></button><button type="button" class="cbtn" data-get></button></div>
   <p class="shoecta"><a class="go" style="--c:var(--plum)" href="https://www.stevemadden.com/" target="_blank" rel="noopener">Shop Steve Madden</a></p>
 </section>
 </main>
@@ -543,7 +547,7 @@ WISHES.forEach((w,i)=>{
   const el=document.createElement('article');
   el.className='gift';el.id='w-'+w.id;el.hidden=true;el.style.setProperty('--c',w.c);
   const links=w.links.map((l,j)=>{const ext=!l[1].startsWith('#');return `<a class="go${j?' alt':''}" href="${l[1]}" ${ext?'target="_blank" rel="noopener"':''}>${l[0]}</a>`}).join('');
-  el.innerHTML=`<div class="inner"><div class="lvl">Level ${pad(i+1)} of ${WISHES.length}</div><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div>${NOCLAIM.has(w.id)?'':w.items?`<ul class="subitems">${w.items.map((t,j)=>`<li><span>${t}</span><div data-claim="${w.id}-${j}" data-compact></div></li>`).join('')}</ul><div class="allrow"><button type="button" class="cbtn" data-all="${w.id}-" data-label="${w.what}"></button></div>`:`<div data-claim="${w.id}"></div>`}</div>`;
+  el.innerHTML=`<div class="inner"><div class="lvl">Level ${pad(i+1)} of ${WISHES.length}</div><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div>${NOCLAIM.has(w.id)?'':w.items?`<ul class="subitems">${w.items.map((t,j)=>`<li><span>${t}</span><div data-claim="${w.id}-${j}" data-compact></div></li>`).join('')}</ul><div class="allrow" data-group="${w.id}-"><button type="button" class="cbtn undo" data-pickall></button><button type="button" class="cbtn" data-get></button></div>`:`<div data-claim="${w.id}"></div>`}</div>`;
   stage.appendChild(el);
   pips.appendChild(document.createElement('i'));
 });
@@ -577,28 +581,40 @@ BOOKS.forEach((b,i)=>{
 /* claims: a shared, name-free record of what is already being bought */
 document.querySelectorAll('.polaroid').forEach((f,i)=>f.insertAdjacentHTML('beforeend',`<div data-claim="shoe-${i}" data-compact></div>`));
 let CL={taken:[],shared:{}},busy=false;
+const picked=new Set(); // ticked items on multi-item wishes, not yet claimed
 const ADMIN=location.hash.startsWith('#admin=')?decodeURIComponent(location.hash.slice(7)):'';
 const mem={get(id){try{return JSON.parse(localStorage.getItem('claim:'+id))}catch(e){return null}},
   set(id,v){try{v?localStorage.setItem('claim:'+id,JSON.stringify(v)):localStorage.removeItem('claim:'+id)}catch(e){}}};
 const newToken=()=>(crypto.randomUUID?crypto.randomUUID():Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join(''));
 function paint(){
   const taken=new Set(CL.taken);
+  picked.forEach(id=>{if(taken.has(id))picked.delete(id)});
   document.querySelectorAll('[data-claim]').forEach(box=>{
     const id=box.dataset.claim,compact=box.hasAttribute('data-compact'),n=CL.shared[id]||0;let m=mem.get(id);
     if(m&&!taken.has(id)&&!n){mem.set(id,null);m=null}
     const btn=(act,cls,label)=>`<button type="button" class="cbtn ${cls}" data-act="${act}">${label}</button>`;let out;
     if(taken.has(id))out=m&&m.a==='take'?`<span class="cbadge mine">${compact?'Yours':"You're getting this"}</span>`+btn('undo','undo','Undo'):`<span class="cbadge">Taken</span>`;
     else if(n)out=`<span class="cbadge group">${n} chipping in</span>`+(m&&m.a==='share'?btn('account','share','Account details')+btn('undo','undo','Undo mine'):btn('share','share','Chip in too'));
-    else out=btn('take','',compact?"I'll get it":"I'm getting this")+(SHAREABLE.has(id)?btn('share','share','Chip in'):'');
+    else if(compact)out=`<label class="pick"><input type="checkbox" data-pick${picked.has(id)?' checked':''}>Pick</label>`;
+    else out=btn('take','',"I'm getting this")+(SHAREABLE.has(id)?btn('share','share','Chip in'):'');
     if(ADMIN&&(taken.has(id)||n))out+=btn('reset','undo','Release');
     box.innerHTML=out;
+    const c=box.querySelector('[data-pick]');if(c)c.setAttribute('aria-label','Pick '+nameOf(id));
   });
   const all=p=>[...taken].filter(x=>x.startsWith(p)).length;
   WISHES.forEach((w,i)=>tiles.children[i].classList.toggle('claimed',w.id==='books'?all('book-')===BOOKS.length:w.id==='shoes'?all('shoe-')===5:w.items?all(w.id+'-')===w.items.length:taken.has(w.id)));
   document.querySelectorAll('.subitems li').forEach(li=>li.classList.toggle('gone',taken.has(li.querySelector('[data-claim]').dataset.claim)));
-  document.querySelectorAll('[data-all]').forEach(b=>{const n=left(b.dataset.all).length;b.hidden=n<2;b.textContent="I'll get all "+n});
+  paintGroups();
   [...bl.children].forEach((li,i)=>{const g=taken.has('book-'+i);li.classList.toggle('gone',g);sp.children[i].classList.toggle('gone',g)});
   document.querySelectorAll('.polaroid').forEach((f,i)=>f.classList.toggle('gone',taken.has('shoe-'+i)));
+}
+// the "select all" and "I'll get these" buttons under each multi-item wish
+function paintGroups(){
+  document.querySelectorAll('[data-group]').forEach(row=>{
+    const ids=left(row.dataset.group),n=ids.filter(id=>picked.has(id)).length,all=row.querySelector('[data-pickall]'),get=row.querySelector('[data-get]');
+    row.hidden=!ids.length;all.hidden=ids.length<2;all.textContent=n===ids.length?'Clear':'Select all '+ids.length;
+    get.disabled=!n;get.textContent=!n?'Tick what you\'ll get':n===1?"I'll get this one":"I'll get these "+n;
+  });
 }
 const dlg=document.getElementById('ask');
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close('no')});
@@ -610,7 +626,27 @@ dlg.querySelector('form').addEventListener('submit',e=>{
   const n=readAmt();
   if(n<100||n>50000000){e.preventDefault();amtErr.textContent=n<100?'Enter an amount of at least ₦100.':'That amount is too large.';amtErr.hidden=false;amtIn.focus()}
 });
-function ask(title,item,text,yes,withAmount){
+// The shop tab is opened on the confirming tap (so popup blockers allow it) and pointed at the shop once the claim saves.
+let orderTo='',orderWin=null;
+document.getElementById('askY').addEventListener('click',()=>{
+  orderWin=null;if(!orderTo)return;
+  try{orderWin=window.open('about:blank','_blank');orderWin.document.write('<title>Wish Quest</title><body style="margin:0;display:grid;place-items:center;height:100vh;background:#5C94FC;color:#fff;font:700 18px system-ui,sans-serif">Saving your pick, then off to the shop...</body>')}catch(e){}
+});
+// where to buy: the item's own link where it has one, otherwise the wish's shop. A prefix like "book-" means the whole group.
+function orderUrl(id){
+  const [p,k]=id.split('-');
+  if(p==='book')return k?url(BOOKS[+k][0]):'https://rhbooks.com.ng/';
+  if(p==='shoe')return 'https://www.stevemadden.com/';
+  const w=WISHES.find(w=>w.id===p),ext=w.links.filter(l=>!l[1].startsWith('#'));
+  return (k&&w.items&&ext.length===w.items.length?ext[+k]:ext[0])[1];
+}
+function goOrder(link){
+  const w=orderWin;orderWin=null;
+  if(w&&!w.closed){try{w.opener=null}catch(e){}w.location.replace(link)}else setTimeout(()=>{location.href=link},1200);
+}
+function dropOrder(){if(orderWin&&!orderWin.closed)orderWin.close();orderWin=null}
+function ask(title,item,text,yes,withAmount,order){
+  orderTo=order||'';
   document.getElementById('askT').textContent=title;document.getElementById('askItem').textContent=item;
   document.getElementById('askP').textContent=text;document.getElementById('askY').textContent=yes;
   amtWrap.hidden=!withAmount;amtErr.hidden=true;amtIn.value='';
@@ -641,18 +677,31 @@ function nameOf(id){
 }
 // ids under a prefix (e.g. "book-") that nobody has taken yet
 const left=p=>[...document.querySelectorAll('[data-claim^="'+p+'"]')].map(b=>b.dataset.claim).filter(id=>!CL.taken.includes(id));
+document.addEventListener('change',e=>{
+  const c=e.target.closest('[data-pick]');if(!c)return;
+  const id=c.closest('[data-claim]').dataset.claim;c.checked?picked.add(id):picked.delete(id);paintGroups();
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pickall]');if(!b||busy)return;
+  const ids=left(b.closest('[data-group]').dataset.group),all=ids.every(id=>picked.has(id));
+  ids.forEach(id=>all?picked.delete(id):picked.add(id));paint();
+});
 document.addEventListener('click',async e=>{
-  const b=e.target.closest('[data-all]');if(!b||busy)return;
-  const ids=left(b.dataset.all);if(ids.length<2)return;
-  if(!await ask('Grab them all?',b.dataset.label,'That is '+ids.length+' items. Everyone else will see them as taken. No names are shown.','Yes, all mine')||busy)return;
-  busy=true;b.disabled=true;let got=0;
-  for(const id of ids){
-    try{const token=newToken(),r=await fetch('/api/claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,action:'take',token})}),d=await r.json();
-      if(d.taken)CL=d;if(r.ok){mem.set(id,{t:token,a:'take'});got++}}catch(err){}
-  }
-  busy=false;b.disabled=false;paint();
-  if(got){burst(0.5,0.4,120);sfx('coin')}
-  say(got===ids.length?'All '+got+' are yours. Thank you!':got?got+' of '+ids.length+' saved. Someone got to the rest first.':"That didn't save. Please try again.");
+  const b=e.target.closest('[data-get]');if(!b||busy)return;
+  const group=b.closest('[data-group]').dataset.group,ids=left(group).filter(id=>picked.has(id)),n=ids.length;if(!n)return;
+  const names=ids.map(nameOf),shop=orderUrl(n===1?ids[0]:group);
+  if(!await ask(n===1?'Grab this wish?':'Grab these '+n+'?',n<=4?names.join(', '):names.slice(0,3).join(', ')+' and '+(n-3)+' more',
+    'Everyone else will see '+(n===1?'it':'them')+' as taken, and the shop opens so you can order. No names are shown.',n===1?"Yes, it's mine":'Yes, all mine',false,shop)||busy){dropOrder();return}
+  busy=true;b.disabled=true;
+  const done=await Promise.all(ids.map(async id=>{
+    try{const token=newToken(),r=await fetch('/api/claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,action:'take',token})});
+      if(r.ok){mem.set(id,{t:token,a:'take'});picked.delete(id)}return r.ok}catch(err){return false}
+  }));
+  const got=done.filter(Boolean).length;
+  busy=false;await loadClaims();paint();
+  if(got){burst(0.5,0.4,n>1?120:60);sfx('coin')}
+  say(got===n?(n===1?"It's yours.":'All '+got+' are yours.')+' Opening the shop...':got?got+' of '+n+' saved. Someone got to the rest first.':"That didn't save. Please try again.");
+  if(got)goOrder(shop);else dropOrder();
 });
 async function loadClaims(){
   try{const r=await fetch('/api/claims',{cache:'no-store'});if(!r.ok)throw 0;CL=await r.json();document.body.classList.add('claims-on');paint()}catch(e){}
@@ -660,10 +709,10 @@ async function loadClaims(){
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-act]');if(!b||busy)return;
   const id=b.closest('[data-claim]').dataset.claim,act=b.dataset.act;let m=mem.get(id);
-  if(act==='take'&&!await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken. No names are shown.',"Yes, it's mine"))return;
+  if(act==='take'&&!await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken, and the shop opens so you can order. No names are shown.',"Yes, it's mine",false,orderUrl(id)))return dropOrder();
   let amount=0;
   if(act==='share'){const a=await ask('Chip in on this one?',nameOf(id),'Enter what you would like to put towards it. Others can still join you. No names are shown.','Continue',true);if(!a)return;amount=a.amount}
-  if(busy)return;
+  if(busy)return dropOrder();
   const body={id,action:act};
   if(act==='reset')body.key=ADMIN;else body.token=(act==='undo'||act==='account')?(m&&m.t):newToken();
   if(act==='share')body.amount=amount;
@@ -674,12 +723,12 @@ document.addEventListener('click',async e=>{
     if(r.ok){
       if(act==='account'){if(d.account)showPay(id,d.amount,d.account)}
       else if(act==='take'||act==='share'){mem.set(id,{t:body.token,a:act});burst(0.5,0.4,60);
-        if(act==='share'&&d.account){sfx('coin');showPay(id,d.amount,d.account)}else say("It's yours. Thank you!")}
+        if(act==='share'&&d.account){sfx('coin');showPay(id,d.amount,d.account)}else if(act==='take'){say("It's yours. Opening the shop...");goOrder(orderUrl(id))}else say("It's yours. Thank you!")}
       else{mem.set(id,null);say('Released.')}
     }
     else if(r.status===409)say('Someone just beat you to that one.');else say("That didn't save. Please try again.");
   }catch(err){say("That didn't save. Please try again.")}
-  busy=false;paint();
+  dropOrder();busy=false;paint();
 });
 loadClaims();setInterval(()=>{if(!document.hidden&&!busy)loadClaims()},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadClaims()});
