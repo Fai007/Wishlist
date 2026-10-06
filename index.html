@@ -320,6 +320,17 @@ body.claims-on .claimtip{display:block;margin:0 0 16px;padding:12px 14px;backgro
 .booklist li.gone a,.booklist li.gone>span{text-decoration:line-through;opacity:.55}
 .spine.gone{opacity:.3}
 .polaroid [data-claim]{justify-content:center;margin-top:10px}
+.subitems{list-style:none;margin:6px 0 0;padding:12px 0 0;border-top:2px dashed var(--line);display:grid;gap:8px}
+.subitems li{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:600;font-size:15px}
+.subitems li.gone>span{text-decoration:line-through;opacity:.55}
+.subitems .cbtn,.subitems .cbadge{font-size:8px;padding:6px 7px;border-width:2px;box-shadow:2px 2px 0 #000}
+.subitems .cbadge{box-shadow:none;color:#fff}
+.gift .subitems [data-claim]{margin:0;padding:0;border:0;flex-wrap:nowrap}
+.allrow{display:none}
+body.claims-on .allrow{display:flex;justify-content:flex-end;margin-top:10px}
+.allrow [hidden]{display:none}
+body.claims-on .shelfall{padding:0 4px 22px;margin-top:-8px}
+body.claims-on .shoeall{justify-content:center;margin-top:26px}
 .polaroid.gone img{opacity:.35}
 
 /* in-game confirm box */
@@ -425,6 +436,7 @@ body.claims-on .claimtip{display:block;margin:0 0 16px;padding:12px 14px;backgro
       <a class="go" style="--c:var(--cherry)" href="https://rhbooks.com.ng/" target="_blank" rel="noopener">Visit Roving Heights</a>
     </div>
     <ul class="booklist" id="booklist"></ul>
+    <div class="allrow shelfall"><button type="button" class="cbtn" data-all="book-" data-label="All the books on the shelf"></button></div>
   </div>
 </section>
 
@@ -440,6 +452,7 @@ body.claims-on .claimtip{display:block;margin:0 0 16px;padding:12px 14px;backgro
     <figure class="polaroid"><span class="size">38/39</span><img alt="Magenta suede slingback pump with burgundy ankle strap" src="images/magenta-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Magenta suede slingback</figcaption></figure>
   <figure class="polaroid"><span class="size">38/39</span><img alt="Mustard suede slingback pump with light blue ankle strap and brown heel" src="images/mustard-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Mustard suede slingback</figcaption></figure>
   </div>
+  <div class="allrow shoeall"><button type="button" class="cbtn" data-all="shoe-" data-label="All the shoes"></button></div>
   <p class="shoecta"><a class="go" style="--c:var(--plum)" href="https://www.stevemadden.com/" target="_blank" rel="noopener">Shop Steve Madden</a></p>
 </section>
 </main>
@@ -482,7 +495,7 @@ body.claims-on .claimtip{display:block;margin:0 0 16px;padding:12px 14px;backgro
 
 <script>
 const WISHES=[
- {id:"tennis",e:"🎾",c:"#008A00",t:'<span class="pun">Love all</span>',what:"Wilson Envy XP tennis racket, with balls",
+ {id:"tennis",items:["Wilson Envy XP racket", "Vermont tennis balls"],e:"🎾",c:"#008A00",t:'<span class="pun">Love all</span>',what:"Wilson Envy XP tennis racket, with balls",
   p:'<span class="pun">The ball\'s in your court.</span> <span class="pun">A racket worth making a racket about.</span>',
   links:[["Wilson racket at Tennis Shop NG","https://tennisshopng.com/listing/ab4861c1-f14f-40d4-adf2-906a892fa45d"],["Tennis balls","https://tennisshopng.com/listing/6eef1a49-456a-4c35-9af7-4b3bfb81f0ea"]]},
  {id:"watch",e:"⌚",c:"#2038EC",t:'<span class="pun">It\'s about time</span>',what:"Apple Watch",
@@ -501,13 +514,13 @@ const WISHES=[
   p:'Pick any from the shelf below, or gift the whole stack.',links:[["See the bookshelf","#books"]]},
  {id:"shoes",e:"👠",c:"#D03A8C",t:'<span class="pun">If the shoe fits</span>',what:"Shoes, size 38/39 (Steve Madden)",
   p:'Five pairs I love are pinned below.',links:[["See the shoes","#shoes"]]},
- {id:"jewel",e:"📿",c:"#7C5800",t:'<span class="pun">Let\'s link up</span>',what:"Necklace and bracelet pair from ÌTURA",
+ {id:"jewel",items:["Necklace", "Bracelet"],e:"📿",c:"#7C5800",t:'<span class="pun">Let\'s link up</span>',what:"Necklace and bracelet pair from ÌTURA",
   p:'<span class="pun">A pair-fect match, made in Lagos.</span>',links:[["ÌTURA Jewelry","https://iturajewelry.com/"]]},
  {id:"wig",e:"💇🏾‍♀️",c:"#6A3FCF",t:'<span class="pun">Hair today, here tomorrow</span>',what:"Wig from Hairs by Nii",
   p:'<span class="pun">No need to split hairs:</span> just tell her it\'s for Faith. She knows exactly what I want.',
   note:'<span class="pun">Saying "it\'s for Faith" is the secret to make her wig out.</span>',
   links:[["Hairs by Nii","https://www.instagram.com/reel/DcO5XeJK0gO/?stkn=MXZoczJ0dWR2ZGlpeA=="]]},
- {id:"suede",e:"👜",c:"#7C2800",t:'<span class="pun">It\'s in the bag</span>',what:"Cherry bag from Brags, in suede",
+ {id:"suede",items:["Black suede, maxi", "Black suede, midi", "Brown suede, maxi", "Brown suede, midi"],e:"👜",c:"#7C2800",t:'<span class="pun">It\'s in the bag</span>',what:"Cherry bag from Brags, in suede",
   p:'<span class="pun">I suede-ly need the full set:</span> maxi and midi, in both colours.',
   note:'A set in black suede (maxi + midi) and a set in brown suede (maxi + midi).',
   links:[["Cherry bag on Brags","https://www.bragsng.co/products/chelly-all-bag?variant=45388192743458"]]}
@@ -518,7 +531,7 @@ const SPINE=["#E52521","#008A00","#2038EC","#C84C0C","#B87800","#6A3FCF","#00888
 const quest=document.getElementById('quest'),tiles=document.getElementById('tiles'),stage=document.getElementById('stage'),
   pips=document.getElementById('pips'),count=document.getElementById('count'),intro=document.getElementById('intro'),winmsg=document.getElementById('winmsg');
 const pad=n=>String(n).padStart(2,'0');
-const NOCLAIM=new Set(['books','shoes']),SHAREABLE=new Set(['watch','ipad','monitor','flight','suede']);
+const NOCLAIM=new Set(['books','shoes']),SHAREABLE=new Set(['watch','ipad','monitor','flight']);
 const BX=i=>300+i*150,WORLD=300+WISHES.length*150+260;
 WISHES.forEach((w,i)=>{
   const b=document.createElement('button');
@@ -530,7 +543,7 @@ WISHES.forEach((w,i)=>{
   const el=document.createElement('article');
   el.className='gift';el.id='w-'+w.id;el.hidden=true;el.style.setProperty('--c',w.c);
   const links=w.links.map((l,j)=>{const ext=!l[1].startsWith('#');return `<a class="go${j?' alt':''}" href="${l[1]}" ${ext?'target="_blank" rel="noopener"':''}>${l[0]}</a>`}).join('');
-  el.innerHTML=`<div class="inner"><div class="lvl">Level ${pad(i+1)} of ${WISHES.length}</div><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div>${NOCLAIM.has(w.id)?'':`<div data-claim="${w.id}"></div>`}</div>`;
+  el.innerHTML=`<div class="inner"><div class="lvl">Level ${pad(i+1)} of ${WISHES.length}</div><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div>${NOCLAIM.has(w.id)?'':w.items?`<ul class="subitems">${w.items.map((t,j)=>`<li><span>${t}</span><div data-claim="${w.id}-${j}" data-compact></div></li>`).join('')}</ul><div class="allrow"><button type="button" class="cbtn" data-all="${w.id}-" data-label="${w.what}"></button></div>`:`<div data-claim="${w.id}"></div>`}</div>`;
   stage.appendChild(el);
   pips.appendChild(document.createElement('i'));
 });
@@ -581,7 +594,9 @@ function paint(){
     box.innerHTML=out;
   });
   const all=p=>[...taken].filter(x=>x.startsWith(p)).length;
-  WISHES.forEach((w,i)=>tiles.children[i].classList.toggle('claimed',w.id==='books'?all('book-')===BOOKS.length:w.id==='shoes'?all('shoe-')===5:taken.has(w.id)));
+  WISHES.forEach((w,i)=>tiles.children[i].classList.toggle('claimed',w.id==='books'?all('book-')===BOOKS.length:w.id==='shoes'?all('shoe-')===5:w.items?all(w.id+'-')===w.items.length:taken.has(w.id)));
+  document.querySelectorAll('.subitems li').forEach(li=>li.classList.toggle('gone',taken.has(li.querySelector('[data-claim]').dataset.claim)));
+  document.querySelectorAll('[data-all]').forEach(b=>{const n=left(b.dataset.all).length;b.hidden=n<2;b.textContent="I'll get all "+n});
   [...bl.children].forEach((li,i)=>{const g=taken.has('book-'+i);li.classList.toggle('gone',g);sp.children[i].classList.toggle('gone',g)});
   document.querySelectorAll('.polaroid').forEach((f,i)=>f.classList.toggle('gone',taken.has('shoe-'+i)));
 }
@@ -619,11 +634,26 @@ function showPay(id,amount,acct){
   if(pay.showModal)pay.showModal();else alert('Transfer to '+acct.number+' '+acct.name+(acct.bank?' ('+acct.bank+')':''));
 }
 function nameOf(id){
-  const n=+id.split('-')[1];
-  if(id.startsWith('book-'))return BOOKS[n][0];
-  if(id.startsWith('shoe-'))return document.querySelectorAll('.polaroid figcaption')[n].textContent;
-  return WISHES.find(w=>w.id===id).what;
+  const [p,k]=id.split('-'),n=+k;
+  if(p==='book')return BOOKS[n][0];
+  if(p==='shoe')return document.querySelectorAll('.polaroid figcaption')[n].textContent;
+  const w=WISHES.find(w=>w.id===p);return k===undefined?w.what:w.items[n];
 }
+// ids under a prefix (e.g. "book-") that nobody has taken yet
+const left=p=>[...document.querySelectorAll('[data-claim^="'+p+'"]')].map(b=>b.dataset.claim).filter(id=>!CL.taken.includes(id));
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-all]');if(!b||busy)return;
+  const ids=left(b.dataset.all);if(ids.length<2)return;
+  if(!await ask('Grab them all?',b.dataset.label,'That is '+ids.length+' items. Everyone else will see them as taken. No names are shown.','Yes, all mine')||busy)return;
+  busy=true;b.disabled=true;let got=0;
+  for(const id of ids){
+    try{const token=newToken(),r=await fetch('/api/claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,action:'take',token})}),d=await r.json();
+      if(d.taken)CL=d;if(r.ok){mem.set(id,{t:token,a:'take'});got++}}catch(err){}
+  }
+  busy=false;b.disabled=false;paint();
+  if(got){burst(0.5,0.4,120);sfx('coin')}
+  say(got===ids.length?'All '+got+' are yours. Thank you!':got?got+' of '+ids.length+' saved. Someone got to the rest first.':"That didn't save. Please try again.");
+});
 async function loadClaims(){
   try{const r=await fetch('/api/claims',{cache:'no-store'});if(!r.ok)throw 0;CL=await r.json();document.body.classList.add('claims-on');paint()}catch(e){}
 }
@@ -679,8 +709,8 @@ document.addEventListener('visibilitychange',()=>{if(AC&&musicOn)document.hidden
 
 /* the level: a tiny platformer */
 const level=document.getElementById('level'),world=document.getElementById('world'),heroEl=document.getElementById('plumber');
-const SPR=["...RRRRR....","..RRRRRRRRR.","..HHHSSHS...",".HSHSSSHSSS.",".HSHHSSSHSSS",".HHSSSSHHHH.","...SSSSSSS..","..RRBRRR....",".RRRBRRBRRR.","RRRRBBBBRRRR","SSRBYBBYBRSS","SSSBBBBBBSSS","SSBBBBBBBBSS","..BBB..BBB..",".HHH....HHH.","HHHH....HHHH"];
-const PAL={R:'#E52521',B:'#2038EC',S:'#FFCC99',H:'#6B3A0A',Y:'#FAC000'};
+const SPR=[".....PP.....",".....YY.....","....YYYY....","...YPYYPY...","..KKKKKKKK..",".KKKSSSSKKK.",".KKSSSSSSKK.",".KKSKSSKSKK.","..KSSSSSSK..","...SSSSSS...","..DDDDDDDD..",".SDDDDDDDDS.",".SDDDDDDDDS.","..DDDDDDDD..","...SS..SS...","..BBB..BBB.."];
+const PAL={Y:'#FAC000',P:'#E52521',K:'#2B1810',S:'#9A5B34',D:'#D03A8C',B:'#111111'};
 heroEl.innerHTML='<svg viewBox="0 0 12 16" shape-rendering="crispEdges" aria-hidden="true">'+SPR.map((r,y)=>[...r].map((c,x)=>PAL[c]?`<rect x="${x}" y="${y}" width="1" height="1" fill="${PAL[c]}"/>`:'').join('')).join('')+'</svg>';
 world.style.width=WORLD+'px';document.getElementById('flag').style.left=(WORLD-130)+'px';
 const HW=48,HH=64,GAP=130,SPEED=280,GRAV=1900,JUMP=660;
