@@ -59,7 +59,7 @@ h1,h2,.display{font-family:"Press Start 2P","Cooper Black","Arial Rounded MT Bol
 .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px 8px 14px;
   background:linear-gradient(90deg,#111111,#6B4A2F 55%,#5E6B33);color:#fff;font:700 13px/1 "Press Start 2P",ui-monospace,monospace;border-bottom:3px solid var(--ink)}
 .bar .dots{display:flex;gap:6px}
-.bar .dots i{width:18px;height:18px;display:grid;place-items:center;background:#F3E6CF;color:#111111;border:2px solid #111111;border-radius:3px;font-style:normal;font-size:10px}
+.bar .dots button{width:18px;height:18px;display:grid;place-items:center;background:#F3E6CF;color:#111111;border:2px solid #111111;border-radius:3px;font-style:normal;font-size:10px}
 .tagwrap{position:relative;width:min(720px,100%)}
 .tag{transform:rotate(-1.5deg)}
 .tag .body{background:linear-gradient(135deg,#B5532F,#8A3F22);color:#fff;padding:34px 40px 42px}
@@ -193,9 +193,21 @@ footer .display{font-size:clamp(26px,4vw,36px);color:var(--magenta);margin-botto
 
 /* MARIO THEME */
 h1,h2,.display{letter-spacing:0}
-.win,.btn,.gift,.shelf,.quest,.tile,.ticker,.go,.intro,.winmsg,.polaroid,.spine,.toast,.gift .note,.pun,.box .hint span,.bar .dots i{border-radius:0}
+.win,.btn,.gift,.shelf,.quest,.tile,.ticker,.go,.intro,.winmsg,.polaroid,.spine,.toast,.gift .note,.pun,.box .hint span,.bar .dots button{border-radius:0}
 .bar{background:#000;color:#fff;font:400 11px/1 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;padding:10px 10px 10px 14px}
-.bar .dots i{background:#FAC000;color:#000;border-color:#fff;font-size:9px}
+.bar .dots button{background:#FAC000;color:#000;border-color:#fff;font-size:9px}
+/* window buttons: minimise, expand, close */
+.bar .dots button{padding:0;cursor:pointer;font-family:inherit;line-height:1}
+.bar .dots button:hover,.bar .dots button:focus-visible{background:#fff}
+.bar .dots button:active{transform:translate(1px,1px)}
+.winmin:not(dialog)>:not(.bar),dialog.winmin form>:not(.bar){display:none}
+.winmin>.bar,dialog.winmin .bar{margin-bottom:0;border-bottom:0}
+.winmax:not(dialog){position:fixed;inset:0;z-index:40;margin:0;overflow:auto;box-shadow:none}
+.winmax:not(dialog)>.bar{position:sticky;top:0;z-index:5}
+dialog.winmax{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;box-shadow:none;overflow:auto}
+html.winlock{overflow:hidden}
+.winclosed{display:none}
+.reopen{display:block;margin:0 auto}
 .tag{transform:none;box-shadow:8px 8px 0 #000;border-color:#000}
 .tag .bar{display:none}
 .tag .body{position:relative;background:#C84C0C;color:#FFE7C2;padding:44px 44px 48px;box-shadow:inset 5px 5px 0 #F8A070,inset -5px -5px 0 #7C2800}
@@ -371,7 +383,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
   <div class="tagwrap">
     <span class="spark a" aria-hidden="true"></span><span class="spark b" aria-hidden="true"></span><span class="spark c" aria-hidden="true"></span>
     <div class="tag win">
-      <div class="bar"><span>wishlist.exe</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+      <div class="bar"><span>wishlist.exe</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
       <div class="body">
         <div class="msg">
           <p class="to">Greetings from my 20s</p>
@@ -404,7 +416,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
   </div>
   <p class="claimtip">Buying something? Tap <b>I'm getting this</b> on the wish so nobody doubles up, and the shop opens for you. Where a wish has several items, tick one, a few or all of them. No names are shown, so it stays a surprise. Big gifts can be bought outright or shared.</p>
   <div class="quest" id="quest">
-    <div class="bar"><span>World 1-1: Wish Quest</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="bar"><span>World 1-1: Wish Quest</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="screen">
       <div class="hud"><span>Faith <b id="score">000000</b></span><span class="pips" id="pips" aria-hidden="true"></span><span>Coins ×<b id="count">00/12</b></span></div>
       <div class="level" id="level" tabindex="0" aria-label="Wish Quest level. Use the arrow keys to move and space to jump, or pick a block.">
@@ -435,7 +447,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
     <p><span class="pun">Fourteen novel ideas, already shelf-selected.</span></p>
   </div>
   <div class="shelf">
-    <div class="bar"><span>World 1-2: Books</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="bar"><span>World 1-2: Books</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="books" id="spines"></div>
     <div class="shelfmeta">
       <div><div class="total">₦201,500</div><div style="color:var(--ink-soft);font-size:15px">14 books, all at Roving Heights Bookstore</div></div>
@@ -470,7 +482,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
 
 <dialog class="ask" id="ask" aria-labelledby="askT">
   <form method="dialog">
-    <div class="bar"><span>Player 1: your move</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="bar"><span>Player 1: your move</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="askbody">
       <span class="qb" aria-hidden="true">?</span>
       <h3 id="askT"></h3>
@@ -485,7 +497,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
 
 <dialog class="ask" id="pay" aria-labelledby="payT">
   <form method="dialog">
-    <div class="bar"><span>Bonus stage: send your coins</span><span class="dots" aria-hidden="true"><i>_</i><i>□</i><i>×</i></span></div>
+    <div class="bar"><span>Bonus stage: send your coins</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="askbody">
       <span class="coin" aria-hidden="true"></span>
       <h3 id="payT"></h3>
@@ -778,6 +790,39 @@ function autoMusic(){
 if('IntersectionObserver' in window)new IntersectionObserver(es=>{levelInView=es[es.length-1].isIntersecting;autoMusic()},{threshold:.3}).observe(document.getElementById('level'));
 ['pointerup','touchend','keydown'].forEach(ev=>document.addEventListener(ev,e=>{if(!(e.target.closest&&e.target.closest('#musicBtn')))autoMusic()},{passive:true}));
 document.addEventListener('visibilitychange',()=>{if(AC&&musicOn)document.hidden?AC.suspend():AC.resume()});
+
+/* window buttons: _ folds a window to its title bar, □ fills the screen, × closes it (dialogs cancel, page windows leave a reopen button) */
+function winOf(el){return el.closest('dialog,.quest,.shelf,.win')}
+function winSync(w){
+  const min=w.classList.contains('winmin'),max=w.classList.contains('winmax');
+  w.querySelector('[data-win="min"]').setAttribute('aria-label',min?'Restore':'Minimise');
+  const mx=w.querySelector('[data-win="max"]');mx.setAttribute('aria-label',max?'Shrink':'Expand');mx.textContent=max?'❐':'□';
+  document.documentElement.classList.toggle('winlock',!!document.querySelector('.winmax:not(dialog)'));
+  dispatchEvent(new Event('resize'));
+}
+function winRestore(w){
+  w.classList.remove('winmin','winmax','winclosed');if(w._reopen){w._reopen.remove();w._reopen=null}winSync(w);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-win]');
+  if(!b){
+    if(e.target.closest('#spin,#unwrapAll'))winRestore(quest);
+    else if(e.target.closest('a[href="#books"]'))winRestore(document.querySelector('.shelf'));
+    return;
+  }
+  const w=winOf(b),act=b.dataset.win;sfx('ui');
+  if(act==='min'){w.classList.toggle('winmin');w.classList.remove('winmax')}
+  else if(act==='max'){w.classList.toggle('winmax');w.classList.remove('winmin')}
+  else if(w.matches('dialog')){w.close();return}
+  else{
+    w.classList.remove('winmin','winmax');w.classList.add('winclosed');
+    const r=document.createElement('button');r.type='button';r.className='btn reopen';r.textContent='▶ Reopen '+w.querySelector('.bar span').textContent;
+    r.addEventListener('click',()=>{winRestore(w);w.querySelector('[data-win="close"]').focus()});w.after(r);w._reopen=r;r.focus();
+  }
+  winSync(w);
+});
+document.querySelectorAll('dialog').forEach(d=>d.addEventListener('close',()=>{d.classList.remove('winmin','winmax');winSync(d)}));
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const w=document.querySelector('.winmax:not(dialog)');if(w&&!document.querySelector('dialog[open]')){w.classList.remove('winmax');winSync(w)}});
 
 /* the level: a tiny platformer */
 const level=document.getElementById('level'),world=document.getElementById('world'),heroEl=document.getElementById('plumber');
