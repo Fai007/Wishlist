@@ -80,7 +80,8 @@ function emailHtml({ heading, kicker, rows, footer }) {
 }
 
 async function notify(kind, id, amount) {
-  if (!RESEND_KEY) return;
+  if (!RESEND_KEY) { console.log('notify: skipped — RESEND_API_KEY not set'); return; }
+  console.log('notify:', kind, id, naira(amount));
   try {
     const [vals, count] = await redis([['HVALS', 'amt:' + id], ['SCARD', 'share:' + id]]);
     const total = (vals || []).reduce((s, v) => s + (parseInt(v, 10) || 0), 0);
@@ -102,6 +103,7 @@ async function notify(kind, id, amount) {
     });
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 5000);
+    console.log('notify: sending to', MAIL_TO, 'from', MAIL_FROM);
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       signal: ctl.signal,
@@ -114,9 +116,15 @@ async function notify(kind, id, amount) {
       }),
     });
     clearTimeout(timer);
-    if (!r.ok) console.error('notify failed', r.status, await r.text());
+    if (r.ok) {
+      const data = await r.json();
+      console.log('notify: sent ok, id', data.id);
+    } else {
+      const body = await r.text();
+      console.error('notify: failed', r.status, body);
+    }
   } catch (e) {
-    console.error('notify error', e && e.message);
+    console.error('notify: error', e && e.message);
   }
 }
 
