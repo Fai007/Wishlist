@@ -630,7 +630,8 @@ dlg.querySelector('form').addEventListener('submit',e=>{
 let orderTo='',orderWin=null;
 document.getElementById('askY').addEventListener('click',()=>{
   orderWin=null;if(!orderTo)return;
-  try{orderWin=window.open('about:blank','_blank');orderWin.document.write('<title>Wish Quest</title><body style="margin:0;display:grid;place-items:center;height:100vh;background:#5C94FC;color:#fff;font:700 18px system-ui,sans-serif">Saving your pick, then off to the shop...</body>')}catch(e){}
+  try{orderWin=window.open('about:blank','_blank');const d=orderWin.document;d.title='Wish Quest';
+    d.body.style.cssText='margin:0;display:grid;place-items:center;height:100vh;background:#5C94FC;color:#fff;font:700 18px system-ui,sans-serif';d.body.textContent='Saving your pick, then off to the shop...'}catch(e){}
 });
 // where to buy: the item's own link where it has one, otherwise the wish's shop. A prefix like "book-" means the whole group.
 function orderUrl(id){
