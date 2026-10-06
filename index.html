@@ -610,23 +610,7 @@ dlg.querySelector('form').addEventListener('submit',e=>{
   const n=readAmt();
   if(n<100||n>50000000){e.preventDefault();amtErr.textContent=n<100?'Enter an amount of at least ₦100.':'That amount is too large.';amtErr.hidden=false;amtIn.focus()}
 });
-let orderTo='',orderWin=null;
-document.getElementById('askY').addEventListener('click',()=>{orderWin=null;if(orderTo){try{orderWin=window.open('about:blank','_blank')}catch(e){}}});
-// where to buy an item: its own link where one exists, otherwise the wish's shop link
-function orderUrl(id){
-  const [p,k]=id.split('-');
-  if(p==='book')return k===''||k===undefined?'https://rhbooks.com.ng/':url(BOOKS[+k][0]);
-  if(p==='shoe')return 'https://www.stevemadden.com/';
-  const w=WISHES.find(w=>w.id===p),ext=w.links.filter(l=>!l[1].startsWith('#'));
-  return (k&&w.items&&ext.length===w.items.length?ext[+k]:ext[0])[1];
-}
-function goOrder(link){
-  const w=orderWin;orderWin=null;
-  if(w&&!w.closed){try{w.opener=null}catch(e){}w.location.replace(link)}else location.href=link;
-}
-function dropOrder(){if(orderWin&&!orderWin.closed)orderWin.close();orderWin=null}
-function ask(title,item,text,yes,withAmount,order){
-  orderTo=order||'';
+function ask(title,item,text,yes,withAmount){
   document.getElementById('askT').textContent=title;document.getElementById('askItem').textContent=item;
   document.getElementById('askP').textContent=text;document.getElementById('askY').textContent=yes;
   amtWrap.hidden=!withAmount;amtErr.hidden=true;amtIn.value='';
@@ -660,8 +644,7 @@ const left=p=>[...document.querySelectorAll('[data-claim^="'+p+'"]')].map(b=>b.d
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-all]');if(!b||busy)return;
   const ids=left(b.dataset.all);if(ids.length<2)return;
-  const shop=orderUrl(b.dataset.all);
-  if(!await ask('Grab them all?',b.dataset.label,'That is '+ids.length+' items. Everyone else will see them as taken, and the shop opens so you can order. No names are shown.','Yes, all mine',false,shop)||busy){dropOrder();return}
+  if(!await ask('Grab them all?',b.dataset.label,'That is '+ids.length+' items. Everyone else will see them as taken. No names are shown.','Yes, all mine')||busy)return;
   busy=true;b.disabled=true;let got=0;
   for(const id of ids){
     try{const token=newToken(),r=await fetch('/api/claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,action:'take',token})}),d=await r.json();
@@ -669,8 +652,7 @@ document.addEventListener('click',async e=>{
   }
   busy=false;b.disabled=false;paint();
   if(got){burst(0.5,0.4,120);sfx('coin')}
-  say(got===ids.length?'All '+got+' are yours. Opening the shop...':got?got+' of '+ids.length+' saved. Someone got to the rest first.':"That didn't save. Please try again.");
-  if(got)goOrder(shop);else dropOrder();
+  say(got===ids.length?'All '+got+' are yours. Thank you!':got?got+' of '+ids.length+' saved. Someone got to the rest first.':"That didn't save. Please try again.");
 });
 async function loadClaims(){
   try{const r=await fetch('/api/claims',{cache:'no-store'});if(!r.ok)throw 0;CL=await r.json();document.body.classList.add('claims-on');paint()}catch(e){}
@@ -678,10 +660,10 @@ async function loadClaims(){
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-act]');if(!b||busy)return;
   const id=b.closest('[data-claim]').dataset.claim,act=b.dataset.act;let m=mem.get(id);
-  if(act==='take'&&!await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken, and the shop opens so you can order it. No names are shown.',"Yes, it's mine",false,orderUrl(id)))return;
+  if(act==='take'&&!await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken. No names are shown.',"Yes, it's mine"))return;
   let amount=0;
   if(act==='share'){const a=await ask('Chip in on this one?',nameOf(id),'Enter what you would like to put towards it. Others can still join you. No names are shown.','Continue',true);if(!a)return;amount=a.amount}
-  if(busy){dropOrder();return}
+  if(busy)return;
   const body={id,action:act};
   if(act==='reset')body.key=ADMIN;else body.token=(act==='undo'||act==='account')?(m&&m.t):newToken();
   if(act==='share')body.amount=amount;
@@ -692,12 +674,12 @@ document.addEventListener('click',async e=>{
     if(r.ok){
       if(act==='account'){if(d.account)showPay(id,d.amount,d.account)}
       else if(act==='take'||act==='share'){mem.set(id,{t:body.token,a:act});burst(0.5,0.4,60);
-        if(act==='share'&&d.account){sfx('coin');showPay(id,d.amount,d.account)}else{say("It's yours. Opening the shop...");goOrder(orderUrl(id))}}
+        if(act==='share'&&d.account){sfx('coin');showPay(id,d.amount,d.account)}else say("It's yours. Thank you!")}
       else{mem.set(id,null);say('Released.')}
     }
     else if(r.status===409)say('Someone just beat you to that one.');else say("That didn't save. Please try again.");
   }catch(err){say("That didn't save. Please try again.")}
-  dropOrder();busy=false;paint();
+  busy=false;paint();
 });
 loadClaims();setInterval(()=>{if(!document.hidden&&!busy)loadClaims()},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadClaims()});
