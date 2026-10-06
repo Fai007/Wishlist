@@ -1,5 +1,6 @@
-// Shared "who's getting what" store for the wish list. No names are kept:
-// a claim is just an item id plus a random token that lets the claimer undo it.
+// Shared "who's getting what" store for the wish list. A claim is an item id plus a random
+// token that lets the claimer undo it. A name is kept only if the claimer chose to give one,
+// and it is only ever sent to Faith, never returned to visitors.
 const WISH = {
   tennis: 'Wilson Envy XP tennis racket, with balls',
   watch: 'Apple Watch',
@@ -56,6 +57,9 @@ async function snapshot() {
   return { taken, shared };
 }
 
+const cleanName = (v) => (typeof v === 'string' ? v.replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, 60) : '');
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
 const naira = (n) => '₦' + Number(n).toLocaleString('en-NG');
 
 // Retro arcade email: table layout and inline styles so it survives email clients.
@@ -79,21 +83,25 @@ function emailHtml({ heading, kicker, rows, footer }) {
 </table></td></tr></table></body></html>`;
 }
 
-async function notify(kind, id, amount) {
+async function notify(kind, id, amount, name) {
   if (!RESEND_KEY) return;
   try {
     const when = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Lagos', dateStyle: 'medium', timeStyle: 'short' });
     let subject, html;
+    const from = ['From', name ? esc(name) : 'Anonymous'];
     if (kind === 'take') {
-      subject = 'Wish taken: ' + WISH[id.split('-')[0]];
+      subject = 'Wish taken: ' + WISH[id.split('-')[0]] + (name ? ' (from ' + name + ')' : '');
       html = emailHtml({
         kicker: 'someone\'s on it',
         heading: 'Wish grabbed!',
         rows: [
           ['Wish', WISH[id.split('-')[0]]],
+          from,
           ['When', when + ' (Lagos)'],
         ],
-        footer: 'Someone tapped "I\'m getting this". No name was collected — it\'s a surprise.',
+        footer: name
+          ? esc(name) + ' tapped "I\'m getting this" and chose to tell you.'
+          : 'Someone tapped "I\'m getting this" and chose to stay anonymous — it\'s a surprise.',
       });
     } else {
       const [vals, count] = await redis([['HVALS', 'amt:' + id], ['SCARD', 'share:' + id]]);
@@ -105,13 +113,15 @@ async function notify(kind, id, amount) {
         heading: added ? 'New chip-in!' : 'Chip-in withdrawn',
         rows: [
           ['Wish', WISH[id]],
+          from,
           [added ? 'Amount pledged' : 'Amount withdrawn', naira(amount)],
           ['Players chipping in', String(count)],
           ['Total pledged so far', naira(total)],
           ['When', when + ' (Lagos)'],
         ],
         footer: added
-          ? 'Someone tapped Chip in and was shown your account details. No name was collected, so check your bank alerts for the transfer.'
+          ? (name ? esc(name) : 'Someone') + ' tapped Chip in and was shown your account details. ' +
+            (name ? 'Check' : 'They chose to stay anonymous, so check') + ' your bank alerts for the transfer.'
           : 'Someone undid their chip-in on this wish.',
       });
     }
@@ -145,16 +155,20 @@ module.exports = async (req, res) => {
     const extra = {};
     if (action === 'reset') {
       if (!ADMIN_KEY || key !== ADMIN_KEY) return res.status(403).json({ error: 'forbidden' });
-      await redis([['DEL', 'claim:' + id, 'share:' + id, 'amt:' + id]]);
+      await redis([['DEL', 'claim:' + id, 'share:' + id, 'amt:' + id, 'who:' + id]]);
     } else {
       if (typeof token !== 'string' || !/^[\w-]{16,64}$/.test(token)) return res.status(400).json({ error: 'bad token' });
+      const name = cleanName(body.name);
       if (action === 'take') {
         const [sharers] = await redis([['SCARD', 'share:' + id]]);
         if (sharers) status = 409;
         else {
           const [ok] = await redis([['SET', 'claim:' + id, token, 'NX']]);
           if (ok !== 'OK') status = 409;
-          else await notify('take', id, 0);
+          else {
+            if (name) await redis([['HSET', 'who:' + id, token, name]]);
+            await notify('take', id, 0, name);
+          }
         }
       } else if (action === 'share') {
         if (!SHAREABLE.has(id)) return res.status(400).json({ error: 'not shareable' });
@@ -163,10 +177,10 @@ module.exports = async (req, res) => {
         const [taken] = await redis([['EXISTS', 'claim:' + id]]);
         if (taken) status = 409;
         else {
-          await redis([['SADD', 'share:' + id, token], ['HSET', 'amt:' + id, token, String(amount)]]);
+          await redis([['SADD', 'share:' + id, token], ['HSET', 'amt:' + id, token, String(amount)], name ? ['HSET', 'who:' + id, token, name] : ['HDEL', 'who:' + id, token]]);
           extra.account = ACCOUNT;
           extra.amount = amount;
-          await notify('share', id, amount);
+          await notify('share', id, amount, name);
         }
       } else if (action === 'account') {
         const [member, amt] = await redis([['SISMEMBER', 'share:' + id, token], ['HGET', 'amt:' + id, token]]);
@@ -174,11 +188,11 @@ module.exports = async (req, res) => {
         extra.account = ACCOUNT;
         extra.amount = parseInt(amt, 10) || 0;
       } else if (action === 'undo') {
-        const [cur, amt] = await redis([['GET', 'claim:' + id], ['HGET', 'amt:' + id, token]]);
-        if (cur === token) await redis([['DEL', 'claim:' + id]]);
+        const [cur, amt, who] = await redis([['GET', 'claim:' + id], ['HGET', 'amt:' + id, token], ['HGET', 'who:' + id, token]]);
+        if (cur === token) await redis([['DEL', 'claim:' + id], ['HDEL', 'who:' + id, token]]);
         else {
-          const [removed] = await redis([['SREM', 'share:' + id, token], ['HDEL', 'amt:' + id, token]]);
-          if (removed) await notify('undo', id, parseInt(amt, 10) || 0);
+          const [removed] = await redis([['SREM', 'share:' + id, token], ['HDEL', 'amt:' + id, token], ['HDEL', 'who:' + id, token]]);
+          if (removed) await notify('undo', id, parseInt(amt, 10) || 0, who || '');
         }
       } else {
         return res.status(400).json({ error: 'unknown action' });

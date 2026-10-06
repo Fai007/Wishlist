@@ -369,6 +369,10 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
 .askamt span{font:400 10px/1.4 "Press Start 2P",ui-monospace,monospace;text-transform:uppercase;color:var(--ink-soft)}
 .askamt input{width:min(260px,100%);padding:12px;border:3px solid #000;border-radius:0;background:#fff;color:#111;text-align:center;font:400 16px/1.2 "Press Start 2P",ui-monospace,monospace}
 .askerr{color:var(--magenta);font-weight:800;min-height:1.4em}
+.askwho{display:flex;align-items:center;gap:10px;font-weight:800;cursor:pointer}
+.askwho input{width:22px;height:22px;margin:0;accent-color:#E52521;cursor:pointer}
+#askName{font:600 16px/1.2 system-ui,sans-serif}
+.askhint{font-size:13px;color:var(--ink-soft)}
 .coin{width:46px;height:58px;border-radius:50%;background:#FAC000;border:3px solid #000;box-shadow:inset -5px 0 0 #C87800,inset 5px 0 0 #FFE9A0;animation:bob 1.6s ease-in-out infinite}
 .acct{width:100%;display:grid;gap:6px;padding:14px 12px;background:#000;color:#fff;border:3px solid #000}
 .acct .num{font:400 clamp(16px,5.4vw,22px)/1.4 "Press Start 2P",ui-monospace,monospace;color:#FAC000;letter-spacing:1px;word-break:break-all}
@@ -414,7 +418,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
     <h2 id="wishes">The wish</h2>
     <p><span class="pun">No pressure, but these are pre-sent-ed in no particular order.</span></p>
   </div>
-  <p class="claimtip">Buying something? Tap <b>I'm getting this</b> on the wish so nobody doubles up, and the shop opens for you. Where a wish has several items, tick one, a few or all of them. No names are shown, so it stays a surprise. Big gifts can be bought outright or shared.</p>
+  <p class="claimtip">Buying something? Tap <b>I'm getting this</b> on the wish so nobody doubles up, and the shop opens for you. Where a wish has several items, tick one, a few or all of them. You can stay anonymous or tell Faith it's from you, and other visitors never see names. Big gifts can be bought outright or shared.</p>
   <div class="quest" id="quest">
     <div class="bar"><span>World 1-1: Wish Quest</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="screen">
@@ -489,6 +493,9 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
       <p class="askitem" id="askItem"></p>
       <p id="askP"></p>
       <label class="askamt" id="askAmtWrap" hidden><span>How much? (₦)</span><input id="askAmt" inputmode="numeric" autocomplete="off" placeholder="20,000" aria-describedby="askErr"></label>
+      <label class="askwho"><input type="checkbox" id="askWho"><span>Tell Faith it's from me</span></label>
+      <label class="askamt" id="askNameWrap" hidden><span>Your name</span><input id="askName" maxlength="60" autocomplete="name" placeholder="Your name" aria-describedby="askErr"></label>
+      <p class="askhint">Leave it unticked to stay anonymous.</p>
       <p class="askerr" id="askErr" role="alert" hidden></p>
       <div class="askbtns"><button class="cbtn" value="yes" id="askY"></button><button class="cbtn undo" value="no">Not yet</button></div>
     </div>
@@ -642,15 +649,24 @@ dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close('no')});
 const amtWrap=document.getElementById('askAmtWrap'),amtIn=document.getElementById('askAmt'),amtErr=document.getElementById('askErr');
 const readAmt=()=>parseInt(amtIn.value.replace(/[^0-9]/g,''),10)||0;
 amtIn.addEventListener('input',()=>{const n=readAmt();amtIn.value=n?n.toLocaleString('en-NG'):'';amtErr.hidden=true});
+// anonymous unless the visitor ticks the box and gives a name; the name only ever goes to Faith
+const whoIn=document.getElementById('askWho'),nameWrap=document.getElementById('askNameWrap'),nameIn=document.getElementById('askName');
+const readName=()=>whoIn.checked?nameIn.value.trim().slice(0,60):'';
+const nameMissing=()=>whoIn.checked&&!nameIn.value.trim();
+const savedName={get(){try{return localStorage.getItem('wish:name')||''}catch(e){return ''}},set(v){try{v?localStorage.setItem('wish:name',v):localStorage.removeItem('wish:name')}catch(e){}}};
+whoIn.addEventListener('change',()=>{nameWrap.hidden=!whoIn.checked;amtErr.hidden=true;if(whoIn.checked)nameIn.focus()});
+nameIn.addEventListener('input',()=>{amtErr.hidden=true});
 dlg.querySelector('form').addEventListener('submit',e=>{
-  if(amtWrap.hidden||!e.submitter||e.submitter.value!=='yes')return;
+  if(!e.submitter||e.submitter.value!=='yes')return;
   const n=readAmt();
-  if(n<100||n>50000000){e.preventDefault();amtErr.textContent=n<100?'Enter an amount of at least ₦100.':'That amount is too large.';amtErr.hidden=false;amtIn.focus()}
+  if(!amtWrap.hidden&&(n<100||n>50000000)){e.preventDefault();amtErr.textContent=n<100?'Enter an amount of at least ₦100.':'That amount is too large.';amtErr.hidden=false;amtIn.focus()}
+  else if(nameMissing()){e.preventDefault();amtErr.textContent='Add your name, or untick the box to stay anonymous.';amtErr.hidden=false;nameIn.focus()}
+  else savedName.set(readName());
 });
 // The shop tab is opened on the confirming tap (so popup blockers allow it) and pointed at the shop once the claim saves.
 let orderTo='',orderWin=null;
 document.getElementById('askY').addEventListener('click',()=>{
-  orderWin=null;if(!orderTo)return;
+  orderWin=null;if(!orderTo||nameMissing())return;
   try{orderWin=window.open('about:blank','_blank');const d=orderWin.document;d.title='Wish Quest';
     d.body.style.cssText='margin:0;display:grid;place-items:center;height:100vh;background:#5C94FC;color:#fff;font:700 18px system-ui,sans-serif';d.body.textContent='Saving your pick, then off to the shop...'}catch(e){}
 });
@@ -672,11 +688,13 @@ function ask(title,item,text,yes,withAmount,order){
   document.getElementById('askT').textContent=title;document.getElementById('askItem').textContent=item;
   document.getElementById('askP').textContent=text;document.getElementById('askY').textContent=yes;
   amtWrap.hidden=!withAmount;amtErr.hidden=true;amtIn.value='';
+  nameIn.value=savedName.get();whoIn.checked=!!nameIn.value;nameWrap.hidden=!whoIn.checked;
   if(!dlg.showModal){
-    if(!withAmount)return Promise.resolve(confirm(title+' '+item));
-    const n=parseInt((prompt(title+' '+item+' How much, in naira?')||'').replace(/[^0-9]/g,''),10)||0;return Promise.resolve(n>=100?{amount:n}:false);
+    const who=()=>(prompt('Your name for Faith, or leave blank to stay anonymous')||'').trim().slice(0,60);
+    if(!withAmount)return Promise.resolve(confirm(title+' '+item)&&{amount:0,name:who()});
+    const n=parseInt((prompt(title+' '+item+' How much, in naira?')||'').replace(/[^0-9]/g,''),10)||0;return Promise.resolve(n>=100?{amount:n,name:who()}:false);
   }
-  return new Promise(done=>{dlg.returnValue='';dlg.addEventListener('close',()=>done(dlg.returnValue==='yes'&&{amount:withAmount?readAmt():0}),{once:true});dlg.showModal();if(withAmount)amtIn.focus()});
+  return new Promise(done=>{dlg.returnValue='';dlg.addEventListener('close',()=>done(dlg.returnValue==='yes'&&{amount:withAmount?readAmt():0,name:readName()}),{once:true});dlg.showModal();if(withAmount)amtIn.focus()});
 }
 const pay=document.getElementById('pay');
 pay.addEventListener('click',e=>{if(e.target===pay)pay.close()});
@@ -712,11 +730,11 @@ document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-get]');if(!b||busy)return;
   const group=b.closest('[data-group]').dataset.group,ids=left(group).filter(id=>picked.has(id)),n=ids.length;if(!n)return;
   const names=ids.map(nameOf),shop=orderUrl(n===1?ids[0]:group);
-  if(!await ask(n===1?'Grab this wish?':'Grab these '+n+'?',n<=4?names.join(', '):names.slice(0,3).join(', ')+' and '+(n-3)+' more',
-    'Everyone else will see '+(n===1?'it':'them')+' as taken, and the shop opens so you can order. No names are shown.',n===1?"Yes, it's mine":'Yes, all mine',false,shop)||busy){dropOrder();return}
+  const a=await ask(n===1?'Grab this wish?':'Grab these '+n+'?',n<=4?names.join(', '):names.slice(0,3).join(', ')+' and '+(n-3)+' more',
+    'Everyone else will see '+(n===1?'it':'them')+' as taken, and the shop opens so you can order. Other visitors never see names.',n===1?"Yes, it's mine":'Yes, all mine',false,shop);if(!a||busy){dropOrder();return}
   busy=true;b.disabled=true;
   const done=await Promise.all(ids.map(async id=>{
-    try{const token=newToken(),r=await fetch('/api/claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,action:'take',token})});
+    try{const token=newToken(),r=await fetch('/api/claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,action:'take',token,name:a.name||undefined})});
       if(r.ok){mem.set(id,{t:token,a:'take'});picked.delete(id)}return r.ok}catch(err){return false}
   }));
   const got=done.filter(Boolean).length;
@@ -731,13 +749,14 @@ async function loadClaims(){
 document.addEventListener('click',async e=>{
   const b=e.target.closest('[data-act]');if(!b||busy)return;
   const id=b.closest('[data-claim]').dataset.claim,act=b.dataset.act;let m=mem.get(id);
-  if(act==='take'&&!await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken, and the shop opens so you can order. No names are shown.',"Yes, it's mine",false,orderUrl(id)))return dropOrder();
-  let amount=0;
-  if(act==='share'){const a=await ask('Chip in on this one?',nameOf(id),'Enter what you would like to put towards it. Others can still join you. No names are shown.','Continue',true);if(!a)return;amount=a.amount}
+  let amount=0,who='';
+  if(act==='take'){const a=await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken, and the shop opens so you can order. Other visitors never see names.',"Yes, it's mine",false,orderUrl(id));if(!a)return dropOrder();who=a.name}
+  if(act==='share'){const a=await ask('Chip in on this one?',nameOf(id),'Enter what you would like to put towards it. Others can still join you. Other visitors never see names.','Continue',true);if(!a)return;amount=a.amount;who=a.name}
   if(busy)return dropOrder();
   const body={id,action:act};
   if(act==='reset')body.key=ADMIN;else body.token=(act==='undo'||act==='account')?(m&&m.t):newToken();
   if(act==='share')body.amount=amount;
+  if(who)body.name=who;
   busy=true;b.disabled=true;
   try{
     const r=await fetch('/api/claims',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),d=await r.json();
