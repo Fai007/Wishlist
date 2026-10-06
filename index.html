@@ -572,7 +572,11 @@ function unlockAll(){WISHES.forEach((_,i)=>unlock(i));quest.classList.add('all')
 
 const sp=document.getElementById('spines'),bl=document.getElementById('booklist');
 const slug=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-const url=t=>'https://rhbooks.com.ng/?s='+encodeURIComponent(t)+'&post_type=product';
+/* product page slugs on Roving Heights; books without one fall back to a store search */
+const PAGES={"This Seat Is Taken":"this-seat-is-taken","The Score":"the-score-now-an-original-series-on-amazon-prime-off-campus","The Goal":"the-goal-now-an-original-series-on-amazon-prime-off-campus","The Mistake":"the-mistake-now-an-original-series-on-amazon-prime-off-campus","The Night We Met":"the-night-we-met","Love at First Sighting":"love-at-first-sighting","Love and Other Conspiracies":"love-and-other-conspiracies","Losing Hope & Finding Cinderella":"losing-hope-colleen-hoover","Beg, Borrow, or Steal":"beg-borrow-or-steal","Beach Read":"beach-read","Love and Other Words":"love-and-other-words-paperback","Love on the Brain":"love-on-the-brain"};
+/* books that open a ready-made order to pay for, instead of a product page */
+const ORDERS={"The Romance Revival":"https://rhbooks.com.ng/checkout/order-pay/132649/?key=wc_order_45l9ePg5TsbrU"};
+const url=t=>ORDERS[t]||(PAGES[t]?'https://rhbooks.com.ng/product/'+PAGES[t]+'/':'https://rhbooks.com.ng/?s='+encodeURIComponent(t)+'&post_type=product');
 BOOKS.forEach((b,i)=>{
   const a=document.createElement('a');a.className='spine';a.href=url(b[0]);a.target='_blank';a.rel='noopener';
   a.textContent=b[0];a.style.background=SPINE[i%SPINE.length];a.style.height=(170+((i*37)%70))+'px';a.style.width=(40+((i*13)%16))+'px';
