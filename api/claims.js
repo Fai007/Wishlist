@@ -60,6 +60,9 @@ async function snapshot() {
 const cleanName = (v) => (typeof v === 'string' ? v.replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, 60) : '');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
+// The giver's email is only used to ask Faith for her delivery details; it goes in her notification and is not stored.
+const cleanEmail = (v) => (typeof v === 'string' && v.length <= 120 && /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']{2,}$/.test(v.trim()) ? v.trim() : '');
+
 const naira = (n) => '₦' + Number(n).toLocaleString('en-NG');
 
 // Retro arcade email: table layout and inline styles so it survives email clients.
@@ -83,25 +86,28 @@ function emailHtml({ heading, kicker, rows, footer }) {
 </table></td></tr></table></body></html>`;
 }
 
-async function notify(kind, id, amount, name) {
-  if (!RESEND_KEY) return;
+async function notify(kind, id, amount, name, email) {
+  if (!RESEND_KEY) return false;
   try {
     const when = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Lagos', dateStyle: 'medium', timeStyle: 'short' });
     let subject, html;
     const from = ['From', name ? esc(name) : 'Anonymous'];
     if (kind === 'take') {
-      subject = 'Wish taken: ' + WISH[id.split('-')[0]] + (name ? ' (from ' + name + ')' : '');
+      subject = 'Wish taken: ' + WISH[id.split('-')[0]] + (name ? ' (from ' + name + ')' : '') + (email ? ' — wants your delivery details' : '');
       html = emailHtml({
         kicker: 'someone\'s on it',
         heading: 'Wish grabbed!',
         rows: [
           ['Wish', WISH[id.split('-')[0]]],
           from,
+          ...(id === 'flight' ? [] : [['Delivery', email ? 'Send details to ' + esc(email) : 'Already has your address']]),
           ['When', when + ' (Lagos)'],
         ],
-        footer: name
-          ? esc(name) + ' tapped "I\'m getting this" and chose to tell you.'
-          : 'Someone tapped "I\'m getting this" and chose to stay anonymous — it\'s a surprise.',
+        footer:
+          (name
+            ? esc(name) + ' tapped "I\'m getting this" and chose to tell you.'
+            : 'Someone tapped "I\'m getting this" and chose to stay anonymous — it\'s a surprise.') +
+          (email ? '<br><br><b>They asked for your delivery details.</b> Reply to this email to send your address to ' + esc(email) + '.' : ''),
       });
     } else {
       const [vals, count] = await redis([['HVALS', 'amt:' + id], ['SCARD', 'share:' + id]]);
@@ -131,12 +137,14 @@ async function notify(kind, id, amount, name) {
       method: 'POST',
       signal: ctl.signal,
       headers: { Authorization: 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: MAIL_FROM, to: [MAIL_TO], subject, html }),
+      body: JSON.stringify({ from: MAIL_FROM, to: [MAIL_TO], subject, html, ...(email ? { reply_to: email } : {}) }),
     });
     clearTimeout(timer);
     if (!r.ok) console.error('notify failed', r.status, await r.text());
+    return r.ok;
   } catch (e) {
     console.error('notify error', e && e.message);
+    return false;
   }
 }
 
@@ -167,7 +175,9 @@ module.exports = async (req, res) => {
           if (ok !== 'OK') status = 409;
           else {
             if (name) await redis([['HSET', 'who:' + id, token, name]]);
-            await notify('take', id, 0, name);
+            const email = id === 'flight' ? '' : cleanEmail(body.email);
+            const sent = await notify('take', id, 0, name, email);
+            if (email && !sent) extra.delivery = 'failed';
           }
         }
       } else if (action === 'share') {
