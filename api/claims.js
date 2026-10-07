@@ -56,19 +56,16 @@ function deliveryReply(email, name, wish) {
     'Recipient: ' + DELIVERY.name,
     ...(DELIVERY.phone ? ['Phone: ' + DELIVERY.phone] : []),
     'Address:',
-    DELIVERY.address,
-    '',
-    ...(DELIVERY.phone ? ['Please put the phone number on the order, as riders usually call before they deliver.'] : []),
-    ...(DELIVERY.notes ? [DELIVERY.notes] : []),
-    '',
-    "If the shop sends you a tracking number or a delivery date, I'd love it if you could forward it so I know to look out for it.",
+    DELIVERY.address.replace(/\r?\n/g, '\r\n'),
+    ...(DELIVERY.notes ? ['', DELIVERY.notes] : []),
     '',
     "Thank you again. I'm so grateful.",
     '',
     'With love,',
     'Faith',
   ].join('\r\n');
-  return 'mailto:' + encodeURIComponent(email) + '?subject=' + encodeURIComponent('Delivery details for my birthday gift') + '&body=' + encodeURIComponent(body);
+  // the @ must stay unescaped or some mail apps (Gmail among them) leave the To field empty
+  return 'mailto:' + encodeURIComponent(email).replace(/%40/g, '@') + '?subject=' + encodeURIComponent('Delivery details for my birthday gift') + '&body=' + encodeURIComponent(body);
 }
 
 async function redis(cmds) {
