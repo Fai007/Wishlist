@@ -380,6 +380,14 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
 .askdeliv{display:grid;gap:12px;justify-items:center;width:100%;padding-top:12px;border-top:2px dashed var(--line)}
 .askdeliv[hidden]{display:none}
 .askhint{font-size:13px;color:var(--ink-soft)}
+.askhint:empty,#gateP:empty{display:none}
+.gateprice{font:400 16px/1.6 "Press Start 2P",ui-monospace,monospace;color:#E52521}
+.gateprice ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;font:700 15px/1.4 system-ui,sans-serif;color:var(--ink);text-align:left}
+.gateprice li{display:flex;justify-content:space-between;gap:18px}
+.gateprice li b{color:#E52521;white-space:nowrap}
+.gift .price{margin:0;font:400 12px/1.6 "Press Start 2P",ui-monospace,monospace}
+.subitems small.price{margin-left:6px;font-weight:800;color:var(--ink-soft);white-space:nowrap}
+.shoeprice{display:block;text-align:center;color:#111;font-weight:700;font-size:13px;margin-top:2px;opacity:.7}
 .coin{width:46px;height:58px;border-radius:50%;background:#FAC000;border:3px solid #000;box-shadow:inset -5px 0 0 #C87800,inset 5px 0 0 #FFE9A0;animation:bob 1.6s ease-in-out infinite}
 .acct{width:100%;display:grid;gap:6px;padding:14px 12px;background:#000;color:#fff;border:3px solid #000}
 .acct .num{font:400 clamp(16px,5.4vw,22px)/1.4 "Press Start 2P",ui-monospace,monospace;color:#FAC000;letter-spacing:1px;word-break:break-all}
@@ -461,7 +469,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
     <div class="bar"><span>World 1-2: Books</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="books" id="spines"></div>
     <div class="shelfmeta">
-      <div><div class="total">₦201,500</div><div style="color:var(--ink-soft);font-size:15px">14 books, all at Roving Heights Bookstore</div></div>
+      <div><div class="total" id="shelfTotal">₦201,500</div><div id="shelfCount" style="color:var(--ink-soft);font-size:15px">14 books, all at Roving Heights Bookstore</div></div>
       <a class="go" style="--c:var(--cherry)" href="https://rhbooks.com.ng/" target="_blank" rel="noopener">Visit Roving Heights</a>
     </div>
     <ul class="booklist" id="booklist"></ul>
@@ -511,6 +519,21 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
       </div>
       <p class="askerr" id="askErr" role="alert" hidden></p>
       <div class="askbtns"><button class="cbtn" value="yes" id="askY"></button><button class="cbtn undo" value="no">Not yet</button></div>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="ask" id="gate" aria-labelledby="gateT">
+  <form method="dialog">
+    <div class="bar"><span>Checkpoint: before you go</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
+    <div class="askbody">
+      <span class="qb" aria-hidden="true">?</span>
+      <h3 id="gateT">Before you head to the shop</h3>
+      <p class="askitem" id="gateItem"></p>
+      <div class="gateprice" id="gatePrice"></div>
+      <p id="gateP"></p>
+      <div class="askbtns" id="gateBtns"></div>
+      <p class="askhint" id="gateNote"></p>
     </div>
   </form>
 </dialog>
@@ -569,6 +592,10 @@ const SPINE=["#E52521","#008A00","#2038EC","#C84C0C","#B87800","#6A3FCF","#00888
 const quest=document.getElementById('quest'),tiles=document.getElementById('tiles'),stage=document.getElementById('stage'),
   pips=document.getElementById('pips'),count=document.getElementById('count'),intro=document.getElementById('intro'),winmsg=document.getElementById('winmsg');
 const pad=n=>String(n).padStart(2,'0');
+/* shop prices, looked up by hand on 7 Oct 2026 (books carry theirs in BOOKS). Wishes that link to a brand or a search have none. */
+const PRICE={monitor:'₦342,000','tennis-0':'₦185,000','tennis-1':'₦14,000','suede-0':'₦45,000','suede-1':'₦40,000','suede-2':'₦45,000','suede-3':'₦45,000',
+  'shoe-0':'$109.95','shoe-1':'$39.99','shoe-2':'$69.99','shoe-3':'$119.95','shoe-4':'$119.95'};
+const priceOf=id=>id.startsWith('book-')?'₦'+BOOKS[+id.slice(5)][1].toLocaleString():PRICE[id]||'';
 const NOCLAIM=new Set(['books','shoes']),SHAREABLE=new Set(['watch','ipad','monitor','flight']);
 const BX=i=>300+i*150,WORLD=300+WISHES.length*150+260;
 WISHES.forEach((w,i)=>{
@@ -581,7 +608,7 @@ WISHES.forEach((w,i)=>{
   const el=document.createElement('article');
   el.className='gift';el.id='w-'+w.id;el.hidden=true;el.style.setProperty('--c',w.c);
   const links=w.links.map((l,j)=>{const ext=!l[1].startsWith('#');return `<a class="go${j?' alt':''}" href="${l[1]}" ${ext?'target="_blank" rel="noopener"':''}>${l[0]}</a>`}).join('');
-  el.innerHTML=`<div class="inner"><div class="lvl">Level ${pad(i+1)} of ${WISHES.length}</div><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p><p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div>${NOCLAIM.has(w.id)?'':w.items?`<ul class="subitems">${w.items.map((t,j)=>`<li><span>${t}</span><div data-claim="${w.id}-${j}" data-compact></div></li>`).join('')}</ul><div class="allrow" data-group="${w.id}-"><button type="button" class="cbtn undo" data-pickall></button><button type="button" class="cbtn" data-get></button></div>`:`<div data-claim="${w.id}"></div>`}</div>`;
+  el.innerHTML=`<div class="inner"><div class="lvl">Level ${pad(i+1)} of ${WISHES.length}</div><div class="emoji" aria-hidden="true">${w.e}</div><h3>${w.t}</h3><p class="what">${w.what}</p>${PRICE[w.id]?`<p class="price">${PRICE[w.id]}</p>`:''}<p>${w.p}</p>${w.note?`<p class="note">${w.note}</p>`:''}<div class="links">${links}</div>${NOCLAIM.has(w.id)?'':w.items?`<ul class="subitems">${w.items.map((t,j)=>`<li><span>${t}${PRICE[w.id+'-'+j]?` <small class="price">${PRICE[w.id+'-'+j]}</small>`:''}</span><div data-claim="${w.id}-${j}" data-compact></div></li>`).join('')}</ul><div class="allrow" data-group="${w.id}-"><button type="button" class="cbtn undo" data-pickall></button><button type="button" class="cbtn" data-get></button></div>`:`<div data-claim="${w.id}"></div>`}</div>`;
   stage.appendChild(el);
   pips.appendChild(document.createElement('i'));
 });
@@ -620,7 +647,7 @@ BOOKS.forEach((b,i)=>{
 });
 
 /* claims: a shared, name-free record of what is already being bought */
-document.querySelectorAll('.polaroid').forEach((f,i)=>f.insertAdjacentHTML('beforeend',`<div data-claim="shoe-${i}" data-compact></div>`));
+document.querySelectorAll('.polaroid').forEach((f,i)=>{f.querySelector('a').insertAdjacentHTML('beforeend',`<span class="shoeprice">${PRICE['shoe-'+i]}</span>`);f.insertAdjacentHTML('beforeend',`<div data-claim="shoe-${i}" data-compact></div>`)});
 let CL={taken:[],shared:{}},busy=false;
 const picked=new Set(); // ticked items on multi-item wishes, not yet claimed
 const ADMIN=location.hash.startsWith('#admin=')?decodeURIComponent(location.hash.slice(7)):'';
@@ -647,6 +674,10 @@ function paint(){
   document.querySelectorAll('.subitems li').forEach(li=>li.classList.toggle('gone',taken.has(li.querySelector('[data-claim]').dataset.claim)));
   paintGroups();
   [...bl.children].forEach((li,i)=>{const g=taken.has('book-'+i);li.classList.toggle('gone',g);sp.children[i].classList.toggle('gone',g)});
+  // the shelf total only counts books nobody has taken yet
+  const open=BOOKS.filter((_,i)=>!taken.has('book-'+i)),gone=BOOKS.length-open.length;
+  document.getElementById('shelfTotal').textContent='₦'+open.reduce((t,b)=>t+b[1],0).toLocaleString();
+  document.getElementById('shelfCount').textContent=!gone?BOOKS.length+' books, all at Roving Heights Bookstore':!open.length?'All '+BOOKS.length+' books taken. Thank you!':open.length+' of '+BOOKS.length+' books left ('+gone+' taken), all at Roving Heights Bookstore';
   document.querySelectorAll('.polaroid').forEach((f,i)=>f.classList.toggle('gone',taken.has('shoe-'+i)));
 }
 // the "select all" and "I'll get these" buttons under each multi-item wish
@@ -771,6 +802,59 @@ document.addEventListener('click',async e=>{
   if(got)goOrder(shop);else dropOrder();
 });
 const deliveryNote=(mail,failed)=>!mail?'':failed?" The delivery request didn't send, so please ask Faith for her address.":' Faith will email you her delivery details.';
+/* checkpoint: a shop link first shows the price and asks whether to claim the item, so nobody slips off to buy unrecorded */
+const gate=document.getElementById('gate');let gateTo={id:'',href:''};
+gate.addEventListener('click',e=>{if(e.target===gate)gate.close()});
+// which claim a shop link belongs to; "tennis-" style ids mean a link shared by several items
+function claimIdFor(a){
+  if(a.classList.contains('spine'))return 'book-'+[...sp.children].indexOf(a);
+  const li=a.closest('.booklist li');if(li)return 'book-'+[...bl.children].indexOf(li);
+  const pol=a.closest('.polaroid');if(pol)return 'shoe-'+[...document.querySelectorAll('.polaroid')].indexOf(pol);
+  const g=a.closest('.gift');if(!g||!a.closest('.links'))return '';
+  const w=WISHES.find(w=>'w-'+w.id===g.id),ext=[...g.querySelectorAll('.links a')].filter(x=>!x.getAttribute('href').startsWith('#'));
+  return !w.items?w.id:ext.length===w.items.length?w.id+'-'+ext.indexOf(a):w.id+'-';
+}
+function openGate(id,href){
+  gateTo={id,href};
+  const group=id.endsWith('-'),w=WISHES.find(w=>w.id===id.split('-')[0]),m=mem.get(id),n=CL.shared[id]||0,taken=CL.taken.includes(id);
+  const price=document.getElementById('gatePrice'),btns=[];let text='',any=false;
+  document.getElementById('gateItem').textContent=group?w.what:nameOf(id);
+  price.textContent='';
+  if(group){
+    const ul=document.createElement('ul');
+    w.items.forEach((t,j)=>{const p=priceOf(id+j),li=document.createElement('li');li.append(t);if(p){const b=document.createElement('b');b.textContent=p;li.append(b);any=true}ul.append(li)});
+    price.append(ul);
+  }else{any=!!priceOf(id);price.textContent=priceOf(id)||'Price varies'}
+  if(!document.body.classList.contains('claims-on'))btns.push(['look','Go to the shop','']);
+  else if(group){text="Tick the ones you'll get on the card, then tap \u201cI'll get these\u201d so nobody doubles up.";btns.push(['choose','Choose items',''],['look','Just looking','undo'])}
+  else if(taken&&m&&m.a==='take'){text="You've already claimed this one.";btns.push(['look','Go to the shop',''])}
+  else if(taken){text='Someone is already getting this one.';btns.push(['look','Just looking','undo'])}
+  else if(n){text=n+' chipping in on this one so far.';if(!(m&&m.a==='share'))btns.push(['share','Chip in too','share']);btns.push(['look','Just looking','undo'])}
+  else{text='Planning to buy it? Claim it first so nobody doubles up.';btns.push(['take',"I'm getting this",'']);if(SHAREABLE.has(id))btns.push(['share','Chip in','share']);btns.push(['look','Just looking','undo'])}
+  document.getElementById('gateP').textContent=text;
+  document.getElementById('gateNote').textContent=any?"Price when last checked. The shop's own price is final.":'';
+  document.getElementById('gateBtns').innerHTML=btns.map(b=>`<button type="button" class="cbtn ${b[2]}" data-gate="${b[0]}">${b[1]}</button>`).join('');
+  gate.showModal();
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href]');
+  if(!a||!gate.showModal||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||a.getAttribute('href').startsWith('#'))return;
+  const id=claimIdFor(a);if(!id)return;
+  e.preventDefault();openGate(id,a.href);
+});
+document.getElementById('gateBtns').addEventListener('click',e=>{
+  const b=e.target.closest('[data-gate]');if(!b)return;
+  const {id,href}=gateTo,act=b.dataset.gate,box=document.querySelector(`[data-claim="${id}"]`);
+  if(act==='look')window.open(href,'_blank','noopener');
+  gate.close();
+  if(act==='choose'){const c=document.querySelector(`[data-claim^="${id}"] [data-pick]`);if(c)c.focus()}
+  else if(act==='share')box.querySelector('[data-act="share"]').click();
+  else if(act==='take'){
+    // single wishes have their own claim button; items in a set are ticked and sent through the set's "I'll get this" button
+    if(!box.hasAttribute('data-compact'))box.querySelector('[data-act="take"]').click();
+    else{picked.add(id);paint();[...document.querySelectorAll('[data-group]')].find(r=>id.startsWith(r.dataset.group)).querySelector('[data-get]').click()}
+  }
+});
 async function loadClaims(){
   try{const r=await fetch('/api/claims',{cache:'no-store'});if(!r.ok)throw 0;CL=await r.json();document.body.classList.add('claims-on');paint()}catch(e){}
 }
