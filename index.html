@@ -171,6 +171,11 @@ section{padding:40px 0}
 .polaroid{background:#fff;padding:12px 12px 16px;border:3px solid var(--ink);border-radius:6px;box-shadow:5px 5px 0 var(--plum);position:relative;margin:0}
 .polaroid:nth-child(odd){transform:rotate(-2deg)} .polaroid:nth-child(even){transform:rotate(2deg)}
 .polaroid img{width:100%;height:auto;display:block;border-radius:2px}
+.polaroid a{display:block;text-decoration:none}
+.polaroid a:hover figcaption,.polaroid a:focus-visible figcaption{text-decoration:underline}
+.sizemap{display:flex;flex-wrap:wrap;gap:10px;list-style:none;margin:0 0 30px;padding:0}
+.sizemap li{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#FAC000;color:#111;border:3px solid #000;box-shadow:3px 3px 0 #000;font-weight:800;font-size:15px}
+.sizemap b{font:400 9px/1 "Press Start 2P",ui-monospace,monospace}
 .polaroid figcaption{color:#111111;font-weight:800;font-size:14px;margin-top:8px;text-align:center}
 .size{position:absolute;top:-14px;right:-10px;background:var(--sun);color:#111111;font-weight:800;font-size:13px;border:2px solid #111111;border-radius:999px;padding:6px 10px;transform:rotate(8deg)}
 .shoecta{margin-top:26px;text-align:center}
@@ -469,12 +474,13 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
     <h2 id="shoehead">Shoes, size 38/39</h2>
     <p><span class="pun">I'm head over heels for these, Steve Madden-ly so.</span></p>
   </div>
+  <ul class="sizemap" aria-label="My shoe size by region"><li><b>EU</b>38-39</li><li><b>US</b>8</li><li><b>UK</b>6</li><li><b>Foot</b>24.1 cm</li></ul>
   <div class="shoes">
-    <figure class="polaroid"><span class="size">38/39</span><img alt="Plum patent strappy stiletto sandal with ankle strap" src="images/plum-strappy-sandal.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Plum patent strappy sandal</figcaption></figure>
-    <figure class="polaroid"><span class="size">38/39</span><img alt="Black toe-loop stiletto sandal with ankle strap" src="images/black-toe-loop-stiletto.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Black toe-loop stiletto</figcaption></figure>
-    <figure class="polaroid"><span class="size">38/39</span><img alt="Black strappy kitten-heel sandal with gold bead details" src="images/black-strappy-gold-beads.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Black strappy, gold beads</figcaption></figure>
-    <figure class="polaroid"><span class="size">38/39</span><img alt="Magenta suede slingback pump with burgundy ankle strap" src="images/magenta-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Magenta suede slingback</figcaption></figure>
-  <figure class="polaroid"><span class="size">38/39</span><img alt="Mustard suede slingback pump with light blue ankle strap and brown heel" src="images/mustard-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Mustard suede slingback</figcaption></figure>
+    <figure class="polaroid"><span class="size">38/39</span><a href="https://www.stevemadden.com/products/jypsey-fuchsia-patent" target="_blank" rel="noopener"><img alt="Plum patent strappy stiletto sandal with ankle strap" src="images/plum-strappy-sandal.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Plum patent strappy sandal</figcaption></a></figure>
+    <figure class="polaroid"><span class="size">38/39</span><a href="https://www.stevemadden.com/collections/womens-heels/products/tia-beige-snake" target="_blank" rel="noopener"><img alt="Beige snake-print stiletto sandal with a gold toe ring and gold ankle cuff" src="images/tia-beige-snake.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Beige snake toe-ring stiletto</figcaption></a></figure>
+    <figure class="polaroid"><span class="size">38/39</span><a href="https://www.stevemadden.com/collections/womens-heels/products/ramos-black" target="_blank" rel="noopener"><img alt="Black strappy kitten-heel sandal with gold bead details" src="images/black-strappy-gold-beads.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Black strappy, gold beads</figcaption></a></figure>
+    <figure class="polaroid"><span class="size">38/39</span><a href="https://www.stevemadden.com/collections/womens-heels/products/lysandra-purple-multi" target="_blank" rel="noopener"><img alt="Magenta suede slingback pump with burgundy ankle strap" src="images/magenta-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Magenta suede slingback</figcaption></a></figure>
+  <figure class="polaroid"><span class="size">38/39</span><a href="https://www.stevemadden.com/collections/womens-heels/products/lysandra-olive-multi" target="_blank" rel="noopener"><img alt="Mustard suede slingback pump with light blue ankle strap and brown heel" src="images/mustard-suede-slingback.jpg" width="416" height="520" loading="lazy" decoding="async"><figcaption>Mustard suede slingback</figcaption></a></figure>
   </div>
   <div class="allrow shoeall" data-group="shoe-"><button type="button" class="cbtn undo" data-pickall></button><button type="button" class="cbtn" data-get></button></div>
   <p class="shoecta"><a class="go" style="--c:var(--plum)" href="https://www.stevemadden.com/" target="_blank" rel="noopener">Shop Steve Madden</a></p>
@@ -692,7 +698,7 @@ document.getElementById('askY').addEventListener('click',()=>{
 function orderUrl(id){
   const [p,k]=id.split('-');
   if(p==='book')return k?url(BOOKS[+k][0]):'https://rhbooks.com.ng/';
-  if(p==='shoe')return 'https://www.stevemadden.com/';
+  if(p==='shoe')return k?document.querySelectorAll('.polaroid a')[+k].href:'https://www.stevemadden.com/';
   const w=WISHES.find(w=>w.id===p),ext=w.links.filter(l=>!l[1].startsWith('#'));
   return (k&&w.items&&ext.length===w.items.length?ext[+k]:ext[0])[1];
 }
