@@ -12,11 +12,12 @@ const WISH = {
   jewel: 'Necklace and bracelet pair from ÌTURA',
   wig: 'Wig from Hairs by Nii',
   suede: 'Cherry bag from Brags, in suede',
+  camera: 'Fujifilm Instax Mini Evo hybrid instant camera, in black',
 };
 const SHAREABLE = new Set(['watch', 'ipad', 'monitor', 'flight']);
 // Wishes made of several items are claimed item by item: racket + balls, necklace + bracelet, four bags.
 const IDS = [
-  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig',
+  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera',
   'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1',
   'suede-0', 'suede-1', 'suede-2', 'suede-3',
   ...Array.from({ length: 14 }, (_, i) => 'book-' + i),
