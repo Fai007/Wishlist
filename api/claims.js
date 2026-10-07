@@ -33,6 +33,43 @@ const ADMIN_KEY = process.env.CLAIMS_ADMIN_KEY;
 const RESEND_KEY = process.env.RESEND_API_KEY;
 const MAIL_TO = process.env.CHIP_NOTIFY_TO || 'faydev007@gmail.com';
 const MAIL_FROM = process.env.CHIP_NOTIFY_FROM || 'Wish Quest <onboarding@resend.dev>';
+// Where gifts are delivered. Kept in environment variables so it never sits in the repo, and only ever
+// placed in Faith's own notification email, as a ready-to-send reply to a giver who asked for it.
+const multiline = (v) => (v || '').replace(/\\n/g, '\n').trim();
+const DELIVERY = {
+  name: process.env.DELIVERY_NAME || 'Faith Oluokun',
+  phone: (process.env.DELIVERY_PHONE || '').trim(),
+  address: multiline(process.env.DELIVERY_ADDRESS),
+  notes: multiline(process.env.DELIVERY_NOTES),
+};
+
+// A mailto: link that opens Faith's mail app with the delivery-details reply already written.
+function deliveryReply(email, name, wish) {
+  if (!DELIVERY.address) return '';
+  const body = [
+    'Hi ' + (name || 'there') + ',',
+    '',
+    'Thank you so much for granting one of my birthday wishes (' + wish + "). You've made my day!",
+    '',
+    'Here is where to send it:',
+    '',
+    'Recipient: ' + DELIVERY.name,
+    ...(DELIVERY.phone ? ['Phone: ' + DELIVERY.phone] : []),
+    'Address:',
+    DELIVERY.address,
+    '',
+    ...(DELIVERY.phone ? ['Please put the phone number on the order, as riders usually call before they deliver.'] : []),
+    ...(DELIVERY.notes ? [DELIVERY.notes] : []),
+    '',
+    "If the shop sends you a tracking number or a delivery date, I'd love it if you could forward it so I know to look out for it.",
+    '',
+    "Thank you again. I'm so grateful.",
+    '',
+    'With love,',
+    'Faith',
+  ].join('\r\n');
+  return 'mailto:' + encodeURIComponent(email) + '?subject=' + encodeURIComponent('Delivery details for my birthday gift') + '&body=' + encodeURIComponent(body);
+}
 
 async function redis(cmds) {
   const r = await fetch(REDIS_URL + '/pipeline', {
@@ -67,7 +104,7 @@ const cleanEmail = (v) => (typeof v === 'string' && v.length <= 120 && /^[^\s@<>
 const naira = (n) => '₦' + Number(n).toLocaleString('en-NG');
 
 // Retro arcade email: table layout and inline styles so it survives email clients.
-function emailHtml({ heading, kicker, rows, footer }) {
+function emailHtml({ heading, kicker, rows, footer, button }) {
   const mono = "'Courier New',Courier,monospace";
   const row = ([k, v]) =>
     `<tr><td style="padding:10px 14px;border-bottom:2px dashed #B9C8F5;font:bold 12px ${mono};color:#14215E;text-transform:uppercase;white-space:nowrap">${k}</td>` +
@@ -82,6 +119,7 @@ function emailHtml({ heading, kicker, rows, footer }) {
   <tr><td align="center" style="padding:12px 20px 0;font:bold 12px ${mono};color:#E52521;letter-spacing:1px;text-transform:uppercase">${kicker}</td></tr>
   <tr><td align="center" style="padding:8px 20px 18px;font:bold 22px ${mono};color:#111111;text-transform:uppercase">${heading}</td></tr>
   <tr><td style="padding:0 18px 22px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:3px solid #000000;background:#F4F7FF">${rows.map(row).join('')}</table></td></tr>
+  ${button ? `<tr><td align="center" style="padding:0 20px 20px"><a href="${esc(button.href)}" style="display:inline-block;padding:14px 18px;background:#00A800;border:4px solid #000000;font:bold 13px ${mono};color:#FFFFFF;text-decoration:none;text-transform:uppercase;letter-spacing:1px">${button.label}</a></td></tr>` : ''}
   <tr><td style="padding:0 20px 22px;font:14px Arial,Helvetica,sans-serif;color:#14215E;text-align:center">${footer}</td></tr>
   <tr><td height="26" style="background:#C84C0C;border-top:4px solid #000000;font-size:0;line-height:0">&nbsp;</td></tr>
 </table></td></tr></table></body></html>`;
@@ -95,6 +133,7 @@ async function notify(kind, id, amount, name, email) {
     const from = ['From', name ? esc(name) : 'Anonymous'];
     if (kind === 'take') {
       subject = 'Wish taken: ' + WISH[id.split('-')[0]] + (name ? ' (from ' + name + ')' : '') + (email ? ' — wants your delivery details' : '');
+      const reply = email ? deliveryReply(email, name, WISH[id.split('-')[0]]) : '';
       html = emailHtml({
         kicker: 'someone\'s on it',
         heading: 'Wish grabbed!',
@@ -108,7 +147,13 @@ async function notify(kind, id, amount, name, email) {
           (name
             ? esc(name) + ' tapped "I\'m getting this" and chose to tell you.'
             : 'Someone tapped "I\'m getting this" and chose to stay anonymous — it\'s a surprise.') +
-          (email ? '<br><br><b>They asked for your delivery details.</b> Reply to this email to send your address to ' + esc(email) + '.' : ''),
+          (email
+            ? '<br><br><b>They asked for your delivery details.</b> ' +
+              (reply
+                ? 'Tap the button to open a reply to ' + esc(email) + ' with your details already filled in, then press Send. Or just reply to this email.'
+                : 'Reply to this email to send your address to ' + esc(email) + '.')
+            : ''),
+        button: reply ? { href: reply, label: 'Reply with delivery details' } : null,
       });
     } else {
       const [vals, count] = await redis([['HVALS', 'amt:' + id], ['SCARD', 'share:' + id]]);
