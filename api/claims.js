@@ -14,6 +14,23 @@ const WISH = {
   suede: 'Cherry bag from Brags, in suede',
   camera: 'Fujifilm Instax Mini Evo hybrid instant camera, in black',
 };
+// Names of the individually claimed items, in the same order as the page (index.html) lists them.
+const ITEMS = {
+  tennis: ['Wilson Envy XP racket', 'Vermont tennis balls'],
+  jewel: ['Necklace', 'Bracelet'],
+  suede: ['Black suede, maxi', 'Black suede, midi', 'Brown suede, maxi', 'Brown suede, midi'],
+  book: ['The Romance Revival', 'Soft Landing in Kumasi', 'This Seat Is Taken', 'The Score', 'The Goal', 'The Mistake', 'The Night We Met',
+    'Love at First Sighting', 'Love and Other Conspiracies', 'Losing Hope & Finding Cinderella', 'Beg, Borrow, or Steal', 'Beach Read',
+    'Love and Other Words', 'Love on the Brain'],
+  shoe: ['Plum patent strappy sandal', 'Beige snake toe-ring stiletto', 'Black strappy, gold beads', 'Magenta suede slingback', 'Mustard suede slingback'],
+};
+const GROUP = { book: 'Book', shoe: 'Shoes', tennis: 'Tennis', jewel: 'ÌTURA jewellery', suede: 'Cherry bag from Brags' };
+// What a claim id means in words, e.g. "Book: Beach Read" or "Cherry bag from Brags, in suede: Black suede, maxi".
+function labelOf(id) {
+  const [p, k] = id.split('-');
+  if (k === undefined) return WISH[p] || id;
+  return (GROUP[p] || WISH[p] || p) + ': ' + ((ITEMS[p] || [])[+k] || 'item ' + (+k + 1));
+}
 const SHAREABLE = new Set(['watch', 'ipad', 'monitor', 'flight']);
 // Wishes made of several items are claimed item by item: racket + balls, necklace + bracelet, four bags.
 const IDS = [
@@ -129,13 +146,14 @@ async function notify(kind, id, amount, name, email) {
     let subject, html;
     const from = ['From', name ? esc(name) : 'Anonymous'];
     if (kind === 'take') {
-      subject = 'Wish taken: ' + WISH[id.split('-')[0]] + (name ? ' (from ' + name + ')' : '') + (email ? ' — wants your delivery details' : '');
-      const reply = email ? deliveryReply(email, name, WISH[id.split('-')[0]]) : '';
+      const what = labelOf(id);
+      subject = 'Wish taken: ' + what + (name ? ' (from ' + name + ')' : '') + (email ? ' — wants your delivery details' : '');
+      const reply = email ? deliveryReply(email, name, what) : '';
       html = emailHtml({
         kicker: 'someone\'s on it',
         heading: 'Wish grabbed!',
         rows: [
-          ['Wish', WISH[id.split('-')[0]]],
+          ['Wish', esc(what)],
           from,
           ...(id === 'flight' ? [] : [['Delivery', email ? 'Send details to ' + esc(email) : 'Already has your address']]),
           ['When', when + ' (Lagos)'],
