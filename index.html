@@ -591,7 +591,7 @@ function unlock(i){
   b.classList.add('got');b.querySelector('.q').textContent=WISHES[i].e;b.setAttribute('aria-label','Level '+(i+1)+': '+WISHES[i].what);
   const n=tiles.querySelectorAll('.got').length;
   [...pips.children].forEach((p,j)=>p.classList.toggle('on',j<n));count.textContent=pad(n)+'/'+WISHES.length;document.getElementById('score').textContent=String(n*100).padStart(6,'0');
-  if(n===WISHES.length&&!won){won=true;winmsg.hidden=false;quest.classList.add('won')}
+  if(n===WISHES.length&&!won){won=true;winmsg.hidden=false;quest.classList.add('won');fanfare()}
 }
 function restart(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)}
 function select(i){
@@ -806,24 +806,50 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadClaims
 const toast=document.getElementById('toast');let tt;
 function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('on'),3200)}
 
-/* sound: an original chiptune loop + blips, starts once the level scrolls into view (or from the button) */
-let AC=null,musicOn=false,musicTimer=0,beat=0,nextT=0;
+/* sound, used the way a platformer uses it: the theme (an original chiptune loop) plays while a round is on,
+   meaning the hero is on the move, and fades out once a gift is picked or play stops. It restarts from the top
+   on the next round. Clearing all the blocks stops it for a level-clear fanfare. */
+let AC=null,MG=null,musicOn=false,musicTimer=0,beat=0,nextT=0,playing=false,fadeT=0,justPicked=false,quietUntil=0;
 const hz=m=>440*Math.pow(2,(m-69)/12);
 const MEL=[67,71,74,71,72,76,74,null,69,72,76,72,74,71,67,null,76,74,71,67,69,71,72,null,74,78,76,72,71,69,67,null];
 const BASS=[43,48,45,50,40,45,50,43];
-function tone(f,t,d,type,v,f2){const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
-  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.02)}
-function sched(){while(nextT<AC.currentTime+.3){const i=beat%MEL.length;if(MEL[i]!=null)tone(hz(MEL[i]),nextT,.19,'square',.045);
-  if(i%2===0)tone(hz(BASS[i>>2]+(i%4?7:0)),nextT,.24,'triangle',.1);nextT+=.2;beat++}}
+function ensureAC(){if(AC)return;AC=new (window.AudioContext||window.webkitAudioContext)();MG=AC.createGain();MG.gain.value=0;MG.connect(AC.destination)}
+function tone(f,t,d,type,v,f2,out){const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(out||AC.destination);o.start(t);o.stop(t+d+.02)}
+function sched(){while(nextT<AC.currentTime+.3){const i=beat%MEL.length;if(MEL[i]!=null)tone(hz(MEL[i]),nextT,.19,'square',.045,0,MG);
+  if(i%2===0)tone(hz(BASS[i>>2]+(i%4?7:0)),nextT,.24,'triangle',.1,0,MG);nextT+=.2;beat++}}
 function sfx(k){if(!musicOn||!AC)return;const t=AC.currentTime;
   if(k==='coin'){tone(hz(84),t,.07,'square',.06);tone(hz(88),t+.07,.07,'square',.06);tone(hz(91),t+.14,.2,'square',.06)}
   else tone(260,t,.16,'square',.04,620)}
+function musicVol(v,d){const g=MG.gain,t=AC.currentTime;if(g.cancelAndHoldAtTime)g.cancelAndHoldAtTime(t);else{g.cancelScheduledValues(t);g.setValueAtTime(g.value,t)}g.linearRampToValueAtTime(v,t+d)}
+function stopLoop(){clearInterval(musicTimer);clearTimeout(fadeT);musicTimer=fadeT=0;playing=false}
+// a round begins: bring the theme in, from the top if it had gone quiet
+function playMusic(){
+  if(!musicOn||!AC||(playing&&!fadeT)||performance.now()<quietUntil)return;
+  clearTimeout(fadeT);fadeT=0;musicVol(1,.15);
+  if(!playing){playing=true;beat=0;nextT=AC.currentTime+.05;sched();musicTimer=setInterval(sched,100)}
+}
+// a round ends: wait `delay` seconds, fade over `d`, then stay quiet until the next round
+function fadeMusic(d,delay){
+  if(!playing||fadeT)return;
+  fadeT=setTimeout(()=>{musicVol(0,d);fadeT=setTimeout(stopLoop,d*1000+80)},delay*1000);
+}
+// every block cleared: cut the theme and play the level-clear jingle
+function fanfare(){
+  if(!musicOn||!AC)return;
+  quietUntil=performance.now()+2800;
+  if(playing){musicVol(0,.12);clearTimeout(fadeT);fadeT=setTimeout(stopLoop,200)}
+  const t=AC.currentTime+.4,n=(m,at,d,v)=>tone(hz(m),t+at,d,'square',v||.05);
+  [74,79,83,86].forEach((m,i)=>n(m,i*.1,.11));[76,81,84,88].forEach((m,i)=>n(m,.45+i*.1,.11));
+  n(86,.95,.14);n(88,1.1,.14);n(90,1.25,.14);[79,83,86,91].forEach(m=>n(m,1.42,.9,.04));
+  [43,45,47].forEach((m,i)=>tone(hz(m),t+i*.45,.4,'triangle',.1));tone(hz(43),t+1.42,.9,'triangle',.1);
+}
 const mb=document.getElementById('musicBtn');
 function setMusic(on){
-  if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();
+  ensureAC();
   musicOn=on;mb.setAttribute('aria-pressed',musicOn);mb.textContent='♪ Music: '+(musicOn?'on':'off');
-  clearInterval(musicTimer);
-  if(musicOn){AC.resume();nextT=AC.currentTime+.05;sched();musicTimer=setInterval(sched,100)}else AC.suspend();
+  if(musicOn){AC.resume();playMusic();fadeMusic(1.6,4.8)} // a short burst of the theme as the level intro, then quiet until play starts
+  else{stopLoop();MG.gain.cancelScheduledValues(0);MG.gain.value=0;AC.suspend()}
 }
 /* once the visitor uses the button, their choice wins over the auto-start */
 let musicTouched=false,levelInView=false;
@@ -831,7 +857,7 @@ mb.addEventListener('click',()=>{musicTouched=true;setMusic(!musicOn)});
 /* browsers keep audio locked until a tap or key press, so retry on those while the level is in view */
 function autoMusic(){
   if(musicTouched||musicOn||!levelInView)return;
-  try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+  try{ensureAC()}catch(e){return}
   const go=()=>{if(!musicTouched&&!musicOn&&levelInView&&AC.state==='running')setMusic(true)};
   AC.resume().then(go,()=>{});
 }
@@ -889,6 +915,7 @@ function draw(){
 function jump(){P.ground=false;P.vy=JUMP;sfx('jump')}
 function bump(i){
   const fresh=!tiles.children[i].classList.contains('got');select(i);if(fresh){burst(0.5,0.4,40);sfx('coin')}
+  justPicked=true;
   if(P.target===i){P.target=null;const f=P.after;P.after=null;if(f)f()}
 }
 function frame(t){
@@ -905,8 +932,9 @@ function frame(t){
   }
   draw();
   loop=(mv||!P.ground||P.target!=null||keys.left||keys.right||keys.jump)?requestAnimationFrame(frame):0;
+  if(!loop)fadeMusic(1.4,justPicked?.5:2.5); // round over: quicker once a gift has been picked
 }
-function kick(){if(!loop){last=performance.now();loop=requestAnimationFrame(frame)}}
+function kick(){justPicked=false;playMusic();if(!loop){last=performance.now();loop=requestAnimationFrame(frame)}}
 function goTo(i,after){
   if(reduce){P.x=BX(i)+8;draw();const fresh=!tiles.children[i].classList.contains('got');select(i);if(fresh)burst(0.5,0.4,40);if(after)after();return}
   P.target=i;P.after=after||null;kick();
