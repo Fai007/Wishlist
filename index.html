@@ -127,7 +127,7 @@ section{padding:40px 0}
 @media (min-width:860px){.quest:not(.all) .play{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 .quest.all .stage{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
 .quest.all .gift[hidden]{display:flex}
-@media (min-width:860px){.quest.all .tiles{grid-template-columns:repeat(13,minmax(0,1fr))}.quest.all .tile{font-size:26px}.quest.all .tile .lv{display:none}}
+@media (min-width:860px){.quest.all .tiles{grid-template-columns:repeat(14,minmax(0,1fr))}.quest.all .tile{font-size:26px}.quest.all .tile .lv{display:none}}
 .quest.all .intro{display:none}
 .gift{background:var(--card);color:var(--ink);border:3px solid #000000;border-radius:12px;display:flex;flex-direction:column;min-height:260px;box-shadow:6px 6px 0 var(--c,var(--magenta))}
 .gift[hidden]{display:none}
@@ -440,7 +440,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
   <div class="quest" id="quest">
     <div class="bar"><span>World 1-1: Wish Quest</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="screen">
-      <div class="hud"><span>Faith <b id="score">000000</b></span><span class="pips" id="pips" aria-hidden="true"></span><span>Coins ×<b id="count">00/13</b></span></div>
+      <div class="hud"><span>Faith <b id="score">000000</b></span><span class="pips" id="pips" aria-hidden="true"></span><span>Coins ×<b id="count">00/14</b></span></div>
       <div class="level" id="level" tabindex="0" aria-label="Wish Quest level. Use the arrow keys to move and space to jump, or pick a block.">
         <div class="world" id="world">
           <span class="hill" style="left:560px" aria-hidden="true"></span><span class="hill" style="left:1380px" aria-hidden="true"></span>
@@ -549,7 +549,7 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
       <h3 id="payT"></h3>
       <p class="askitem" id="payItem"></p>
       <div class="acct"><span class="num" id="payNum"></span><span class="who" id="payWho"></span><span class="bank" id="payBank"></span></div>
-      <p>Send it by bank transfer. Faith gets a ping that a chip-in is on the way.</p>
+      <p>Send it by bank transfer. Faith gets a ping that it is on the way.</p>
       <div class="askbtns"><button class="cbtn share" type="button" id="payCopy">Copy number</button><button class="cbtn" value="done">Done</button></div>
     </div>
   </form>
@@ -590,7 +590,9 @@ const WISHES=[
   links:[["Cherry bag on Brags","https://www.bragsng.co/products/chelly-all-bag?variant=45388192743458"]]},
  {id:"camera",e:"📸",c:"#B0126B",t:'<span class="pun">Picture this</span>',what:"Fujifilm Instax Mini Evo hybrid instant camera, in black",
   p:'<span class="pun">Give it your best shot</span> and watch how fast things develop.',
-  links:[["Instax Mini Evo at Camera Joint","https://www.camerajoint.ng/browse/fujifilm-instax-mini-evo-hybrid-instant-camera-black/"]]}
+  links:[["Instax Mini Evo at Camera Joint","https://www.camerajoint.ng/browse/fujifilm-instax-mini-evo-hybrid-instant-camera-black/"]]},
+ {id:"cash",e:"💸",c:"#00A800",t:'<span class="pun">Cash me if you can</span>',what:"A monetary gift, any amount",
+  p:'Not sure what to pick? <span class="pun">This one always makes cents.</span> Enter an amount and you\'ll get my account details.',links:[]}
 ];
 const BOOKS=[["The Romance Revival",14500],["Soft Landing in Kumasi",15000],["This Seat Is Taken",15000],["The Score",14500],["The Goal",14500],["The Mistake",14500],["The Night We Met",14000],["Love at First Sighting",14500],["Love and Other Conspiracies",15000],["Losing Hope & Finding Cinderella",13500],["Beg, Borrow, or Steal",14500],["Beach Read",17000],["Love and Other Words",13000],["Love on the Brain",12000],["My Week with Him",12500],["The Parlour Wife",12000],["Broken: Not a Halal Love Story",15000],["A Thousand Splendid Suns",6000]];
 const SPINE=["#E52521","#008A00","#2038EC","#C84C0C","#B87800","#6A3FCF","#00888A","#7C2800"];
@@ -602,7 +604,8 @@ const pad=n=>String(n).padStart(2,'0');
 const PRICE={monitor:'₦342,000',camera:'₦335,000','tennis-0':'₦185,000','tennis-1':'₦14,000','suede-0':'₦45,000','suede-1':'₦40,000','suede-2':'₦45,000','suede-3':'₦45,000',
   'shoe-0':'$109.95','shoe-1':'$39.99','shoe-2':'$69.99','shoe-3':'$119.95','shoe-4':'$119.95'};
 const priceOf=id=>id.startsWith('book-')?'₦'+BOOKS[+id.slice(5)][1].toLocaleString():PRICE[id]||'';
-const NOCLAIM=new Set(['books','shoes']),SHAREABLE=new Set(['watch','ipad','monitor','flight']);
+const NOCLAIM=new Set(['books','shoes']),SHAREABLE=new Set(['watch','ipad','monitor','flight','cash']);
+const CASH='cash'; // the money wish: never "taken", anyone can send any amount
 const BX=i=>300+i*150,WORLD=300+WISHES.length*150+260;
 WISHES.forEach((w,i)=>{
   const b=document.createElement('button');
@@ -668,9 +671,9 @@ function paint(){
     if(m&&!taken.has(id)&&!n){mem.set(id,null);m=null}
     const btn=(act,cls,label)=>`<button type="button" class="cbtn ${cls}" data-act="${act}">${label}</button>`;let out;
     if(taken.has(id))out=m&&m.a==='take'?`<span class="cbadge mine">${compact?'Yours':"You're getting this"}</span>`+btn('undo','undo','Undo'):`<span class="cbadge">Taken</span>`;
-    else if(n)out=`<span class="cbadge group">${n} chipping in</span>`+(m&&m.a==='share'?btn('account','share','Account details')+btn('undo','undo','Undo mine'):btn('share','share','Chip in too'));
+    else if(n)out=`<span class="cbadge group">${id===CASH?n+(n===1?' gift':' gifts')+' sent':n+' chipping in'}</span>`+(m&&m.a==='share'?btn('account','share','Account details')+btn('undo','undo','Undo mine'):btn('share','share',id===CASH?'Send one too':'Chip in too'));
     else if(compact)out=`<label class="pick"><input type="checkbox" data-pick${picked.has(id)?' checked':''}>Pick</label>`;
-    else out=btn('take','',"I'm getting this")+(SHAREABLE.has(id)?btn('share','share','Chip in'):'');
+    else out=id===CASH?btn('share','share','Send a cash gift'):btn('take','',"I'm getting this")+(SHAREABLE.has(id)?btn('share','share','Chip in'):'');
     if(ADMIN&&(taken.has(id)||n))out+=btn('reset','undo','Release');
     box.innerHTML=out;
     const c=box.querySelector('[data-pick]');if(c)c.setAttribute('aria-label','Pick '+nameOf(id));
@@ -869,7 +872,8 @@ document.addEventListener('click',async e=>{
   const id=b.closest('[data-claim]').dataset.claim,act=b.dataset.act;let m=mem.get(id);
   let amount=0,who='',mail='';
   if(act==='take'){const a=await ask('Grab this wish?',nameOf(id),'Everyone else will see it as taken, and the shop opens so you can order. Other visitors never see names.',"Yes, it's mine",false,orderUrl(id),id!=='flight');if(!a)return dropOrder();who=a.name;mail=a.email}
-  if(act==='share'){const a=await ask('Chip in on this one?',nameOf(id),'Enter what you would like to put towards it. Others can still join you. Other visitors never see names.','Continue',true);if(!a)return;amount=a.amount;who=a.name}
+  if(act==='share'){const a=id===CASH?await ask('Send a cash gift?',nameOf(id),"Enter the amount you'd like to gift and you'll get Faith's account details next. Other visitors never see names or amounts.",'Continue',true)
+    :await ask('Chip in on this one?',nameOf(id),'Enter what you would like to put towards it. Others can still join you. Other visitors never see names.','Continue',true);if(!a)return;amount=a.amount;who=a.name}
   if(busy)return dropOrder();
   const body={id,action:act};
   if(act==='reset')body.key=ADMIN;else body.token=(act==='undo'||act==='account')?(m&&m.t):newToken();

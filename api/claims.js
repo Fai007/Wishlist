@@ -13,6 +13,7 @@ const WISH = {
   wig: 'Wig from Hairs by Nii',
   suede: 'Cherry bag from Brags, in suede',
   camera: 'Fujifilm Instax Mini Evo hybrid instant camera, in black',
+  cash: 'Monetary gift',
 };
 // Names of the individually claimed items, in the same order as the page (index.html) lists them.
 const ITEMS = {
@@ -32,10 +33,12 @@ function labelOf(id) {
   if (k === undefined) return WISH[p] || id;
   return (GROUP[p] || WISH[p] || p) + ': ' + ((ITEMS[p] || [])[+k] || 'item ' + (+k + 1));
 }
-const SHAREABLE = new Set(['watch', 'ipad', 'monitor', 'flight']);
+const SHAREABLE = new Set(['watch', 'ipad', 'monitor', 'flight', 'cash']);
+// The money wish stays open to everyone: it can be sent to any number of times but never taken outright.
+const OPEN_ONLY = new Set(['cash']);
 // Wishes made of several items are claimed item by item: racket + balls, necklace + bracelet, four bags.
 const IDS = [
-  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera',
+  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera', 'cash',
   'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1',
   'suede-0', 'suede-1', 'suede-2', 'suede-3',
   ...Array.from({ length: 18 }, (_, i) => 'book-' + i),
@@ -175,22 +178,24 @@ async function notify(kind, id, amount, name, email) {
       const [vals, count] = await redis([['HVALS', 'amt:' + id], ['SCARD', 'share:' + id]]);
       const total = (vals || []).reduce((s, v) => s + (parseInt(v, 10) || 0), 0);
       const added = kind === 'share';
-      subject = (added ? 'New chip-in: ' : 'Chip-in withdrawn: ') + naira(amount) + ' for ' + WISH[id];
+      const cash = OPEN_ONLY.has(id);
+      const noun = cash ? 'cash gift' : 'chip-in';
+      subject = (added ? 'New ' + noun + ': ' : (cash ? 'Cash gift' : 'Chip-in') + ' withdrawn: ') + naira(amount) + (cash ? '' : ' for ' + WISH[id]);
       html = emailHtml({
         kicker: added ? '+1 coin' : 'Coin returned',
-        heading: added ? 'New chip-in!' : 'Chip-in withdrawn',
+        heading: added ? 'New ' + noun + '!' : (cash ? 'Cash gift' : 'Chip-in') + ' withdrawn',
         rows: [
           ['Wish', WISH[id]],
           from,
           [added ? 'Amount pledged' : 'Amount withdrawn', naira(amount)],
-          ['Players chipping in', String(count)],
+          [cash ? 'Cash gifts so far' : 'Players chipping in', String(count)],
           ['Total pledged so far', naira(total)],
           ['When', when + ' (Lagos)'],
         ],
         footer: added
-          ? (name ? esc(name) : 'Someone') + ' tapped Chip in and was shown your account details. ' +
+          ? (name ? esc(name) : 'Someone') + ' tapped ' + (cash ? 'Send a cash gift' : 'Chip in') + ' and was shown your account details. ' +
             (name ? 'Check' : 'They chose to stay anonymous, so check') + ' your bank alerts for the transfer.'
-          : 'Someone undid their chip-in on this wish.',
+          : 'Someone undid their ' + noun + ' on this wish.',
       });
     }
     const ctl = new AbortController();
@@ -230,6 +235,7 @@ module.exports = async (req, res) => {
       if (typeof token !== 'string' || !/^[\w-]{16,64}$/.test(token)) return res.status(400).json({ error: 'bad token' });
       const name = cleanName(body.name);
       if (action === 'take') {
+        if (OPEN_ONLY.has(id)) return res.status(400).json({ error: 'not claimable' });
         const [sharers] = await redis([['SCARD', 'share:' + id]]);
         if (sharers) status = 409;
         else {
