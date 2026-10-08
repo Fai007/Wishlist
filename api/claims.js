@@ -21,7 +21,8 @@ const ITEMS = {
   suede: ['Black suede, maxi', 'Black suede, midi', 'Brown suede, maxi', 'Brown suede, midi'],
   book: ['The Romance Revival', 'Soft Landing in Kumasi', 'This Seat Is Taken', 'The Score', 'The Goal', 'The Mistake', 'The Night We Met',
     'Love at First Sighting', 'Love and Other Conspiracies', 'Losing Hope & Finding Cinderella', 'Beg, Borrow, or Steal', 'Beach Read',
-    'Love and Other Words', 'Love on the Brain'],
+    'Love and Other Words', 'Love on the Brain', 'My Week with Him', 'The Parlour Wife',
+    'Broken: Not a Halal Love Story', 'A Thousand Splendid Suns'],
   shoe: ['Plum patent strappy sandal', 'Beige snake toe-ring stiletto', 'Black strappy, gold beads', 'Magenta suede slingback', 'Mustard suede slingback'],
 };
 const GROUP = { book: 'Book', shoe: 'Shoes', tennis: 'Tennis', jewel: 'ÌTURA jewellery', suede: 'Cherry bag from Brags' };
@@ -37,7 +38,7 @@ const IDS = [
   'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera',
   'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1',
   'suede-0', 'suede-1', 'suede-2', 'suede-3',
-  ...Array.from({ length: 14 }, (_, i) => 'book-' + i),
+  ...Array.from({ length: 18 }, (_, i) => 'book-' + i),
   ...Array.from({ length: 5 }, (_, i) => 'shoe-' + i),
 ];
 

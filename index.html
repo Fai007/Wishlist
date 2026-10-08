@@ -466,13 +466,13 @@ body.claims-on .shoeall{justify-content:center;margin-top:26px}
 <section id="books" aria-labelledby="bookhead">
   <div class="sechead">
     <h2 id="bookhead">Books!!!</h2>
-    <p><span class="pun">Fourteen novel ideas, already shelf-selected.</span></p>
+    <p><span class="pun">Eighteen novel ideas, already shelf-selected.</span></p>
   </div>
   <div class="shelf">
     <div class="bar"><span>World 1-2: Books</span><span class="dots"><button type="button" data-win="min" aria-label="Minimise">_</button><button type="button" data-win="max" aria-label="Expand">□</button><button type="button" data-win="close" aria-label="Close">×</button></span></div>
     <div class="books" id="spines"></div>
     <div class="shelfmeta">
-      <div><div class="total" id="shelfTotal">₦201,500</div><div id="shelfCount" style="color:var(--ink-soft);font-size:15px">14 books, all at Roving Heights Bookstore</div></div>
+      <div><div class="total" id="shelfTotal">₦247,000</div><div id="shelfCount" style="color:var(--ink-soft);font-size:15px">18 books, all at Roving Heights Bookstore</div></div>
       <a class="go" style="--c:var(--cherry)" href="https://rhbooks.com.ng/" target="_blank" rel="noopener">Visit Roving Heights</a>
     </div>
     <ul class="booklist" id="booklist"></ul>
@@ -574,7 +574,7 @@ const WISHES=[
   p:'<span class="pun">I\'d be lotion-ally moved.</span>',links:[["The Body Shop","https://www.thebodyshop.com/"]]},
  {id:"flight",e:"✈️",c:"#C84C0C",t:'<span class="pun">Kenya believe it?</span>',what:"Return flight ticket to Nairobi",
   p:'<span class="pun">Plane and simple: I want to go.</span>',links:[["Search flights","https://www.google.com/travel/flights?q=Flights%20from%20Lagos%20to%20Nairobi"],["Kenya Airways","https://www.kenya-airways.com/"]]},
- {id:"books",e:"📚",c:"#C81E1E",t:'<span class="pun">Booked and busy</span>',what:"Books!!! (14 already in the cart)",
+ {id:"books",e:"📚",c:"#C81E1E",t:'<span class="pun">Booked and busy</span>',what:"Books!!! (18 already in the cart)",
   p:'Pick any from the shelf below, or gift the whole stack.',links:[["See the bookshelf","#books"]]},
  {id:"shoes",e:"👠",c:"#D03A8C",t:'<span class="pun">If the shoe fits</span>',what:"Shoes, size 38/39 (Steve Madden)",
   p:'Five pairs I love are pinned below.',links:[["See the shoes","#shoes"]]},
@@ -592,7 +592,7 @@ const WISHES=[
   p:'<span class="pun">Give it your best shot</span> and watch how fast things develop.',
   links:[["Instax Mini Evo at Camera Joint","https://www.camerajoint.ng/browse/fujifilm-instax-mini-evo-hybrid-instant-camera-black/"]]}
 ];
-const BOOKS=[["The Romance Revival",14500],["Soft Landing in Kumasi",15000],["This Seat Is Taken",15000],["The Score",14500],["The Goal",14500],["The Mistake",14500],["The Night We Met",14000],["Love at First Sighting",14500],["Love and Other Conspiracies",15000],["Losing Hope & Finding Cinderella",13500],["Beg, Borrow, or Steal",14500],["Beach Read",17000],["Love and Other Words",13000],["Love on the Brain",12000]];
+const BOOKS=[["The Romance Revival",14500],["Soft Landing in Kumasi",15000],["This Seat Is Taken",15000],["The Score",14500],["The Goal",14500],["The Mistake",14500],["The Night We Met",14000],["Love at First Sighting",14500],["Love and Other Conspiracies",15000],["Losing Hope & Finding Cinderella",13500],["Beg, Borrow, or Steal",14500],["Beach Read",17000],["Love and Other Words",13000],["Love on the Brain",12000],["My Week with Him",12500],["The Parlour Wife",12000],["Broken: Not a Halal Love Story",15000],["A Thousand Splendid Suns",6000]];
 const SPINE=["#E52521","#008A00","#2038EC","#C84C0C","#B87800","#6A3FCF","#00888A","#7C2800"];
 
 const quest=document.getElementById('quest'),tiles=document.getElementById('tiles'),stage=document.getElementById('stage'),
@@ -638,7 +638,7 @@ function unlockAll(){WISHES.forEach((_,i)=>unlock(i));quest.classList.add('all')
 const sp=document.getElementById('spines'),bl=document.getElementById('booklist');
 const slug=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 /* product page slugs on Roving Heights; books without one fall back to a store search */
-const PAGES={"This Seat Is Taken":"this-seat-is-taken","The Score":"the-score-now-an-original-series-on-amazon-prime-off-campus","The Goal":"the-goal-now-an-original-series-on-amazon-prime-off-campus","The Mistake":"the-mistake-now-an-original-series-on-amazon-prime-off-campus","The Night We Met":"the-night-we-met","Love at First Sighting":"love-at-first-sighting","Love and Other Conspiracies":"love-and-other-conspiracies","Losing Hope & Finding Cinderella":"losing-hope-colleen-hoover","Beg, Borrow, or Steal":"beg-borrow-or-steal","Beach Read":"beach-read","Love and Other Words":"love-and-other-words-paperback","Love on the Brain":"love-on-the-brain"};
+const PAGES={"This Seat Is Taken":"this-seat-is-taken","The Score":"the-score-now-an-original-series-on-amazon-prime-off-campus","The Goal":"the-goal-now-an-original-series-on-amazon-prime-off-campus","The Mistake":"the-mistake-now-an-original-series-on-amazon-prime-off-campus","The Night We Met":"the-night-we-met","Love at First Sighting":"love-at-first-sighting","Love and Other Conspiracies":"love-and-other-conspiracies","Losing Hope & Finding Cinderella":"losing-hope-colleen-hoover","Beg, Borrow, or Steal":"beg-borrow-or-steal","Beach Read":"beach-read","Love and Other Words":"love-and-other-words-paperback","Love on the Brain":"love-on-the-brain","My Week with Him":"my-week-with-him","The Parlour Wife":"the-parlour-wife","Broken: Not a Halal Love Story":"broken-not-a-halal-love-story","A Thousand Splendid Suns":"a-thousand-splendid-suns"};
 /* books that open a ready-made order to pay for, instead of a product page */
 const ORDERS={"The Romance Revival":"https://rhbooks.com.ng/checkout/order-pay/132649/?key=wc_order_45l9ePg5TsbrU"};
 const url=t=>ORDERS[t]||(PAGES[t]?'https://rhbooks.com.ng/product/'+PAGES[t]+'/':'https://rhbooks.com.ng/?s='+encodeURIComponent(t)+'&post_type=product');
