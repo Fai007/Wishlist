@@ -14,6 +14,7 @@ const WISH = {
   suede: 'Cherry bag from Brags, in suede',
   camera: 'Fujifilm Instax Mini Evo hybrid instant camera, in black',
   cash: 'Monetary gift',
+  perfume: 'Zara Cherry Temptation perfume, 90 ml',
 };
 // Names of the individually claimed items, in the same order as the page (index.html) lists them.
 const ITEMS = {
@@ -38,7 +39,7 @@ const SHAREABLE = new Set(['watch', 'ipad', 'monitor', 'flight', 'cash']);
 const OPEN_ONLY = new Set(['cash']);
 // Wishes made of several items are claimed item by item: racket + balls, necklace + bracelet, four bags.
 const IDS = [
-  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera', 'cash',
+  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera', 'cash', 'perfume',
   'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1',
   'suede-0', 'suede-1', 'suede-2', 'suede-3',
   ...Array.from({ length: 18 }, (_, i) => 'book-' + i),
