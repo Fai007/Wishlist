@@ -20,7 +20,8 @@ const WISH = {
 const ITEMS = {
   tennis: ['Wilson Envy XP racket', 'Vermont tennis balls'],
   jewel: ['Necklace', 'Bracelet'],
-  perfume: ['Zara Cherry Temptation, 90 ml', 'French Avenue Luscious, 100 ml', 'Zara Pink Flambe, 90 ml', 'Zara Fashionably London, 100 ml'],
+  perfume: ['Zara Cherry Temptation, 90 ml', 'French Avenue Luscious, 100 ml', 'Zara Pink Flambe, 90 ml', 'Zara Fashionably London, 100 ml',
+    'Atralia Sugar Mallow Pink Cloud, 100 ml'],
   suede: ['Black suede, maxi', 'Black suede, midi', 'Brown suede, maxi', 'Brown suede, midi'],
   book: ['The Romance Revival', 'Soft Landing in Kumasi', 'This Seat Is Taken', 'The Score', 'The Goal', 'The Mistake', 'The Night We Met',
     'Love at First Sighting', 'Love and Other Conspiracies', 'Losing Hope & Finding Cinderella', 'Beg, Borrow, or Steal', 'Beach Read',
@@ -41,7 +42,7 @@ const OPEN_ONLY = new Set(['cash']);
 // Wishes made of several items are claimed item by item: racket + balls, necklace + bracelet, four bags.
 const IDS = [
   'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera', 'cash',
-  'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1', 'perfume-0', 'perfume-1', 'perfume-2', 'perfume-3',
+  'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1', 'perfume-0', 'perfume-1', 'perfume-2', 'perfume-3', 'perfume-4',
   'suede-0', 'suede-1', 'suede-2', 'suede-3',
   ...Array.from({ length: 18 }, (_, i) => 'book-' + i),
   ...Array.from({ length: 5 }, (_, i) => 'shoe-' + i),

@@ -593,10 +593,10 @@ const WISHES=[
   links:[["Instax Mini Evo at Camera Joint","https://www.camerajoint.ng/browse/fujifilm-instax-mini-evo-hybrid-instant-camera-black/"]]},
  {id:"cash",e:"💸",c:"#00A800",t:'<span class="pun">Cash me if you can</span>',what:"A monetary gift, any amount",
   p:'Not sure what to pick? <span class="pun">This one always makes cents.</span> Enter an amount and you\'ll get my account details.',links:[]},
- {id:"perfume",items:["Zara Cherry Temptation, 90 ml", "French Avenue Luscious, 100 ml", "Zara Pink Flambe, 90 ml", "Zara Fashionably London, 100 ml"],e:"🌸",c:"#B3123F",t:'<span class="pun">Scent with love</span>',what:"Perfumes, mostly from Fragrances.com.ng",
+ {id:"perfume",items:["Zara Cherry Temptation, 90 ml", "French Avenue Luscious, 100 ml", "Zara Pink Flambe, 90 ml", "Zara Fashionably London, 100 ml", "Atralia Sugar Mallow Pink Cloud, 100 ml"],e:"🌸",c:"#B3123F",t:'<span class="pun">Scent with love</span>',what:"Perfumes, mostly from Fragrances.com.ng",
   p:'<span class="pun">It makes perfect scents:</span> pick one, or spoil me with the lot.',
   note:'Fashionably London is out of stock at Fragrances.com.ng right now, so feel free to get it anywhere you find it.',
-  links:[["Zara Cherry Temptation","https://fragrances.com.ng/zara-cherry-temptation-special-edition-capsule-collection-edp-90ml.html"],["French Avenue Luscious","https://fragrances.com.ng/french-avenue-luscious-edp-100ml.html"],["Zara Pink Flambe","https://fragrances.com.ng/zara-pink-flambe-weekend-edition-edt-90ml.html"],["Zara Fashionably London","https://fragrances.com.ng/zara-fashionably-london-zara-olfactive-no-4-edp-100ml.html"]]}
+  links:[["Zara Cherry Temptation","https://fragrances.com.ng/zara-cherry-temptation-special-edition-capsule-collection-edp-90ml.html"],["French Avenue Luscious","https://fragrances.com.ng/french-avenue-luscious-edp-100ml.html"],["Zara Pink Flambe","https://fragrances.com.ng/zara-pink-flambe-weekend-edition-edt-90ml.html"],["Zara Fashionably London","https://fragrances.com.ng/zara-fashionably-london-zara-olfactive-no-4-edp-100ml.html"],["Atralia Sugar Mallow Pink Cloud","https://fragrances.com.ng/atralia-sugar-mallow-pink-cloud-edp-100ml.html"]]}
 ];
 const BOOKS=[["The Romance Revival",14500],["Soft Landing in Kumasi",15000],["This Seat Is Taken",15000],["The Score",14500],["The Goal",14500],["The Mistake",14500],["The Night We Met",14000],["Love at First Sighting",14500],["Love and Other Conspiracies",15000],["Losing Hope & Finding Cinderella",13500],["Beg, Borrow, or Steal",14500],["Beach Read",17000],["Love and Other Words",13000],["Love on the Brain",12000],["My Week with Him",12500],["The Parlour Wife",12000],["Broken: Not a Halal Love Story",15000],["A Thousand Splendid Suns",6000]];
 const SPINE=["#E52521","#008A00","#2038EC","#C84C0C","#B87800","#6A3FCF","#00888A","#7C2800"];
@@ -605,7 +605,7 @@ const quest=document.getElementById('quest'),tiles=document.getElementById('tile
   pips=document.getElementById('pips'),count=document.getElementById('count'),intro=document.getElementById('intro'),winmsg=document.getElementById('winmsg');
 const pad=n=>String(n).padStart(2,'0');
 /* shop prices, looked up by hand on 7 Oct 2026 (books carry theirs in BOOKS). Wishes that link to a brand or a search have none. */
-const PRICE={monitor:'₦342,000',camera:'₦335,000','perfume-0':'₦54,999','perfume-1':'₦59,999','perfume-2':'₦54,999','tennis-0':'₦185,000','tennis-1':'₦14,000','suede-0':'₦45,000','suede-1':'₦40,000','suede-2':'₦45,000','suede-3':'₦45,000',
+const PRICE={monitor:'₦342,000',camera:'₦335,000','perfume-0':'₦54,999','perfume-1':'₦59,999','perfume-2':'₦54,999','perfume-4':'₦54,999','tennis-0':'₦185,000','tennis-1':'₦14,000','suede-0':'₦45,000','suede-1':'₦40,000','suede-2':'₦45,000','suede-3':'₦45,000',
   'shoe-0':'$109.95','shoe-1':'$39.99','shoe-2':'$69.99','shoe-3':'$119.95','shoe-4':'$119.95'};
 const priceOf=id=>id.startsWith('book-')?'₦'+BOOKS[+id.slice(5)][1].toLocaleString():PRICE[id]||'';
 const NOCLAIM=new Set(['books','shoes']),SHAREABLE=new Set(['watch','ipad','monitor','flight','cash']);
