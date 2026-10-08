@@ -14,12 +14,13 @@ const WISH = {
   suede: 'Cherry bag from Brags, in suede',
   camera: 'Fujifilm Instax Mini Evo hybrid instant camera, in black',
   cash: 'Monetary gift',
-  perfume: 'Zara Cherry Temptation perfume, 90 ml',
+  perfume: 'Perfumes',
 };
 // Names of the individually claimed items, in the same order as the page (index.html) lists them.
 const ITEMS = {
   tennis: ['Wilson Envy XP racket', 'Vermont tennis balls'],
   jewel: ['Necklace', 'Bracelet'],
+  perfume: ['Zara Cherry Temptation, 90 ml', 'French Avenue Luscious, 100 ml', 'Zara Pink Flambe, 90 ml', 'Zara Fashionably London, 100 ml'],
   suede: ['Black suede, maxi', 'Black suede, midi', 'Brown suede, maxi', 'Brown suede, midi'],
   book: ['The Romance Revival', 'Soft Landing in Kumasi', 'This Seat Is Taken', 'The Score', 'The Goal', 'The Mistake', 'The Night We Met',
     'Love at First Sighting', 'Love and Other Conspiracies', 'Losing Hope & Finding Cinderella', 'Beg, Borrow, or Steal', 'Beach Read',
@@ -27,7 +28,7 @@ const ITEMS = {
     'Broken: Not a Halal Love Story', 'A Thousand Splendid Suns'],
   shoe: ['Plum patent strappy sandal', 'Beige snake toe-ring stiletto', 'Black strappy, gold beads', 'Magenta suede slingback', 'Mustard suede slingback'],
 };
-const GROUP = { book: 'Book', shoe: 'Shoes', tennis: 'Tennis', jewel: 'ÌTURA jewellery', suede: 'Cherry bag from Brags' };
+const GROUP = { book: 'Book', shoe: 'Shoes', tennis: 'Tennis', jewel: 'ÌTURA jewellery', suede: 'Cherry bag from Brags', perfume: 'Perfume' };
 // What a claim id means in words, e.g. "Book: Beach Read" or "Cherry bag from Brags, in suede: Black suede, maxi".
 function labelOf(id) {
   const [p, k] = id.split('-');
@@ -39,8 +40,8 @@ const SHAREABLE = new Set(['watch', 'ipad', 'monitor', 'flight', 'cash']);
 const OPEN_ONLY = new Set(['cash']);
 // Wishes made of several items are claimed item by item: racket + balls, necklace + bracelet, four bags.
 const IDS = [
-  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera', 'cash', 'perfume',
-  'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1',
+  'watch', 'ipad', 'monitor', 'sun', 'body', 'flight', 'wig', 'camera', 'cash',
+  'tennis-0', 'tennis-1', 'jewel-0', 'jewel-1', 'perfume-0', 'perfume-1', 'perfume-2', 'perfume-3',
   'suede-0', 'suede-1', 'suede-2', 'suede-3',
   ...Array.from({ length: 18 }, (_, i) => 'book-' + i),
   ...Array.from({ length: 5 }, (_, i) => 'shoe-' + i),
