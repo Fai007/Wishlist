@@ -27,7 +27,7 @@ const ITEMS = {
     'Love at First Sighting', 'Love and Other Conspiracies', 'Losing Hope & Finding Cinderella', 'Beg, Borrow, or Steal', 'Beach Read',
     'Love and Other Words', 'Love on the Brain', 'My Week with Him', 'The Parlour Wife',
     'Broken: Not a Halal Love Story', 'A Thousand Splendid Suns'],
-  shoe: ['Plum patent strappy sandal', 'Beige snake toe-ring stiletto', 'Black strappy, gold beads', 'Magenta suede slingback', 'Mustard suede slingback'],
+  shoe: ['Plum patent strappy sandal', 'Mocha satin rhinestone stiletto', 'Black strappy, gold beads', 'Magenta suede slingback', 'Mustard suede slingback'],
 };
 const GROUP = { book: 'Book', shoe: 'Shoes', tennis: 'Tennis', jewel: 'ÌTURA jewellery', suede: 'Cherry bag from Brags', perfume: 'Perfume' };
 // What a claim id means in words, e.g. "Book: Beach Read" or "Cherry bag from Brags, in suede: Black suede, maxi".
